@@ -263,6 +263,7 @@
       grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
       gap: 30px;
       margin-top: 25px;
+      margin: 25px;
     }
 
     .project-item {
@@ -337,7 +338,10 @@
       }
     }
 
-    .contact-section {
+    .contact-section,
+    .experience-section,
+    .projects-section,
+    .profile-section {
       position: relative;
       padding: 0 !important;
       /* Para que la cabecera de la terminal pegue arriba */
@@ -456,6 +460,10 @@
     }
 
     #profile {
+      /*  */
+    }
+
+    #profile-now {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -472,6 +480,69 @@
       /* Evita que las líneas sean demasiado largas y difíciles de leer */
       margin-left: auto;
       margin-right: auto;
+    }
+
+    .resume-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 40px;
+    }
+
+    .column-title {
+      color: var(--accent-color);
+      font-family: monospace;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+
+    .resume-item {
+      position: relative;
+      padding-left: 25px;
+      border-left: 2px solid var(--border-color);
+      margin-bottom: 30px;
+      transition: 0.3s;
+    }
+
+    .resume-item:hover {
+      border-left-color: var(--accent-color);
+    }
+
+    .resume-date {
+      font-family: monospace;
+      font-size: 0.85rem;
+      color: var(--accent-color);
+      margin-bottom: 5px;
+    }
+
+    .resume-content h4 {
+      margin: 0;
+      font-size: 1.1rem;
+      color: var(--text-color);
+    }
+
+    .institution {
+      font-weight: bold;
+      font-size: 0.9rem;
+      opacity: 0.9;
+      margin: 5px 0;
+    }
+
+    .description {
+      font-size: 0.9rem;
+      opacity: 0.7;
+    }
+
+    .accent-text {
+      animation: blink 1s infinite;
+    }
+
+    @media (max-width: 900px) {
+      .resume-container {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -493,6 +564,7 @@
         <nav class="header-nav">
           <a href="#profile">About Me</a>
           <a href="#projects">Projects</a>
+          <a href="#experience">Experience</a>
           <a href="#contact">Contact</a>
         </nav>
         <div class="skills-badges">
@@ -505,33 +577,48 @@
   </header>
 
   <div class="container">
-    <section id="profile">
-      <h2>Hi, I'm Juanjo Valenzuela</h2>
-      <p>Programming video games is my passion. I love diving into game logic and building the complex
-        systems that make
-        everything work as it should.
+    <section id="profile" class="profile-section">
+      <div class="terminal-header">
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-title">ABOUT_ME.EXE</span>
+      </div>
+      <div id="profile-now">
+        <h2>Hi, I'm Juanjo Valenzuela</h2>
+        <p>Programming video games is my passion. I love diving into game logic and building the complex
+          systems that make
+          everything work as it should.
 
-        To me, there's nothing better than seeing an idea turn into something you can actually play and enjoy. My goal
-        is simple: to keep learning and help build games that people find fun and engaging.</p>
+          To me, there's nothing better than seeing an idea turn into something you can actually play and enjoy. My goal
+          is simple: to keep learning and help build games that people find fun and engaging.</p>
 
-      <p style="margin-top: 20px; color: var(--accent-color); font-size: 1.2rem;">
-        <strong>Let's build something cool!</strong>
-      </p>
+        <p style="margin-top: 20px; color: var(--accent-color); font-size: 1.2rem;">
+          <strong>Let's build something cool!</strong>
+        </p>
 
-      <p style="opacity: 0.6; font-size: 0.9rem;">Based in Spain, building the next generation of interactive
-        entertainment.</p>
+        <p style="opacity: 0.6; font-size: 0.9rem;">Based in Spain, building the next generation of interactive
+          entertainment.</p>
+      </div>
     </section>
 
-    <section id="projects">
-      <h2>Featured Projects</h2>
+    <section id="projects" class="projects-section">
+      <div class="terminal-header">
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-title">FEATURED_PROJECTS.EXE</span>
+      </div>
       <div class="projects-grid">
         <div class="project-item">
           <h3>Vulkan Graphics Engine</h3>
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/ano0BzTNAgY" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>Motor académico con PhysX 5, ECS, Scripting en Lua e integración de ImGui.</p>
-          <small><strong>Tech:</strong> C++, Vulkan, PhysX 5, Lua</small>
+          <p>Graphics engine built with Vulkan (and OpenGL support), featuring PhysX 5 integration, a custom rendering
+            system, Lua scripting, and an ECS architecture. Includes a custom editor powered by ImGui. Academic project
+            for ESAT.</p>
+          <small><strong>Tech:</strong> C++, Vulkan, OpenGL, PhysX 5, Lua</small>
         </div>
 
         <div class="project-item">
@@ -539,7 +626,9 @@
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/rM8X3t2emTo" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>Simulador de gestión 2D desarrollado en Unity centrado en sistemas de IA.</p>
+          <p>A Unity-based game where you play as a bartender in different night clubs. The core gameplay involves
+            crafting drinks while listening to the unique stories of your customers (Currently in Development). Personal
+            project.</p>
           <small><strong>Tech:</strong> C#, Unity</small>
         </div>
 
@@ -548,8 +637,9 @@
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/cE8brbtDXaM" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>Proyecto de Ingeniería Informática centrado en físicas aplicadas a VR.</p>
-          <small><strong>Tech:</strong> C++, Unreal Engine 4</small>
+          <p>My Computer Engineering final thesis project. A VR Ping Pong experience developed in Unreal Engine 4,
+            specifically optimized for Oculus Quest 2. Focused on realistic physics and tactile feedback.</p>
+          <small><strong>Tech:</strong> C++, Blueprints, Unreal Engine 4</small>
         </div>
 
         <div class="project-item">
@@ -557,13 +647,103 @@
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/LiQB0rK2Et0" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>Prototipo de interacción y atmósfera para juegos de terror en Unreal.</p>
-          <small><strong>Tech:</strong> Blueprints, Unreal Engine</small>
+          <p>An Unreal Engine prototype dedicated to exploring interaction mechanics, atmospheric storytelling, and
+            tension-building in the horror genre.</p>
+          <small><strong>Tech:</strong> C++, Blueprints, Unreal Engine 4</small>
+        </div>
+      </div>
+    </section>
+
+    <section id="experience" class="experience-section">
+      <div class="terminal-header">
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-title">RESUME.EXE</span>
+      </div>
+      <div class="resume-container">
+        <div class="resume-column">
+          <h3 class="column-title"><span class="accent-text">></span> Academic Path</h3>
+
+          <div class="resume-item">
+            <div class="resume-date">2023 - Present</div>
+            <div class="resume-content">
+              <h4>HND in Game Programming</h4>
+              <p class="institution">ESAT (Escuela Superior de Arte y Tecnología)</p>
+              <p class="description">Specializing in C++, gameplay, low-level programming, team work, game
+                development, and building an engine.
+              </p>
+            </div>
+          </div>
+
+          <div class="resume-item">
+            <div class="resume-date">2017 - 2021</div>
+            <div class="resume-content">
+              <h4>Computer Engineering</h4>
+              <p class="institution">Universitat de València (UV)</p>
+              <p class="description">Focused on software engineering, C++, Java, Maths, Physics.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="resume-column">
+          <h3 class="column-title"><span class="accent-text">></span> Experience</h3>
+
+          <div class="resume-item empty">
+            <div class="resume-content">
+              <h4>Open for new opportunities</h4>
+              <p>Looking to join a game studio as a Gameplay or Engine Programmer.</p>
+            </div>
+          </div>
+
+          <div class="resume-item">
+            <div class="resume-date">sept. 2023 - dec. 2024</div>
+            <div class="resume-content">
+              <h4>Simulation Researcher</h4>
+              <p class="institution">LSyM - IRTIC</p>
+              <p class="description">Simulators development for learning and training, bugs solving, software solutions,
+                virtual reality.</p>
+            </div>
+          </div>
+
+          <div class="resume-item">
+            <div class="resume-date">apr. 2023 - jun. 2023</div>
+            <div class="resume-content">
+              <h4>Videogame Developer</h4>
+              <p class="institution">Quasar Dynamics</p>
+              <p class="description">Entertainment web and app development.</p>
+            </div>
+          </div>
+
+          <div class="resume-item">
+            <div class="resume-date">oct. 2021 - apr. 2023</div>
+            <div class="resume-content">
+              <h4>Software Developer</h4>
+              <p class="institution">SagitaZ</p>
+              <p class="description">Team management, projects responsibility, customer solutions, Zoho integration,
+                chatbots.</p>
+            </div>
+          </div>
+
+          <div class="resume-item">
+            <div class="resume-date">nov. 2020 - jul. 2021</div>
+            <div class="resume-content">
+              <h4>Software Developer</h4>
+              <p class="institution">IRTIC</p>
+              <p class="description">Intership, Unity and HTML solutions.</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <section id="contact" class="contact-section">
+      <div class="terminal-header">
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span>
+        <span class="terminal-title">CONTACT.EXE</span>
+      </div>
       <div class="contact-grid">
         <div class="contact-info">
           <h2 class="glitch-text">Establishing Connection...</h2>
@@ -599,27 +779,7 @@
     </section>
   </div>
 
-  <button id="theme-toggle">🌓 Switch Theme</button>
-
   <script>
-    // Theme Toggle
-    const btn = document.getElementById("theme-toggle");
-    if (localStorage.getItem("theme") === "light") {
-      document.documentElement.setAttribute("data-theme", "light");
-    }
-
-    btn.addEventListener("click", () => {
-      let theme = document.documentElement.getAttribute("data-theme");
-      if (theme === "light") {
-        document.documentElement.setAttribute("data-theme", "dark");
-        localStorage.setItem("theme", "dark");
-      } else {
-        document.documentElement.setAttribute("data-theme", "light");
-        localStorage.setItem("theme", "light");
-      }
-    });
-
-    // Hide/Show Header on Scroll
     let lastScroll = 0;
     const header = document.getElementById("main-header");
 
