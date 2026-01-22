@@ -6,228 +6,642 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portfolio - Juanjo Valenzuela</title>
   <style>
-    /* Basic CSS Styles */
+    /* Definición de Variables */
+    :root {
+      --bg-color: #121212;
+      --grid-color: rgba(0, 255, 255, 0.05);
+      --text-color: #eee;
+      --section-bg: rgba(255, 255, 255, 0.03);
+      --item-bg: rgba(40, 40, 40, 0.6);
+      --header-bg: rgba(20, 20, 20, 0.95);
+      --accent-color: #00f2ff;
+      --border-color: rgba(0, 255, 255, 0.1);
+      --shadow: rgba(0, 0, 0, 0.5);
+    }
+
+    [data-theme="light"] {
+      --bg-color: #f0f4f8;
+      --grid-color: rgba(0, 123, 255, 0.1);
+      --text-color: #222;
+      --section-bg: rgba(255, 255, 255, 0.8);
+      --item-bg: rgba(255, 255, 255, 1);
+      --header-bg: rgba(255, 255, 255, 0.95);
+      --accent-color: #007bff;
+      --border-color: rgba(0, 0, 0, 0.1);
+      --shadow: rgba(0, 0, 0, 0.1);
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', Arial, sans-serif;
       line-height: 1.6;
       margin: 0;
       padding: 0;
-      background: #f4f4f4;
-      color: #333;
+      padding-top: 100px;
+      /* Espacio para el header fixed */
+      background-color: var(--bg-color);
+      background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 30px 30px;
+      background-attachment: fixed;
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
     }
 
-    .container {
-      width: 80%;
-      margin: auto;
-      overflow: hidden;
-      padding: 20px 0;
-    }
-
+    /* --- HEADER REDISEÑADO --- */
     header {
-      background: #333;
-      color: #fff;
-      padding: 1rem 0;
-      text-align: center;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      background: var(--header-bg);
+      backdrop-filter: blur(15px);
+      border-bottom: 2px solid var(--accent-color);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    header h1 {
-      margin: 0;
+    .scroll-down {
+      transform: translateY(-100%);
     }
 
-    .profile-section,
-    .projects-section,
-    .contact-section {
-      background: #fff;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    .scroll-up {
+      transform: translateY(0);
+      box-shadow: 0 5px 20px var(--shadow);
     }
 
-    .profile-section img {
-      max-width: 150px;
+    .header-content {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 10px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    /* Lado Izquierdo: Branding */
+    .header-branding {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-main img {
+      width: 60px;
+      /* Tamaño reducido para el header */
+      height: 60px;
       border-radius: 50%;
-      display: block;
-      margin: 0 auto 15px auto;
+      border: 2px solid var(--accent-color);
+      animation: img-glitch 4s infinite;
+      object-fit: cover;
     }
 
-    .project-item {
-      border-bottom: 1px solid #eee;
-      padding-bottom: 15px;
-      margin-bottom: 15px;
-    }
-
-    .project-item:last-child {
-      border-bottom: none;
-      margin-bottom: 0;
-    }
-
-    .project-item h3 {
-      color: #007bff;
-    }
-
-    .project-item a {
-      color: #007bff;
-      text-decoration: none;
-    }
-
-    .project-item a:hover {
-      text-decoration: underline;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #333;
-      color: #fff;
-    }
-
-    /* Contenedor de la cuadrícula de proyectos */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 25px;
-      /* Espacio entre columnas y filas */
-      margin-top: 20px;
-    }
-
-    /* Ajustes para los items individuales */
-    .project-item {
-      background: #fff;
-      border: 1px solid #ddd;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 0;
-      /* Eliminamos el margen inferior antiguo */
+    .header-text-group {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
     }
 
-    /* Contenedor del video manteniendo proporción 16:9 */
+    .header-main h1 {
+      margin: 0;
+      font-size: 1.5rem;
+      position: relative;
+      display: inline-block;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .subtitle {
+      margin: 0;
+      font-size: 0.8rem;
+      font-weight: bold;
+      opacity: 0.8;
+      color: var(--accent-color);
+    }
+
+    /* Lado Derecho: Nav y Badges */
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 25px;
+    }
+
+    .header-nav a {
+      color: var(--text-color);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: color 0.3s;
+    }
+
+    .header-nav a:hover {
+      color: var(--accent-color);
+    }
+
+    .skills-badges {
+      display: flex;
+      gap: 6px;
+    }
+
+    .skills-badges span {
+      background: rgba(0, 242, 255, 0.1);
+      border: 1px solid var(--accent-color);
+      padding: 1px 8px;
+      border-radius: 3px;
+      font-size: 0.65rem;
+      color: var(--accent-color);
+      font-weight: bold;
+    }
+
+    /* --- EFECTOS GLITCH --- */
+    .header-main h1::before,
+    .header-main h1::after {
+      content: "Juanjo Valenzuela";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--header-bg);
+    }
+
+    .header-main h1::before {
+      left: 2px;
+      text-shadow: -1px 0 #ff00c1;
+      clip: rect(10px, 450px, 20px, 0);
+      animation: glitch-anim 3s infinite linear alternate-reverse;
+    }
+
+    .header-main h1::after {
+      left: -2px;
+      text-shadow: 1px 0 #00fff9;
+      clip: rect(20px, 450px, 30px, 0);
+      animation: glitch-anim2 2s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitch-anim {
+      0% {
+        clip: rect(10px, 9999px, 20px, 0);
+      }
+
+      50% {
+        clip: rect(2px, 9999px, 30px, 0);
+      }
+
+      100% {
+        clip: rect(15px, 9999px, 12px, 0);
+      }
+    }
+
+    @keyframes glitch-anim2 {
+      0% {
+        clip: rect(5px, 9999px, 15px, 0);
+      }
+
+      50% {
+        clip: rect(25px, 9999px, 5px, 0);
+      }
+
+      100% {
+        clip: rect(10px, 9999px, 25px, 0);
+      }
+    }
+
+    @keyframes img-glitch {
+
+      0%,
+      90% {
+        transform: translate(0);
+        filter: none;
+      }
+
+      92% {
+        transform: translate(-2px, 2px);
+        filter: hue-rotate(90deg);
+      }
+
+      94% {
+        transform: translate(2px, -2px);
+        filter: contrast(1.5);
+      }
+
+      96% {
+        transform: translate(0);
+      }
+    }
+
+    /* --- CONTENIDO PRINCIPAL --- */
+    .container {
+      width: 90%;
+      max-width: 1400px;
+      margin: auto;
+      padding: 40px 0;
+    }
+
+    section {
+      background: rgba(0, 0, 0, 0.4) !important;
+      backdrop-filter: blur(8px);
+      padding: 40px;
+      margin-bottom: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      /* border: 1px solid var(--accent-color); */
+      scroll-margin-top: 120px;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 30px;
+      margin-top: 25px;
+    }
+
+    .project-item {
+      background: var(--item-bg);
+      padding: 20px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      transition: 0.3s;
+    }
+
+    .project-item:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-color);
+      box-shadow: 0 10px 30px var(--shadow);
+    }
+
     .video-container {
       width: 100%;
       aspect-ratio: 16 / 9;
       background: #000;
-      border-radius: 5px;
+      border-radius: 6px;
       overflow: hidden;
       margin-bottom: 15px;
     }
 
-    .video-container video,
     .video-container iframe {
       width: 100%;
       height: 100%;
+      border: none;
     }
 
-    /* Responsividad: En móviles se verá una sola columna */
-    @media (max-width: 768px) {
+    #theme-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      cursor: pointer;
+      background: var(--accent-color);
+      color: #000;
+      border: none;
+      border-radius: 50px;
+      font-weight: bold;
+      z-index: 1000;
+      box-shadow: 0 4px 15px var(--shadow);
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px;
+      color: #777;
+      border-top: 1px solid var(--border-color);
+    }
+
+    /* Móvil */
+    @media (max-width: 850px) {
+      .header-content {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+      }
+
+      .header-right {
+        align-items: center;
+      }
+
+      body {
+        padding-top: 220px;
+      }
+
       .projects-grid {
         grid-template-columns: 1fr;
       }
+    }
+
+    .contact-section {
+      position: relative;
+      padding: 0 !important;
+      /* Para que la cabecera de la terminal pegue arriba */
+      overflow: hidden;
+    }
+
+    .terminal-header {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ff5f56;
+      /* Rojo terminal */
+    }
+
+    .terminal-dot:nth-child(2) {
+      background: #ffbd2e;
+    }
+
+    .terminal-dot:nth-child(3) {
+      background: #27c93f;
+    }
+
+    .terminal-title {
+      margin-left: 10px;
+      font-family: monospace;
+      font-size: 0.8rem;
+      opacity: 0.5;
+    }
+
+    .contact-grid {
+      padding: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+    }
+
+    .contact-card {
+      display: block;
+      position: relative;
+      padding: 20px;
+      margin-bottom: 15px;
+      background: rgba(0, 242, 255, 0.05);
+      border-left: 4px solid var(--accent-color);
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .contact-card:hover {
+      background: rgba(0, 242, 255, 0.15);
+      transform: translateX(10px);
+      box-shadow: -10px 0 20px rgba(0, 242, 255, 0.2);
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .label {
+      font-size: 0.7rem;
+      color: var(--accent-color);
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+
+    .value {
+      font-size: 1.1rem;
+      color: var(--text-color);
+      margin-top: 5px;
+    }
+
+    .typing-effect {
+      font-family: monospace;
+      border-right: 2px solid var(--accent-color);
+      width: fit-content;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 3.5s steps(40, end), blink .75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from {
+        width: 0
+      }
+
+      to {
+        width: 100%
+      }
+    }
+
+    @keyframes blink {
+
+      from,
+      to {
+        border-color: transparent
+      }
+
+      50% {
+        border-color: var(--accent-color);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    #profile {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* Centra horizontalmente */
+      text-align: center;
+      /* Centra el texto dentro de los párrafos */
+      justify-content: center;
+      padding: 60px 20px;
+      /* Un poco más de aire arriba y abajo */
+    }
+
+    #profile p {
+      max-width: 800px;
+      /* Evita que las líneas sean demasiado largas y difíciles de leer */
+      margin-left: auto;
+      margin-right: auto;
     }
   </style>
 </head>
 
 <body>
-  <header>
-    <div class="container">
-      <h1>Juanjo Valenzuela</h1>
-      <p>Welcome to my personal space on the web!</p>
+  <header id="main-header">
+    <div class="header-content">
+      <div class="header-branding">
+        <div class="header-main">
+          <img src="./images/profile.jpg" alt="Juanjo Valenzuela">
+        </div>
+        <div class="header-text-group">
+          <h1>Juanjo Valenzuela</h1>
+          <p class="subtitle">Crafting the logic behind the fun</p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <nav class="header-nav">
+          <a href="#profile">About Me</a>
+          <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <div class="skills-badges">
+          <span>C / C++ / C#</span>
+          <span>Vulkan / OpenGL</span>
+          <span>UE5 / Unity</span>
+        </div>
+      </div>
     </div>
   </header>
 
   <div class="container">
-    <section class="profile-section">
-      <img src="./images/profile.jpg" alt="My Profile Picture">
+    <section id="profile">
       <h2>Hi, I'm Juanjo Valenzuela</h2>
-      <p>I'm a videogame programmer with a passion for gameplay mechanics and systems design, i love to explore
-        different game genres that challenge me.
+      <p>Programming video games is my passion. I love diving into game logic and building the complex
+        systems that make
+        everything work as it should.
+
+        To me, there's nothing better than seeing an idea turn into something you can actually play and enjoy. My goal
+        is simple: to keep learning and help build games that people find fun and engaging.</p>
+
+      <p style="margin-top: 20px; color: var(--accent-color); font-size: 1.2rem;">
+        <strong>Let's build something cool!</strong>
       </p>
-      <p>Here you'll find some of my most notable projects and a way to get in touch with me.</p>
+
+      <p style="opacity: 0.6; font-size: 0.9rem;">Based in Spain, building the next generation of interactive
+        entertainment.</p>
     </section>
 
-    <section class="projects-section">
-      <h2>VideoGame Projects</h2>
+    <section id="projects">
+      <h2>Featured Projects</h2>
       <div class="projects-grid">
         <div class="project-item">
-          <h3>Graphics Engine</h3>
-
+          <h3>Vulkan Graphics Engine</h3>
           <div class="video-container">
-            <iframe width="1583" height="873" src="https://www.youtube.com/embed/ano0BzTNAgY" title="Engine 22012026"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/ano0BzTNAgY" loading="lazy" allowfullscreen></iframe>
           </div>
-
-          <p>Esto es un motor gráfico basado en Vulkan, usa PhysX 5, Renderizado, Luces básicas, Modelo ECS con
-            jerarquía, Scripting con Lua, ImGui, ImGuizmo. Proyecto academico para ESAT.</p>
-          <p><strong>Tecnologías:</strong> C++, lua, Shader Graph, Vulkan, PhysX 5</p>
+          <p>Motor académico con PhysX 5, ECS, Scripting en Lua e integración de ImGui.</p>
+          <small><strong>Tech:</strong> C++, Vulkan, PhysX 5, Lua</small>
         </div>
 
         <div class="project-item">
-          <h3>Project Night Club (YouTube)</h3>
-
+          <h3>Project Night Club</h3>
           <div class="video-container">
-            <iframe width="1583" height="890" src="https://www.youtube.com/embed/rM8X3t2emTo"
-              title="Teaser - Project Night Club" frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/rM8X3t2emTo" loading="lazy" allowfullscreen></iframe>
           </div>
-
-          <p>Videojuego 2D, sobre llevar un club nocturno, hecho en Unity C#. Proyecto personal.</p>
-          <p><strong>Tecnologías:</strong> C#, Unity</p>
+          <p>Simulador de gestión 2D desarrollado en Unity centrado en sistemas de IA.</p>
+          <small><strong>Tech:</strong> C#, Unity</small>
         </div>
-      </div>
 
-      <div class="projects-grid">
         <div class="project-item">
           <h3>Ping Pong VR</h3>
-
           <div class="video-container">
-            <iframe width="1583" height="890" src="https://www.youtube.com/embed/cE8brbtDXaM"
-              title="Ping Pong VR Fase 3" frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; allowfullscreen"
-              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/cE8brbtDXaM" loading="lazy" allowfullscreen></iframe>
           </div>
-
-          <p>Este es el proyecto de fin de grado de ingeniería informática, un Ping Pong en VR, hecho en Unreal Engine
-            4. Proyecto academico para UV.</p>
-          <p><strong>Tecnologías:</strong> C++, Blueprints, Unreal Engine 4</p>
+          <p>Proyecto de Ingeniería Informática centrado en físicas aplicadas a VR.</p>
+          <small><strong>Tech:</strong> C++, Unreal Engine 4</small>
         </div>
 
         <div class="project-item">
-          <h3>Test Unreal Horror Game (YouTube)</h3>
-
+          <h3>Horror Mechanics Test</h3>
           <div class="video-container">
-            <iframe width="1583" height="890" src="https://www.youtube.com/embed/LiQB0rK2Et0"
-              title="TEST   Unreal Editor 2022 10 04 18 57 21" frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/LiQB0rK2Et0" loading="lazy" allowfullscreen></iframe>
           </div>
-
-          <p>Proyecto de prueba para realizar mecánicas de juegos de terror. Proyecto personal.</p>
-          <p><strong>Tecnologías:</strong> C++, Blueprints, Unreal Engine 4</p>
+          <p>Prototipo de interacción y atmósfera para juegos de terror en Unreal.</p>
+          <small><strong>Tech:</strong> Blueprints, Unreal Engine</small>
         </div>
       </div>
     </section>
 
-    <section class="contact-section">
-      <h2>Contact</h2>
-      <p>Feel free to contact me for any collaborations or inquiries. You can find me on:</p>
-      <ul>
-        <li>Email: <a href="mailto:juanjo.valenzuela.go@gmail.com">juanjo.valenzuela.go@gmail.com</a></li>
-        <li>LinkedIn: <a href="https://www.linkedin.com/in/juanjovalenzuela"
-            target="_blank">linkedin.com/in/juanjovalenzuela</a></li>
-        <li>GitHub: <a href="https://github.com/vajujo01" target="_blank">github.com/vajujo01</a></li>
-      </ul>
+    <section id="contact" class="contact-section">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h2 class="glitch-text">Establishing Connection...</h2>
+          <p class="typing-effect">Ready to collaborate on videogame, graphics and high-performance solutions.</p>
+        </div>
+
+        <div class="contact-links">
+          <a href="mailto:juanjo.valenzuela.go@gmail.com" class="contact-card">
+            <div class="card-content">
+              <span class="label">EMAIL</span>
+              <span class="value">juanjo.valenzuela.go@gmail.com</span>
+            </div>
+            <div class="card-border"></div>
+          </a>
+
+          <a href="https://www.linkedin.com/in/juanjovalenzuela" target="_blank" class="contact-card">
+            <div class="card-content">
+              <span class="label">LINKEDIN</span>
+              <span class="value">in/juanjovalenzuela</span>
+            </div>
+            <div class="card-border"></div>
+          </a>
+
+          <a href="https://github.com/vajujo01" target="_blank" class="contact-card">
+            <div class="card-content">
+              <span class="label">GITHUB</span>
+              <span class="value">github.com/vajujo01</span>
+            </div>
+            <div class="card-border"></div>
+          </a>
+        </div>
+      </div>
     </section>
   </div>
 
+  <button id="theme-toggle">🌓 Switch Theme</button>
+
+  <script>
+    // Theme Toggle
+    const btn = document.getElementById("theme-toggle");
+    if (localStorage.getItem("theme") === "light") {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+
+    btn.addEventListener("click", () => {
+      let theme = document.documentElement.getAttribute("data-theme");
+      if (theme === "light") {
+        document.documentElement.setAttribute("data-theme", "dark");
+        localStorage.setItem("theme", "dark");
+      } else {
+        document.documentElement.setAttribute("data-theme", "light");
+        localStorage.setItem("theme", "light");
+      }
+    });
+
+    // Hide/Show Header on Scroll
+    let lastScroll = 0;
+    const header = document.getElementById("main-header");
+
+    window.addEventListener("scroll", () => {
+      const currentScroll = window.pageYOffset;
+      if (currentScroll <= 0) {
+        header.classList.remove("scroll-down");
+        return;
+      }
+      if (currentScroll > lastScroll && !header.classList.contains("scroll-down")) {
+        header.classList.add("scroll-down");
+        header.classList.remove("scroll-up");
+      } else if (currentScroll < lastScroll && header.classList.contains("scroll-down")) {
+        header.classList.remove("scroll-down");
+        header.classList.add("scroll-up");
+      }
+      lastScroll = currentScroll;
+    });
+  </script>
+
   <footer>
-    <div class="container">
-      <p>&copy; 2025 Juanjo Valenzuela. All rights reserved.</p>
-    </div>
+    <p>&copy; 2026 Juanjo Valenzuela. Built for Performance.</p>
   </footer>
 </body>
 
