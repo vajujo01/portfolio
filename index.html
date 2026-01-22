@@ -81,6 +81,51 @@
       background: #333;
       color: #fff;
     }
+
+    /* Contenedor de la cuadrícula de proyectos */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      /* Espacio entre columnas y filas */
+      margin-top: 20px;
+    }
+
+    /* Ajustes para los items individuales */
+    .project-item {
+      background: #fff;
+      border: 1px solid #ddd;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 0;
+      /* Eliminamos el margen inferior antiguo */
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Contenedor del video manteniendo proporción 16:9 */
+    .video-container {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 15px;
+    }
+
+    .video-container video,
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Responsividad: En móviles se verá una sola columna */
+    @media (max-width: 768px) {
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
   </style>
 </head>
 
@@ -94,7 +139,7 @@
 
   <div class="container">
     <section class="profile-section">
-      <img src="./images/profile.jpg" alt="Your Profile Picture">
+      <img src="./images/profile.jpg" alt="My Profile Picture">
       <h2>Hi, I'm Juanjo Valenzuela</h2>
       <p>I'm a videogame programmer with a passion for gameplay mechanics and systems design, i love to explore
         different game genres that challenge me.
@@ -103,20 +148,67 @@
     </section>
 
     <section class="projects-section">
-      <h2>My Projects</h2>
-      <div class="project-item">
-        <h3>Project Name 1</h3>
-        <p>A brief description of your project. What does it do? What technologies did you use?</p>
-        <p>Technologies: HTML, CSS, JavaScript</p>
-        <p><a href="https://github.com/your-username/project-repo-1" target="_blank">View on GitHub</a> | <a
-            href="https://your-username.github.io/project-repo-1/" target="_blank">View Demo (if applicable)</a></p>
+      <h2>VideoGame Projects</h2>
+      <div class="projects-grid">
+        <div class="project-item">
+          <h3>Graphics Engine</h3>
+
+          <div class="video-container">
+            <iframe width="1583" height="873" src="https://www.youtube.com/embed/ano0BzTNAgY" title="Engine 22012026"
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+
+          <p>Esto es un motor gráfico basado en Vulkan, usa PhysX 5, Renderizado, Luces básicas, Modelo ECS con
+            jerarquía, Scripting con Lua, ImGui, ImGuizmo. Proyecto academico para ESAT.</p>
+          <p><strong>Tecnologías:</strong> C++, lua, Shader Graph, Vulkan, PhysX 5</p>
+        </div>
+
+        <div class="project-item">
+          <h3>Project Night Club (YouTube)</h3>
+
+          <div class="video-container">
+            <iframe width="1583" height="890" src="https://www.youtube.com/embed/rM8X3t2emTo"
+              title="Teaser - Project Night Club" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+
+          <p>Videojuego 2D, sobre llevar un club nocturno, hecho en Unity C#. Proyecto personal.</p>
+          <p><strong>Tecnologías:</strong> C#, Unity</p>
+        </div>
       </div>
-      <div class="project-item">
-        <h3>Project Name 2</h3>
-        <p>Another description of your project. Explain its purpose and your achievements.</p>
-        <p>Technologies: Python, Django, PostgreSQL</p>
-        <p><a href="https://github.com/your-username/project-repo-2" target="_blank">View on GitHub</a> | <a
-            href="https://your-username.github.io/project-repo-2/" target="_blank">View Demo (if applicable)</a></p>
+
+      <div class="projects-grid">
+        <div class="project-item">
+          <h3>Ping Pong VR</h3>
+
+          <div class="video-container">
+            <iframe width="1583" height="890" src="https://www.youtube.com/embed/cE8brbtDXaM"
+              title="Ping Pong VR Fase 3" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; allowfullscreen"
+              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+
+          <p>Este es el proyecto de fin de grado de ingeniería informática, un Ping Pong en VR, hecho en Unreal Engine
+            4. Proyecto academico para UV.</p>
+          <p><strong>Tecnologías:</strong> C++, Blueprints, Unreal Engine 4</p>
+        </div>
+
+        <div class="project-item">
+          <h3>Test Unreal Horror Game (YouTube)</h3>
+
+          <div class="video-container">
+            <iframe width="1583" height="890" src="https://www.youtube.com/embed/LiQB0rK2Et0"
+              title="TEST   Unreal Editor 2022 10 04 18 57 21" frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+          </div>
+
+          <p>Proyecto de prueba para realizar mecánicas de juegos de terror. Proyecto personal.</p>
+          <p><strong>Tecnologías:</strong> C++, Blueprints, Unreal Engine 4</p>
+        </div>
       </div>
     </section>
 
