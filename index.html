@@ -32,7 +32,7 @@
     }
 
     html {
-      scroll-behavior: smooth;
+      /* scroll-behavior: smooth; */
     }
 
     body {
@@ -47,7 +47,6 @@
         linear-gradient(var(--grid-color) 1px, transparent 1px),
         linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
       background-size: 30px 30px;
-      background-attachment: fixed;
       color: var(--text-color);
       transition: background-color 0.3s, color 0.3s;
     }
@@ -64,14 +63,14 @@
       transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .scroll-down {
+    /* .scroll-down {
       transform: translateY(-100%);
     }
 
     .scroll-up {
       transform: translateY(0);
       box-shadow: 0 5px 20px var(--shadow);
-    }
+    } */
 
     .header-content {
       max-width: 1600px;
@@ -661,7 +660,8 @@
           </div>
           <p>A Unity-based game where you play as a bartender in different night clubs. The core gameplay involves
             crafting drinks while listening to the unique stories of your customers (Currently in Development). Personal
-            project. All visual assets in this project were generated using AI tools. This is a non-commercial personal project.</p>
+            project. All visual assets in this project were generated using AI tools. This is a non-commercial personal
+            project.</p>
           <small><strong>Tech:</strong> C#, Unity</small>
         </div>
 
@@ -670,8 +670,10 @@
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/0QrlKNaWMx0" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>Academic VR project developed in Unity with a partner. An infinite runner set in a mine where you shoot enemies and score points.
-            Models & assets: Mixamo, Kenney, Unity Asset Store. Audio: YouTube Studio and other fonts. Non-commercial academic project.</p>
+          <p>Academic VR project developed in Unity with a partner. An infinite runner set in a mine where you shoot
+            enemies and score points.
+            Models & assets: Mixamo, Kenney, Unity Asset Store. Audio: YouTube Studio and other fonts. Non-commercial
+            academic project.</p>
           <small><strong>Tech:</strong> C#, VR, Meta Quest 2/3, Unity</small>
         </div>
 
@@ -690,21 +692,23 @@
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/qbJMgp-AF5w" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>Academic project developed in Unity with a partner. A comic infinite runner using Kenney assets and YouTube Studio audio tracks. Non-commercial academic project.</p>
+          <p>Academic project developed in Unity with a partner. A comic infinite runner using Kenney assets and YouTube
+            Studio audio tracks. Non-commercial academic project.</p>
           <small><strong>Tech:</strong> C#, Unity</small>
         </div>
-        
+
         <div class="project-item">
           <h3>Unreal AI Behaviour</h3>
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/buPgK3GWHpM" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>Academic project built in Unreal Engine 5. Features AI agents competing against each other using behavior trees.
+          <p>Academic project built in Unreal Engine 5. Features AI agents competing against each other using behavior
+            trees.
             The demo includes: a patrolling agent, two agents fighting 1v1, and two teams in combat.
             Models and animations from Mixamo.</p>
           <small><strong>Tech:</strong> C++, Blueprints, Unreal Engine 5, AI</small>
         </div>
-        
+
         <div class="project-item">
           <h3>Horror Mechanics Test</h3>
           <div class="video-container">
@@ -841,27 +845,6 @@
       </div>
     </section>
   </div>
-
-  <script>
-    let lastScroll = 0;
-    const header = document.getElementById("main-header");
-
-    window.addEventListener("scroll", () => {
-      const currentScroll = window.pageYOffset;
-      if (currentScroll <= 0) {
-        header.classList.remove("scroll-down");
-        return;
-      }
-      if (currentScroll > lastScroll && !header.classList.contains("scroll-down")) {
-        header.classList.add("scroll-down");
-        header.classList.remove("scroll-up");
-      } else if (currentScroll < lastScroll && header.classList.contains("scroll-down")) {
-        header.classList.remove("scroll-down");
-        header.classList.add("scroll-up");
-      }
-      lastScroll = currentScroll;
-    });
-  </script>
 
   <footer>
     <p>&copy; 2026 Juanjo Valenzuela. Built for Performance.</p>
