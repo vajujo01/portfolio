@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- 
+    ================================================================
+    TECH BLOG TEMPLATE — Juanjo Valenzuela
+    ================================================================
+  -->
+  <title>Vulkan-OpenGL Graphics Engine — Tech Blog | Juanjo Valenzuela</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: rgba(255, 255, 255, 0.03);
+      --surface-2: rgba(0, 242, 255, 0.05);
+      --border: rgba(0, 242, 255, 0.12);
+      --accent: #00f2ff;
+      --accent-dim: rgba(0, 242, 255, 0.35);
+      --accent-2: #ff2d78;
+      --text: #dde6ee;
+      --text-dim: rgba(221, 230, 238, 0.55);
+      --mono: 'Share Tech Mono', monospace;
+      --body: 'Rajdhani', sans-serif;
+      --grid: rgba(0, 242, 255, 0.04);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--body);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text);
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+      background-size: 30px 30px;
+      padding-top: 80px;
+    }
+
+    /* ── SCANLINE OVERLAY ─────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.08) 2px,
+          rgba(0, 0, 0, 0.08) 4px);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── HEADER ───────────────────────────────────────── */
+    header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--accent);
+      padding: 14px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: opacity 0.2s;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    .back-link::before {
+      content: '←';
+    }
+
+    .header-badge {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      border: 1px solid var(--accent-dim);
+      padding: 4px 12px;
+      border-radius: 2px;
+      background: var(--surface-2);
+    }
+
+    /* ── HERO ─────────────────────────────────────────── */
+    .hero {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 80px 40px 50px;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      opacity: 0.8;
+    }
+
+    .hero h1 {
+      font-family: var(--body);
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+      /* Glitch color split */
+      text-shadow:
+        2px 0 0 rgba(255, 45, 120, 0.4),
+        -2px 0 0 rgba(0, 242, 255, 0.4);
+    }
+
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-bottom: 30px;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--text-dim);
+    }
+
+    .hero-meta span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-meta .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .hero-video {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      margin-top: 30px;
+      box-shadow: 0 0 40px rgba(0, 242, 255, 0.07);
+    }
+
+    .hero-video iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* ── TAGS ─────────────────────────────────────────── */
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 24px 0 0;
+    }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      padding: 3px 10px;
+      border-radius: 2px;
+      border: 1px solid var(--accent-dim);
+      background: var(--surface-2);
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    /* ── MAIN LAYOUT ──────────────────────────────────── */
+    .page-body {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 40px 100px;
+    }
+
+    /* ── SECTION ──────────────────────────────────────── */
+    .blog-section {
+      margin-top: 60px;
+      padding: 36px 40px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Accent left bar */
+    .blog-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      opacity: 0.7;
+    }
+
+    .blog-section h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
+
+    .blog-section p {
+      color: var(--text-dim);
+      margin-bottom: 16px;
+      font-size: 1rem;
+    }
+
+    .blog-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ── CODE BLOCK ───────────────────────────────────── */
+    .code-block {
+      margin: 24px 0;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .code-header {
+      background: rgba(0, 242, 255, 0.08);
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .code-lang {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 1px;
+    }
+
+    .code-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .code-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .code-dots span:nth-child(1) {
+      background: #ff5f56;
+    }
+
+    .code-dots span:nth-child(2) {
+      background: #ffbd2e;
+    }
+
+    .code-dots span:nth-child(3) {
+      background: #27c93f;
+    }
+
+    pre {
+      background: rgba(0, 0, 0, 0.5);
+      padding: 24px;
+      overflow-x: auto;
+      font-family: var(--mono);
+      font-size: 0.82rem;
+      line-height: 1.7;
+      color: #a8e6cf;
+    }
+
+    /* ── HIGHLIGHT BOX ────────────────────────────────── */
+    .highlight-box {
+      margin: 24px 0;
+      padding: 20px 24px;
+      background: rgba(0, 242, 255, 0.06);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      color: var(--accent);
+      line-height: 1.7;
+    }
+
+    /* ── PROBLEM/SOLUTION CARDS ───────────────────────── */
+    .ps-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 24px;
+    }
+
+    .ps-card {
+      padding: 20px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .ps-card.problem {
+      background: rgba(255, 45, 120, 0.05);
+      border-color: rgba(255, 45, 120, 0.2);
+    }
+
+    .ps-card.solution {
+      background: rgba(0, 242, 255, 0.05);
+      border-color: rgba(0, 242, 255, 0.2);
+    }
+
+    .ps-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .ps-card.problem .ps-label {
+      color: var(--accent-2);
+    }
+
+    .ps-card.solution .ps-label {
+      color: var(--accent);
+    }
+
+    .ps-card p {
+      font-size: 0.92rem;
+      color: var(--text-dim);
+      margin: 0 !important;
+    }
+
+    /* ── STAT ROW ─────────────────────────────────────── */
+    .stat-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .stat {
+      flex: 1;
+      min-width: 140px;
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: var(--mono);
+      font-size: 1.8rem;
+      color: var(--accent);
+      display: block;
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ── LESSONS LEARNED LIST ─────────────────────────── */
+    .lessons-list {
+      list-style: none;
+      margin-top: 20px;
+    }
+
+    .lessons-list li {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+      color: var(--text-dim);
+    }
+
+    .lessons-list li:last-child {
+      border-bottom: none;
+    }
+
+    .lesson-num {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      flex-shrink: 0;
+      padding-top: 3px;
+    }
+
+    /* ── FOOTER ───────────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── RESPONSIVE ───────────────────────────────────── */
+    @media (max-width: 720px) {
+      header {
+        padding: 12px 20px;
+      }
+
+      .hero,
+      .page-body {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .hero {
+        padding-top: 60px;
+      }
+
+      .blog-section {
+        padding: 24px 20px;
+      }
+
+      .ps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ── HEADER ──────────────────────────────────────── -->
+  <header>
+    <a href="./index.html" class="back-link">Back to Portfolio</a>
+    <span class="header-badge">TECH_BLOG.EXE</span>
+  </header>
+
+  <!-- ── HERO ────────────────────────────────────────── -->
+  <section class="hero">
+    <p class="hero-eyebrow">// tech breakdown</p>
+    <h1>Hyper Technical Magic Leprechaun (HTML)</h1>
+    <h1>Vulkan-OpenGL Graphics Engine</h1>
+
+    <div class="hero-meta">
+      <span><span class="dot"></span>2025 - 2026</span>
+      <span><span class="dot"></span>Vulkan - C++</span>
+      <span><span class="dot"></span>Team of 2</span>
+      <span><span class="dot"></span>Academic</span>
+    </div>
+
+    <div class="tag-list">
+      <span class="tag">C++</span>
+      <span class="tag">Vulkan</span>
+      <span class="tag">OpenGL</span>
+      <span class="tag">PhysX 5</span>
+      <span class="tag">Lua</span>
+    </div>
+
+    <div class="hero-video">
+      <iframe src="https://www.youtube.com/embed/C72k1QLnmFY" loading="lazy" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <!-- ── ARTICLE BODY ─────────────────────────────────── -->
+  <main class="page-body">
+
+    <!-- ╔══════════════════════════════════╗ -->
+    <!-- ║  SECTION 1 — OVERVIEW / PITCH   ║ -->
+    <!-- ╚══════════════════════════════════╝ -->
+    <article class="blog-section">
+      <p class="section-label">// 01 — overview</p>
+      <h2>What is this project?</h2>
+      <p>
+        Graphics engine built with Vulkan (and OpenGL), featuring PhysX 5 integration, a custom rendering
+        system, Lua scripting, and an ECS architecture, limited version on Android Studio. Includes a custom editor
+        powered by ImGui. Academic project for ESAT.
+      </p>
+      <p>
+        El proyecto se dividió entre Vulkan y OpenGL, yo fui responsable de la parte de Vulkan (con base en el tutorial
+        de Brendan Galea) y de la creación del ECS
+        en el que se basa el motor, la integración con PhysX y con ImGui y el port a Android.
+      </p>
+    </article>
+
+
+    <!-- ╔══════════════════════════════════╗ -->
+    <!-- ║  SECTION 2 — BEYOND THE SURFACE  ║ -->
+    <!-- ╚══════════════════════════════════╝ -->
+    <article class="blog-section">
+      <p class="section-label">// 02 — Beyond the Surface</p>
+      <h2>System Design</h2>
+      <p>
+        El motor se basa en un sistema de Entity Component System, se apoya en un Job System para la carga de modelos y
+        algunas texturas.
+      </p>
+
+      <p>
+        Se ha dividido en clases comunes y específicas para Vulkan y OpenGL.
+      </p>
+
+      <!-- CODE SNIPPET EXAMPLE -->
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="code-lang">C++ — ECS.hpp</span>
+        </div>
+        <pre>
+          <code>
+std::vector&ltstd::pair&ltsize_t, T&gt&gt entityList_;  /// Entity - component realtion list</code>
+        </pre>
+      </div>
+
+      <p>Sin el mapa, encontrar el componente de una entidad concreta requeriría recorrer el vector entero: O(n). Con
+        él, la búsqueda por ID es O(1), pero el vector sigue siendo contiguo para la iteración masiva de sistemas. Es el
+        mejor de los dos mundos: velocidad de lookup para accesos individuales, y localidad de caché para los bucles de
+        sistemas.
+      </p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="code-lang">C++ — ECS.hpp</span>
+        </div>
+        <pre>
+          <code>
+std::vector&ltstd::pair&ltsize_t, T&gt&gt entityList_ ; /// Entity - component realtion list
+
+std::unordered_map&ltsize_t, size_t&gt entityIdToIndexMap_; /// For optimization
+
+// Use
+size_t index = entityIdToIndexMap_[entityID];
+T* comp = &entityList_[index].second; // acceso directo</code>
+        </pre>
+      </div>
+
+      <p>Los componentes se guardan en un vector, que en memoria es un bloque contiguo. Cuando un sistema itera sobre
+        todos los componentes de un tipo (por ejemplo, todos los TransformComponent), la CPU puede cargar varios en la
+        misma línea de caché de una sola vez. Si en cambio cada componente fuera un puntero a un objeto creado con new,
+        cada acceso implicaría un salto a una dirección arbitraria de memoria, invalidando la caché constantemente. Esto
+        es uno de los principales motivos por los que ECS supera al diseño orientado a objetos clásico en rendimiento.
+      </p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="code-lang">C++ — vkHTML.hpp</span>
+        </div>
+        <pre>
+          <code>
+class HTML {
+public:
+  HTML();
+  HTML(int width, int height, std::string windowName, std::string facesCubeMap[6] = {});
+  
+  .
+  .
+  .
+
+private:
+  private:
+  std::unique_ptr&ltECSManager&gt ecsManager_;                           /// The manager of the entities
+  std::unique_ptr&ltJobsystem&gt jobSystem_;                             /// System for threading
+  // EXECUTION
+  std::unique_ptr&ltScriptSystem&gt scriptSystem_;                       /// System for scripting
+  std::unique_ptr&ltCameraSystem&gt cameraSystem_;                       /// System for camera
+  std::shared_ptr&ltInput&gt inputController_;                           /// Controller for input
+
+  std::unique_ptr&ltPlantGeneratorSystem&gt plantGeneratorSystem_;       /// System for generating plants
+
+  .
+  .
+  .
+
+  // PAWNS
+  std::shared_ptr&ltPhysXPawnController&gt pawnController_;
+
+  // WRAPPERS
+  std::unique_ptr&ltImGuiWrapper&gt imguiWrapper_;
+  PhysX physXWrapper_;                                               /// Wrapper for all PhysX elements
+  std::unique_ptr&ltVulkanWrapper&gt vkWrapper_;
+  std::unique_ptr&ltActorManager&gt actorManager_;
+  std::unique_ptr&ltRenderManager&gt renderManager_;
+}
+          </code>
+        </pre>
+      </div>
+
+      <p>Separación de responsabilidades mediante sistemas. CameraSystem, ScriptSystem, RenderManager,
+        PlantGeneratorSystem... cada subsistema tiene su clase propia, y HTML los orquesta sin implementarlos.
+      </p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="code-lang">C++ — anyMain.cpp</span>
+        </div>
+        <pre>
+          <code>
+html.InitializeSystems(HTML::kPawnType::kCustom);
+
+auto startTime = std::chrono::high_resolution_clock::now();
+auto currentTime = std::chrono::high_resolution_clock::now();
+auto lastTimeDuration = 
+  std::chrono::duration&ltfloat, std::chrono::seconds::period&gt(startTime - currentTime).count();
+
+while (!html.ShouldClose()) {
+  html.PollEvents();
+  
+  auto newTime = std::chrono::high_resolution_clock::now();
+  float frameTime = 
+    std::chrono::duration&ltfloat, std::chrono::seconds::period&gt(newTime - currentTime).count();
+  lastTimeDuration += frameTime;
+
+  currentTime = newTime;
+
+  frameTime = glm::min(frameTime, 60.0f);
+
+  html.PreUpdateApp(frameTime);
+
+  // update
+  html.UpdateInput();
+  html.ResetInput();
+  html.UpdatePawn(frameTime);
+
+  // User update things
+
+  // render functions
+  html.Render();
+
+  html.BaseImGui();
+
+  // User ImGui
+
+  html.EndImGui();
+
+  html.EndRender();
+
+  // PHYSX
+  html.StepPhysics(frameTime);
+}
+
+html.Finish();
+          </code>
+        </pre>
+      </div>
+
+      <p>Loop típico de juego para facilitar el uso del main al usuario, el cual solo interactúa con la clase HTML.
+      </p>
+
+      <h2>Render</h2>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="code-lang">C++ — renderManager.cpp</span>
+        </div>
+        <pre>
+          <code>
+void RenderManager::InitRenderProcess(FrameInfo& frameInfo, int stepLight, glm::vec3 dirPosReference)
+{
+  switch (renderMode_)
+  {
+  case ImGuiWrapper::kForward:
+    forwardSystem_->RenderShadowMap(ecsManager_,
+      frameInfo,
+      dirPosReference, stepLight);
+    break;
+  case ImGuiWrapper::kDeferred:
+    if (scenesExtent_[0].x > 0.0f && scenesExtent_[0].y > 0.0f) {
+      deferredSystem_->RenderShadowMap(ecsManager_,
+        frameInfo,
+        dirPosReference, stepLight);
+
+      if (stepLight == 0) {
+        deferredSystem_->RenderToGBuffer(ecsManager_,
+          frameInfo,
+          { (uint32_t)scenesExtent_[0].x, (uint32_t)scenesExtent_[0].y });
+
+        deferredSystem_->BlitDepthToMain(
+          frameInfo.commandBuffer,
+          vkWrapper_.GetOffScreenDepthImage(),
+          { (uint32_t)scenesExtent_[0].x, (uint32_t)scenesExtent_[0].y });
+      }
+    }
+    break;
+  case ImGuiWrapper::kDeferredPBR:
+    if (scenesExtent_[0].x > 0.0f && scenesExtent_[0].y > 0.0f) {
+      deferredSystemPBR_->RenderShadowMap(ecsManager_,
+        frameInfo, dirPosReference, stepLight);
+
+      if (stepLight == 0) {
+        deferredSystemPBR_->RenderToGBuffer(ecsManager_,
+          frameInfo,
+          { (uint32_t)scenesExtent_[0].x, (uint32_t)scenesExtent_[0].y });
+
+        deferredSystemPBR_->BlitDepthToMain(
+          frameInfo.commandBuffer,
+          vkWrapper_.GetOffScreenDepthImage(),
+          { (uint32_t)scenesExtent_[0].x, (uint32_t)scenesExtent_[0].y });
+      }
+    }
+    break;
+  default:
+    break;
+  }
+
+  // Start to record draws
+  if (scenesExtent_[0].x > 0.0f) {
+    if ((renderMode_ == ImGuiWrapper::kDeferred ||
+     renderMode_ == ImGuiWrapper::kDeferredPBR) && stepLight == 0)
+      vkWrapper_.BeginOffScreenRenderPassDeferred(frameInfo, (float)scenesExtent_[0].x,
+       (uint32_t)scenesExtent_[0].y);
+    else
+      vkWrapper_.BeginOffScreenRenderPass(frameInfo, (float)scenesExtent_[0].x,
+       (uint32_t)scenesExtent_[0].y,
+        ((stepLight != 0 && renderMode_ != ImGuiWrapper::kSimpleRender) ? false : true));
+  }
+}</code>
+        </pre>
+      </div>
+
+      <p>Se prepara en la parte inicial del renderizado el shadow map para las sombras y el GBuffer, para de esta
+        forma tenerlo todo separado en pequeños pasos fáciles de debugear. El parámetro stepLight sirve para distribuir
+        las sombras en distintos atlas.
+      </p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="code-lang">C++ — renderManager.cpp</span>
+        </div>
+        <pre>
+          <code>
+void RenderManager::RenderObjects(FrameInfo& frameInfo, int stepLight, glm::vec3 dirPosReference) {
+  if (scenesExtent_[0].x &lt= 0.0f || scenesExtent_[0].y &lt= 0.0f) {
+    return;
+  }
+
+  vkWrapper_.SetViewport(frameInfo, scenesExtent_[0].x, scenesExtent_[0].y);
+
+  switch (renderMode_)
+  {
+  case ImGuiWrapper::kForward:
+    forwardSystem_->RenderGameObjects(ecsManager_, frameInfo, dirPosReference, stepLight);
+    break;
+  case ImGuiWrapper::kDeferred:
+    deferredSystem_->RenderLightingPass(frameInfo, ecsManager_, dirPosReference, stepLight);
+    break;
+  case ImGuiWrapper::kDeferredPBR:
+    deferredSystemPBR_->RenderLightingPass(frameInfo, ecsManager_, dirPosReference, stepLight);
+    break;
+  case ImGuiWrapper::kSimpleRender:
+  default:
+    simpleRenderSystem_->RenderGameObjects(ecsManager_, frameInfo);
+    break;
+  }
+}</code>
+        </pre>
+      </div>
+
+      <p>Se ejecuta el lighting pass en los sistemas de renderizado que así lo requieran después de haber generado el
+        mapa de sombras y el buffer de geometría y por último se renderizan todos los objetos.
+      </p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="code-lang">C++ — renderManager.cpp</span>
+        </div>
+        <pre>
+          <code>
+      .
+      .
+      .
+      
+    Texture* outputTexture = nullptr;
+    VkImageView viewbase = vkWrapper_.sceneTarget_.view;
+    VkSampler sampler = vkWrapper_.sceneTarget_.sampler;
+
+    if (postProcess_["MotionBlur"]->enabled) {
+      velocityPassSystem_->Render(
+        ecsManager_, frameInfo,
+        currentViewProj_, prevViewProj_,
+        prevWorldTransforms_);
+
+      Texture* velTex = velocityPassSystem_->GetOutput();
+
+      if (velTex) {
+        motionBlurSystem_->Apply(
+          frameInfo.commandBuffer,
+          viewbase,
+          sampler,
+          velTex->getImageView(),
+          velTex->getSampler(),
+          *frameInfo.frameDescriptorPool,
+          *(std::static_pointer_cast&ltMotionBlurSettings>(postProcess_["MotionBlur"])));
+
+        Texture* mbOutput = motionBlurSystem_->GetOutput();
+        
+        if (mbOutput) {
+          BlitTexture(mbOutput, frameInfo);
+
+          .
+          .
+          .          
+
+          viewbase = mbOutput->getImageView();
+          sampler = mbOutput->getSampler();
+        }
+      }
+    }
+
+    if (postProcess_["DoF"]->enabled && dofSystem_)
+    {
+      auto& dofSettings = *(std::static_pointer_cast&ltDoFSettings>(postProcess_["DoF"]));
+
+      dofSystem_->SetCameraPlanes(camNear, camFar);
+
+      dofSystem_->Apply(
+        frameInfo.commandBuffer,
+        viewbase, sampler,
+        vkWrapper_.GetOffScreenDepthView(),
+        vkWrapper_.GetOffScreenDepthSampler(),
+        *frameInfo.frameDescriptorPool,
+        dofSettings);
+
+      Texture* dofOut = dofSystem_->GetOutput();
+      if (dofOut) {
+        BlitTexture(dofOut, frameInfo);
+
+          .
+          .
+          .
+
+        viewbase = vkWrapper_.sceneTarget_.view;
+        sampler = vkWrapper_.sceneTarget_.sampler;
+      }
+    }
+
+    if (postProcess_["Bloom"]->enabled) {
+      bloomSystem_->Apply(
+        frameInfo.commandBuffer,
+        viewbase,
+        sampler,
+        *frameInfo.frameDescriptorPool,
+        *(std::static_pointer_cast&ltBloomSettings>(postProcess_["Bloom"]))
+      );
+
+      outputTexture = bloomSystem_->GetOutput();
+      if (outputTexture) BlitTexture(outputTexture, frameInfo);
+    }
+
+    .
+    .
+    .
+
+    vkCmdPipelineBarrier(
+      frameInfo.commandBuffer,
+      VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+      VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
+      0, 0, nullptr, 0, nullptr, 1, &depthRestoreBarrier);
+      
+      .
+      .
+      .</code>
+        </pre>
+      </div>
+
+      <p>El pipeline de post-proceso en cadena es la parte más sofisticada. Cada efecto consume la salida del anterior
+        mediante BlitTexture y redirige viewbase/sampler, formando una cadena MotionBlur → DoF → Bloom sobre el mismo
+        sceneTarget_.
+      </p>
+
+      <h2>Simple Plant Generator</h2>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="code-lang">C++ — PlantGeneratorSystem.cpp</span>
+        </div>
+        <pre>
+          <code>
+std::vector&ltchar> PlantGeneratorSystem::GetPlant(kType type, size_t iterations)
+{
+  std::vector&ltchar> result;
+
+	switch (type)
+	{
+	case PlantGeneratorSystem::kPlant:
+		result = { '-', 'X' };
+
+		for (size_t i = 0; i &lt iterations; i++) {
+			std::vector&ltchar> newVector;
+
+			for (char node : result) {
+				switch (node)
+				{
+				case 'X':
+					if (rand() % 2) {
+						AppendString(newVector, "F+[[X]-X]-F[-FX]+X");
+					}
+					else {
+						AppendString(newVector, "F-[[X]+X]+F[+FX]-X");
+					}
+					break;
+				case 'F':
+					AppendString(newVector, "FF");
+					break;
+				default:
+					newVector.push_back(node);
+					break;
+				}
+			}
+
+			result.clear();
+			result = newVector;
+		}
+
+		break;
+	case PlantGeneratorSystem::kTree:
+		result = { 'F', 'X' };
+
+		for (size_t i = 0; i &lt iterations; i++) {
+			std::vector&ltchar> newVector;
+			for (char node : result) {
+				if (node == 'X') {
+					int r = rand() % 100;
+					if (r &lt 30) {
+						AppendString(newVector, "F[&X][^X]");
+					}
+					else if (r &lt 60) {
+						AppendString(newVector, "F[+&X][\\^X]");
+					}
+					else if (r &lt 90) {
+						AppendString(newVector, "F[\\&X]FX");
+					}
+					else {
+						newVector.push_back('X');
+					}
+				}
+				else if (node == 'F') {
+					newVector.push_back('F');
+				}
+				else {
+					newVector.push_back(node);
+				}
+			}
+			result = newVector;
+		}
+		break;
+        case PlantGeneratorSystem::kSymmetricTree:
+            result = { 'F', 'X' };
+
+            for (size_t i = 0; i &lt iterations; i++) {
+                std::vector&ltchar> newVector;
+                newVector.reserve(result.size() * 4);
+
+                for (char node : result) {
+                    switch (node) {
+                        case 'X':
+                            AppendString(newVector, "F[+X][-X]FX");
+                            break;
+                        case 'F':
+                            AppendString(newVector, "FF");
+                            break;
+                        default:
+                            newVector.push_back(node);
+                            break;
+                    }
+                }
+
+                result = std::move(newVector);
+            }
+            break;
+        case PlantGeneratorSystem::kSpiralTree:
+            result = { 'F', 'X' };
+
+            for (size_t i = 0; i &lt iterations; i++) {
+                std::vector&ltchar> newVector;
+                newVector.reserve(result.size() * 5);
+
+                for (char node : result) {
+                    switch (node) {
+                        case 'X':
+                            AppendString(newVector, "F[&+X][&-X][&\\X]X");
+                            break;
+                        case 'F':
+                            AppendString(newVector, "FF");
+                            break;
+                        default:
+                            newVector.push_back(node);
+                            break;
+                    }
+                }
+
+                result = std::move(newVector);
+            }
+            break;
+
+        case PlantGeneratorSystem::kStochasticTree:
+            result = { 'X' };
+
+            for (size_t i = 0; i &lt iterations; i++) {
+                std::vector&ltchar> newVector;
+                newVector.reserve(result.size() * 5);
+
+                for (char node : result) {
+                    switch (node) {
+                        case 'X': {
+                            int r = rand() % 100;
+                            if (r &lt 40) {
+                                AppendString(newVector, "FF[+X][-X]X");
+                            } else if (r &lt 70) {
+                                AppendString(newVector, "F[+X]F[-X]+X");
+                            } else if (r &lt 90) {
+                                AppendString(newVector, "F[\\X][/X]FX");
+                            } else {
+                                AppendString(newVector, "FX");
+                            }
+                            break;
+                        }
+                        case 'F':
+                            AppendString(newVector, "FF");
+                            break;
+                        default:
+                            newVector.push_back(node);
+                            break;
+                    }
+                }
+
+                result = std::move(newVector);
+            }
+            break;
+	default:
+		break;
+	}
+
+  return result;
+}</code>
+        </pre>
+      </div>
+
+      <p>Alfabeto de símbolos (F, X, +, -, [, ], &, ^, \) que se expande iterativamente aplicando reglas de reescritura.
+        Cinco tipos de plantas distintas con patrones de generación diferentes.
+      </p>
+    </article>
+
+
+    <!-- ╔══════════════════════════════════╗ -->
+    <!-- ║  SECTION 3 — CHALLENGES         ║ -->
+    <!-- ╚══════════════════════════════════╝ -->
+    <article class="blog-section">
+      <p class="section-label">// 03 — challenges &amp; solutions</p>
+      <h2>Problems I Solved</h2>
+      <!-- <p>[Brief intro — this section is the heart of the blog. Show how you think.]</p> -->
+
+      <!-- PROBLEM / SOLUTION CARDS — repeat as needed -->
+      <div class="ps-grid">
+        <div class="ps-card problem">
+          <p class="ps-label">⚠ Problem</p>
+          <p>Renderizado con sombras</p>
+        </div>
+        <div class="ps-card solution">
+          <p class="ps-label">✓ Solution</p>
+          <!-- <p>[How you solved it. Be specific — numbers, technique names, API calls.]</p> -->
+        </div>
+      </div>
+
+      <div class="ps-grid">
+        <div class="ps-card problem">
+          <p class="ps-label">⚠ Problem</p>
+          <p>Integración de ImGui</p>
+        </div>
+        <div class="ps-card solution">
+          <p class="ps-label">✓ Solution</p>
+          <!-- <p>[How you solved it. Be specific — numbers, technique names, API calls.]</p> -->
+        </div>
+      </div>
+
+      <div class="ps-grid">
+        <div class="ps-card problem">
+          <p class="ps-label">⚠ Problem</p>
+          <p>Integración de PhysX</p>
+        </div>
+        <div class="ps-card solution">
+          <p class="ps-label">✓ Solution</p>
+          <!-- <p>[How you solved it. Be specific — numbers, technique names, API calls.]</p> -->
+        </div>
+      </div>
+
+      <div class="ps-grid">
+        <div class="ps-card problem">
+          <p class="ps-label">⚠ Problem</p>
+          <p>Frustum Culling</p>
+        </div>
+        <div class="ps-card solution">
+          <p class="ps-label">✓ Solution</p>
+          <!-- <p>[How you solved it. Be specific — numbers, technique names, API calls.]</p> -->
+        </div>
+      </div>
+
+      <div class="ps-grid">
+        <div class="ps-card problem">
+          <p class="ps-label">⚠ Problem</p>
+          <p>Añadido de Postprocesos</p>
+        </div>
+        <div class="ps-card solution">
+          <p class="ps-label">✓ Solution</p>
+          <!-- <p>[How you solved it. Be specific — numbers, technique names, API calls.]</p> -->
+        </div>
+      </div>
+
+      <!-- Add more ps-grid blocks as needed -->
+
+    </article>
+
+
+    <!-- ╔══════════════════════════════════╗ -->
+    <!-- ║  SECTION 4 — METRICS / RESULTS  ║ -->
+    <!-- ╚══════════════════════════════════╝ -->
+    <article class="blog-section">
+      <p class="section-label">// 04 — results</p>
+      <h2>By The Numbers</h2>
+
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value">+60</span>
+          <span class="stat-label">Target FPS</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">+1000</span>
+          <span class="stat-label">Target Entities</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">2</span>
+          <span class="stat-label">Team Members</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">8 Months</span>
+          <span class="stat-label">Development Time</span>
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value">Forward</span>
+          <span class="stat-label">Render System</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">Deferred</span>
+          <span class="stat-label">Render System</span>
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value">Bloom</span>
+          <span class="stat-label">Post Process</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">Motion Blur</span>
+          <span class="stat-label">Post Process</span>
+        </div>
+        <div class="stat">
+          <span class="stat-value">Depth Of Field</span>
+          <span class="stat-label">Post Process</span>
+        </div>
+      </div>
+    </article>
+
+
+    <!-- ╔══════════════════════════════════╗ -->
+    <!-- ║  SECTION 5 — LESSONS LEARNED    ║ -->
+    <!-- ╚══════════════════════════════════╝ -->
+    <article class="blog-section">
+      <p class="section-label">// 05 — retrospective</p>
+      <h2>What I Learned</h2>
+      <!-- <p>[A closing reflection — technical takeaways, team dynamics, what you'd do differently.]</p> -->
+
+      <ul class="lessons-list">
+        <li>
+          <span class="lesson-num">01</span>
+          <!-- <span>[First key takeaway — be specific and honest.]</span> -->
+        </li>
+        <li>
+          <span class="lesson-num">02</span>
+          <!-- <span>[Second takeaway.]</span> -->
+        </li>
+        <li>
+          <span class="lesson-num">03</span>
+          <!-- <span>[What you'd do differently next time.]</span> -->
+        </li>
+      </ul>
+    </article>
+
+  </main>
+
+  <footer>
+    &copy; 2026 Juanjo Valenzuela — <a href="./index.html" style="color: var(--accent); text-decoration:none;">← back to
+      portfolio</a>
+  </footer>
+
+</body>
+
+</html>
