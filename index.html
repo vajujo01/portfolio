@@ -31,17 +31,12 @@
       --shadow: rgba(0, 0, 0, 0.1);
     }
 
-    html {
-      /* scroll-behavior: smooth; */
-    }
-
     body {
       font-family: 'Segoe UI', Arial, sans-serif;
       line-height: 1.6;
       margin: 0;
       padding: 0;
       padding-top: 100px;
-      /* Espacio para el header fixed */
       background-color: var(--bg-color);
       background-image:
         linear-gradient(var(--grid-color) 1px, transparent 1px),
@@ -51,7 +46,6 @@
       transition: background-color 0.3s, color 0.3s;
     }
 
-    /* --- HEADER REDISEÑADO --- */
     header {
       position: fixed;
       top: 0;
@@ -63,15 +57,6 @@
       transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* .scroll-down {
-      transform: translateY(-100%);
-    }
-
-    .scroll-up {
-      transform: translateY(0);
-      box-shadow: 0 5px 20px var(--shadow);
-    } */
-
     .header-content {
       max-width: 1600px;
       margin: 0 auto;
@@ -82,7 +67,6 @@
       box-sizing: border-box;
     }
 
-    /* Lado Izquierdo: Branding */
     .header-branding {
       display: flex;
       align-items: center;
@@ -91,7 +75,6 @@
 
     .header-main img {
       width: 60px;
-      /* Tamaño reducido para el header */
       height: 60px;
       border-radius: 50%;
       border: 2px solid var(--accent-color);
@@ -121,7 +104,6 @@
       color: var(--accent-color);
     }
 
-    /* Lado Derecho: Nav y Badges */
     .header-right {
       display: flex;
       flex-direction: column;
@@ -161,7 +143,6 @@
       font-weight: bold;
     }
 
-    /* --- EFECTOS GLITCH --- */
     .header-main h1::before,
     .header-main h1::after {
       content: "Juanjo Valenzuela";
@@ -238,7 +219,6 @@
       }
     }
 
-    /* --- CONTENIDO PRINCIPAL --- */
     .container {
       width: 90%;
       max-width: 1400px;
@@ -253,7 +233,6 @@
       margin-bottom: 40px;
       border-radius: 12px;
       border: 1px solid var(--border-color);
-      /* border: 1px solid var(--accent-color); */
       scroll-margin-top: 120px;
     }
 
@@ -271,6 +250,8 @@
       border-radius: 10px;
       border: 1px solid var(--border-color);
       transition: 0.3s;
+      display: flex;
+      flex-direction: column;
     }
 
     .project-item:hover {
@@ -278,6 +259,54 @@
       border-color: var(--accent-color);
       box-shadow: 0 10px 30px var(--shadow);
     }
+
+    /* ── Tech Blog Button ──────────────────────────────── */
+    .project-footer {
+      margin-top: auto;
+      padding-top: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .project-footer small {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .btn-blog {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 16px;
+      font-family: monospace;
+      font-size: 0.72rem;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent-color);
+      background: rgba(0, 242, 255, 0.06);
+      border: 1px solid var(--accent-color);
+      border-radius: 4px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+
+    .btn-blog::before {
+      content: '>';
+      opacity: 0.6;
+    }
+
+    .btn-blog:hover {
+      background: rgba(0, 242, 255, 0.15);
+      box-shadow: 0 0 14px rgba(0, 242, 255, 0.25);
+      transform: translateX(3px);
+    }
+
+    /* ─────────────────────────────────────────────────── */
 
     .video-container {
       width: 100%;
@@ -316,7 +345,6 @@
       border-top: 1px solid var(--border-color);
     }
 
-    /* Móvil */
     @media (max-width: 850px) {
       .header-content {
         flex-direction: column;
@@ -343,7 +371,6 @@
     .profile-section {
       position: relative;
       padding: 0 !important;
-      /* Para que la cabecera de la terminal pegue arriba */
       overflow: hidden;
     }
 
@@ -361,7 +388,6 @@
       height: 12px;
       border-radius: 50%;
       background: #ff5f56;
-      /* Rojo terminal */
     }
 
     .terminal-dot:nth-child(2) {
@@ -458,25 +484,17 @@
       }
     }
 
-    #profile {
-      /*  */
-    }
-
     #profile-now {
       display: flex;
       flex-direction: column;
       align-items: center;
-      /* Centra horizontalmente */
       text-align: center;
-      /* Centra el texto dentro de los párrafos */
       justify-content: center;
       padding: 60px 20px;
-      /* Un poco más de aire arriba y abajo */
     }
 
     #profile p {
       max-width: 800px;
-      /* Evita que las líneas sean demasiado largas y difíciles de leer */
       margin-left: auto;
       margin-right: auto;
     }
@@ -547,19 +565,14 @@
     @media (max-width: 768px) {
       .contact-grid {
         padding: 20px;
-        /* Menos padding para ganar espacio lateral */
       }
 
       .typing-effect {
         font-size: 0.85rem;
-        /* Letra un poco más pequeña */
         white-space: normal;
-        /* Permitir salto de línea */
         word-break: break-word;
-        /* Evita que palabras largas rompan el layout */
         width: 100%;
         animation: fade-in 1s ease-in forwards;
-        /* Cambiamos typing por un fundido suave */
       }
     }
 
@@ -619,9 +632,7 @@
       <div id="profile-now">
         <h2>Hi, I'm Juanjo Valenzuela</h2>
         <p>Programming video games is my passion. I love diving into game logic and building the complex
-          systems that make
-          everything work as it should.
-
+          systems that make everything work as it should.
           To me, there's nothing better than seeing an idea turn into something you can actually play and enjoy. My goal
           is simple: to keep learning and help build games that people find fun and engaging.</p>
 
@@ -650,18 +661,25 @@
           </div>
           <p>Top-Down Arcade action-comedy game with viking setting powered by Unreal Engine 5. Academic project
             for ESAT.</p>
-          <small><strong>Tech:</strong> C++, Unreal Engine 5, Gameplay, Design, Team Work</small>
+          <div class="project-footer">
+            <small><strong>Tech:</strong> C++, Unreal Engine 5, Gameplay, Design, Team Work</small>
+            <!-- <a href="./blog-beerseker.html" class="btn-blog">Tech Blog</a> -->
+          </div>
         </div>
-        
+
         <div class="project-item">
           <h3>Vulkan Graphics Engine</h3>
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/C72k1QLnmFY" loading="lazy" allowfullscreen></iframe>
           </div>
           <p>Graphics engine built with Vulkan (and OpenGL support), featuring PhysX 5 integration, a custom rendering
-            system, Lua scripting, and an ECS architecture, limited version on Android Studio. Includes a custom editor powered by ImGui. Academic project
+            system, Lua scripting, and an ECS architecture, limited version on Android Studio. Includes a custom editor
+            powered by ImGui. Academic project
             for ESAT.</p>
-          <small><strong>Tech:</strong> C++, Vulkan, OpenGL, PhysX 5, Lua</small>
+          <div class="project-footer">
+            <small><strong>Tech:</strong> C++, Vulkan, OpenGL, PhysX 5, Lua</small>
+            <a href="./blog-vulkan-engine.html" class="btn-blog">Tech Blog</a>
+          </div>
         </div>
 
         <div class="project-item">
@@ -673,7 +691,10 @@
             crafting drinks while listening to the unique stories of your customers (Currently in Development). Personal
             project. All visual assets in this project were generated using AI tools. This is a non-commercial personal
             project.</p>
-          <small><strong>Tech:</strong> C#, Unity</small>
+          <div class="project-footer">
+            <small><strong>Tech:</strong> C#, Unity</small>
+            <!-- <a href="./blog-night-club.html" class="btn-blog">Tech Blog</a> -->
+          </div>
         </div>
 
         <div class="project-item">
@@ -683,9 +704,13 @@
           </div>
           <p>Academic VR project developed in Unity with a partner. An infinite runner set in a mine where you shoot
             enemies and score points.
-            Models & assets: Mixamo, Kenney, Unity Asset Store. Audio: YouTube Studio and other fonts. Non-commercial
+            Models &amp; assets: Mixamo, Kenney, Unity Asset Store. Audio: YouTube Studio and other fonts.
+            Non-commercial
             academic project.</p>
-          <small><strong>Tech:</strong> C#, VR, Meta Quest 2/3, Unity</small>
+          <div class="project-footer">
+            <small><strong>Tech:</strong> C#, VR, Meta Quest 2/3, Unity</small>
+            <!-- <a href="./blog-vr-mine-runner.html" class="btn-blog">Tech Blog</a> -->
+          </div>
         </div>
 
         <div class="project-item">
@@ -693,10 +718,15 @@
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/w_bd8GWwu0o" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>An academic video game developed in Unreal Engine 5 with a partner, in which the player takes on the role of an astronaut
+          <p>An academic video game developed in Unreal Engine 5 with a partner, in which the player takes on the role
+            of an astronaut
             adrift in space. Using mechanics based on gravitational manipulation and perspective shifting,
-            the player must solve a series of spatial puzzles to locate the missing components of their spacecraft and safely return home.</p>
-          <small><strong>Tech:</strong> C++, Unreal Engine 5</small>
+            the player must solve a series of spatial puzzles to locate the missing components of their spacecraft and
+            safely return home.</p>
+          <div class="project-footer">
+            <small><strong>Tech:</strong> C++, Unreal Engine 5</small>
+            <!-- <a href="./blog-fezio-galaxy.html" class="btn-blog">Tech Blog</a> -->
+          </div>
         </div>
 
         <div class="project-item">
@@ -706,7 +736,10 @@
           </div>
           <p>My Computer Engineering final thesis project. A VR Ping Pong experience developed in Unreal Engine 4,
             specifically optimized for Oculus Quest 2. Focused on realistic physics and tactile feedback.</p>
-          <small><strong>Tech:</strong> C++, VR, Meta Quest 2, Blueprints, Unreal Engine 4</small>
+          <div class="project-footer">
+            <small><strong>Tech:</strong> C++, VR, Meta Quest 2, Blueprints, Unreal Engine 4</small>
+            <!-- <a href="./blog-ping-pong-vr.html" class="btn-blog">Tech Blog</a> -->
+          </div>
         </div>
 
         <div class="project-item">
@@ -716,7 +749,10 @@
           </div>
           <p>Academic project developed in Unity with a partner. A funny infinite runner using Kenney assets and YouTube
             Studio audio tracks. Non-commercial academic project.</p>
-          <small><strong>Tech:</strong> C#, Unity</small>
+          <div class="project-footer">
+            <small><strong>Tech:</strong> C#, Unity</small>
+            <!-- <a href="./blog-funny-runner.html" class="btn-blog">Tech Blog</a> -->
+          </div>
         </div>
 
         <div class="project-item">
@@ -728,7 +764,10 @@
             trees.
             The demo includes: a patrolling agent, two agents fighting 1v1, and two teams in combat.
             Models and animations from Mixamo.</p>
-          <small><strong>Tech:</strong> C++, Blueprints, Unreal Engine 5, AI</small>
+          <div class="project-footer">
+            <small><strong>Tech:</strong> C++, Blueprints, Unreal Engine 5, AI</small>
+            <!-- <a href="./blog-unreal-ai.html" class="btn-blog">Tech Blog</a> -->
+          </div>
         </div>
 
         <div class="project-item">
@@ -738,8 +777,12 @@
           </div>
           <p>An Unreal Engine prototype dedicated to exploring interaction mechanics, atmospheric storytelling, and
             tension-building in the horror genre.</p>
-          <small><strong>Tech:</strong> C++, Blueprints, Unreal Engine 4</small>
+          <div class="project-footer">
+            <small><strong>Tech:</strong> C++, Blueprints, Unreal Engine 4</small>
+            <!-- <a href="./blog-horror-mechanics.html" class="btn-blog">Tech Blog</a> -->
+          </div>
         </div>
+
       </div>
     </section>
 
@@ -760,8 +803,7 @@
               <h4>HND in Game Programming</h4>
               <p class="institution">ESAT (Escuela Superior de Arte y Tecnología)</p>
               <p class="description">Specializing in C++, gameplay, low-level programming, team work, game
-                development, and building an engine.
-              </p>
+                development, and building an engine.</p>
             </div>
           </div>
 
@@ -845,7 +887,6 @@
               <span class="label">EMAIL</span>
               <span class="value">juanjo.valenzuela.go@gmail.com</span>
             </div>
-            <div class="card-border"></div>
           </a>
 
           <a href="https://www.linkedin.com/in/juanjovalenzuela" target="_blank" class="contact-card">
@@ -853,7 +894,6 @@
               <span class="label">LINKEDIN</span>
               <span class="value">in/juanjovalenzuela</span>
             </div>
-            <div class="card-border"></div>
           </a>
 
           <a href="https://github.com/vajujo01" target="_blank" class="contact-card">
@@ -861,7 +901,6 @@
               <span class="label">GITHUB</span>
               <span class="value">github.com/vajujo01</span>
             </div>
-            <div class="card-border"></div>
           </a>
         </div>
       </div>
