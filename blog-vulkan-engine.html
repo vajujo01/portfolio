@@ -470,7 +470,7 @@
       }
     }
   </style>
-	<link rel="icon" href="./images/HTML/icon.png">
+  <link rel="icon" href="./images/HTML/icon.png">
 </head>
 
 <body>
@@ -782,6 +782,9 @@ void RenderManager::InitRenderProcess(FrameInfo& frameInfo, int stepLight, glm::
         small, debuggable steps. The stepLight parameter distributes shadows across different atlas slots.
       </p>
 
+      <img src="./images/HTML/depthPass.png" alt="Depth Pass"
+        style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+
       <div class="code-block">
         <div class="code-header">
           <div class="code-dots">
@@ -821,8 +824,20 @@ void RenderManager::RenderObjects(FrameInfo& frameInfo, int stepLight, glm::vec3
       <p>The lighting pass is executed in the systems that require it, after the shadow map and geometry buffer have
         been generated. Finally, all objects are rendered.
       </p>
-      <img src="./images/HTML/triangleRender.png" alt="TriangleRender"
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0;">
+        <img src="./images/HTML/colorPass.png" alt="Color Pass"
+          style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+        <img src="./images/HTML/shadowPass.png" alt="Shadow Pass"
+          style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+      </div>
+
+      <img src="./images/HTML/lightingPass.png" alt="Lighting Pass"
         style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+
+      <p>All these images are being visualized via RenderDoc, a program that I started learning while developping this
+        project.
+      </p>
 
       <div class="code-block">
         <div class="code-header">
@@ -1114,6 +1129,200 @@ std::vector&ltchar> PlantGeneratorSystem::GetPlant(kType type, size_t iterations
       </p>
       <img src="./images/HTML/plantgeneration.png" alt="plantGenerationImg"
         style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+
+      <h2>Foliage Generator</h2>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="code-lang">C++ — VulkanPlantGeneratorDemoV2.cpp</span>
+        </div>
+        <pre>
+          <code>
+void PopulateForest(HTML* html, float threshold, PlantGeneratorSystem::kType type, int iterations)
+{
+  size_t Foliage = html->AddActor("Foliage", "", 0, glm::vec3(), glm::vec3(), glm::vec3(1.0f));
+
+  std::vector&ltchar> plant;
+
+  glm::vec3 currentPos(0.0f, 0.0f, 0.0f);
+  glm::vec3 currentRot(0.0f, 0.0f, 0.0f);
+
+  float stepLength = 1.0f;
+  float angleStep = glm::radians&ltfloat>(25.0f);
+  int cubeCount = 0;
+  std::string parentPlant = "Plant";
+  int plantsCreated = 0;
+  size_t step = 0;
+  float timeStep = 0.1f;
+
+  std::stack&ltPlantGeneratorSystem::TransformState> stateStackPlant;
+  std::stack&ltPlantGeneratorSystem::TransformStateTree> stateStackTree;
+
+  bool startedTree = false;
+
+  float noiseScale = 0.25f;
+  float seed = static_cast&ltfloat>(rand() % 1000);
+
+  switch (type)
+  {
+  
+  .
+  .
+  .
+
+  case PlantGeneratorSystem::kTree:
+    for (int x = 0; x &lt 80; x++) {
+      for (int y = 0; y &lt 80; y++) {
+
+        float noiseValue = SimplexNoise::noise(x * noiseScale, y * noiseScale, seed);
+        float normalizedNoise = (noiseValue + 1.0f) * 0.5f;
+
+        if (normalizedNoise > threshold) {
+
+          float offsetX = ((rand() % 100) / 100.0f) - 0.5f;
+          float offsetY = ((rand() % 100) / 100.0f) - 0.5f;
+
+          currentPos = { (x - 40.0f) + offsetX, 0.0f, (y - 40.0f) + offsetY };
+
+          if ((rand() % 100) > 30) {
+            parentPlant = "Tree_" + std::to_string(plantsCreated++);
+            size_t parentPlantId = html->AddActor(parentPlant, "", Foliage,
+              glm::vec3(), glm::vec3(), glm::vec3(1.0f));
+
+            plant = html->GetPlantGeneratorSystem()
+              .GetPlant(PlantGeneratorSystem::kType::kTree, iterations);
+
+            currentRot.y = static_cast&ltfloat>(rand() % 360) * (3.14159f / 180.0f);
+
+            int newIteration = (rand() + 2) % iterations;
+
+            LoadTreeFull(html, plant, currentPos, currentRot, stepLength,
+              angleStep, cubeCount, stateStackTree, parentPlantId, newIteration);
+          }
+        }
+      }
+    }
+    break;
+  
+  .
+  .
+  .
+
+  }
+}
+          </code>
+        </pre>
+      </div>
+
+      <p>A forest generation using Perlin and the previous PlantGeneratorSystem.
+      </p>
+      <img src="./images/HTML/foliage.png" alt="Foliage"
+        style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+
+      <h2>Wave Function Collapse</h2>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="code-lang">C++ — VulkanWaveFunctionCollapseDemoV1.cpp</span>
+        </div>
+        <pre>
+          <code>
+void GenerateRules() {
+  rules[kTiles::kEmpty] = { kTiles::kWater };
+  rules[kTiles::kWater] = { kTiles::kWater, kTiles::kSand };
+  rules[kTiles::kSand] = { kTiles::kWater, kTiles::kSand, kTiles::kDirt };
+  rules[kTiles::kDirt] = { kTiles::kSand, kTiles::kDirt };
+}
+
+void GeneratePossibilities() {
+  for (size_t i = 0; i &lt sizeGrid * sizeGrid; i++) {
+    gridPossibilities[i] = { kTiles::kEmpty, kTiles::kWater, kTiles::kSand, kTiles::kDirt };
+  }
+}
+
+std::vector&ltkTiles> GetAvailableTiles(size_t cell, size_t checkingCell) {
+  std::vector&ltkTiles> availableTiles;
+
+  for (kTiles tile : gridPossibilities[checkingCell]) {
+    if (std::find(rules[grid[cell]].begin(), rules[grid[cell]].end(), tile) !=
+      rules[grid[cell]].end()) {
+      availableTiles.push_back(tile);
+    }
+  }
+
+  return availableTiles;
+}
+
+void CommitTile(size_t cell, HTML& html) {
+  std::string tileName = "Tile_" + std::to_string(cell);
+
+  size_t cellRow = cell / sizeGrid;
+  size_t cellCol = cell % sizeGrid;
+  glm::vec3 tilePosition = {cellCol, 0.0f, cellRow};
+
+  std::string texturePath = "";
+
+  switch (grid[cell])
+  {
+  case kTiles::kEmpty:
+  case kTiles::kNoData:
+    texturePath = "../examples/data/Textures/NoTexture.png";
+    break;
+  case kTiles::kWater:
+    texturePath = "../examples/data/Textures/WaterTexture.png";
+    break;
+  case kTiles::kSand:
+    texturePath = "../examples/data/Textures/sandTexture.png";
+    break;
+  case kTiles::kDirt:
+    texturePath = "../examples/data/Textures/dirtTexture.png";
+    break;
+  default:
+    break;
+  }
+
+  gridPossibilities[cell] = { grid[cell] };
+
+  // Top
+  if (cellRow > 0) {
+    size_t topCell = (cellRow - 1) * sizeGrid + cellCol;
+    gridPossibilities[topCell] = GetAvailableTiles(cell, topCell);
+  }
+  // Bottom
+  if (cellRow + 1 &lt sizeGrid) {
+    size_t bottomCell = (cellRow + 1) * sizeGrid + cellCol;
+    gridPossibilities[bottomCell] = GetAvailableTiles(cell, bottomCell);
+  }
+  // Left
+  if (cellCol > 0) {
+    size_t leftCell = cellRow * sizeGrid + cellCol - 1;
+    gridPossibilities[leftCell] = GetAvailableTiles(cell, leftCell);
+  }
+  // Right
+  if (cellCol + 1 &lt sizeGrid) {
+    size_t rightCell = cellRow * sizeGrid + cellCol + 1;
+    gridPossibilities[rightCell] = GetAvailableTiles(cell, rightCell);
+  }
+}
+          </code>
+        </pre>
+      </div>
+
+      <p>Some functions that generate rules and collapse tiles inside a grid and change the nearest cells. Simple
+        implemetation of the wave function collapse technique. In the example the grid is filled ring by ring.
+      </p>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0;">
+        <img src="./images/HTML/wave1.png" alt="Wave Function Collapse 1"
+          style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+        <img src="./images/HTML/wave2.png" alt="Wave Function Collapse 2"
+          style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+      </div>
     </article>
 
 
@@ -1176,6 +1385,18 @@ std::vector&ltchar> PlantGeneratorSystem::GetPlant(kType type, size_t iterations
         </div>
       </div>
 
+      <div class="ps-grid">
+        <div class="ps-card problem">
+          <p class="ps-label">⚠ Problem</p>
+          <p>Android Implementation</p>
+        </div>
+        <div class="ps-card solution">
+          <p class="ps-label">✓ Solution</p>
+          <p>Using Android Studio and CMake it wasn't hard to port the engine, Vulkan is friendly on Android so I just
+            needed to adjust some guards and change how the app is created due to the C++ support.</p>
+        </div>
+      </div>
+
       <!-- Add more ps-grid blocks as needed -->
 
     </article>
@@ -1205,9 +1426,36 @@ std::vector&ltchar> PlantGeneratorSystem::GetPlant(kType type, size_t iterations
           <span class="stat-value">8 Months</span>
           <span class="stat-label">Development Time</span>
         </div>
+        <img src="./images/HTML/metrics.png" alt="Metrics"
+          style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
       </div>
-      <img src="./images/HTML/metrics.png" alt="Metrics"
-        style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+
+      <h2>Platforms</h2>
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value">Vulkan</span>
+          <img src="./images/HTML/plantgeneration.png" alt="Vulkan"
+            style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value">Android</span>
+          <img src="./images/HTML/mobile.jpeg" alt="Mobile"
+            style="width:25%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value">OpenGL</span>
+        </div>
+      </div>
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value">Web</span>
+        </div>
+      </div>
+
       <h2>Render Systems</h2>
       <div class="stat-row">
         <div class="stat">
@@ -1286,6 +1534,16 @@ std::vector&ltchar> PlantGeneratorSystem::GetPlant(kType type, size_t iterations
           <span>Splitting the work across two APIs (Vulkan/OpenGL) within the same engine was a constant abstraction
             challenge with my teammate. I learned to design API-agnostic interfaces before implementing, not
             after.</span>
+        </li>
+        <li>
+          <span class="lesson-num">05</span>
+          <span>Android Studio and Render Doc basic usage. First time using these two tools, one for the mobile port and
+            the other for debugging.</span>
+        </li>
+        <li>
+          <span class="lesson-num">06</span>
+          <span>Some interesting AI techniques such as Lindenmayer Systems, forest generation with Perlin Noise and Wave
+            Function Collapse.</span>
         </li>
       </ul>
     </article>
