@@ -445,6 +445,13 @@
       border-top: 1px solid var(--border);
     }
 
+    .header-nav-blog {
+      display: flex;
+      gap: 20px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+    }
+
     /* ── RESPONSIVE ───────────────────────────────────── */
     @media (max-width: 720px) {
       header {
@@ -467,6 +474,10 @@
 
       .ps-grid {
         grid-template-columns: 1fr;
+      }
+
+      .header-nav-blog {
+        display: none;
       }
     }
 
@@ -508,6 +519,18 @@
   <!-- ── HEADER ──────────────────────────────────────── -->
   <header>
     <a href="./index.html" class="back-link">Back to Portfolio</a>
+    <nav class="header-nav-blog">
+      <a href="#overview" style="color:var(--accent); text-decoration:none; opacity:0.7; transition:opacity 0.2s;"
+        onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">// overview</a>
+      <a href="#system" style="color:var(--accent); text-decoration:none; opacity:0.7; transition:opacity 0.2s;"
+        onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">// beyond the surface</a>
+      <a href="#challenges" style="color:var(--accent); text-decoration:none; opacity:0.7; transition:opacity 0.2s;"
+        onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">// challenges</a>
+      <a href="#results" style="color:var(--accent); text-decoration:none; opacity:0.7; transition:opacity 0.2s;"
+        onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">// results</a>
+      <a href="#retrospective" style="color:var(--accent); text-decoration:none; opacity:0.7; transition:opacity 0.2s;"
+        onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">// retrospective</a>
+    </nav>
     <span class="header-badge">TECH_BLOG.EXE</span>
   </header>
 
@@ -549,7 +572,7 @@
     <!-- ╔══════════════════════════════════╗ -->
     <!-- ║  SECTION 1 — OVERVIEW / PITCH   ║ -->
     <!-- ╚══════════════════════════════════╝ -->
-    <article class="blog-section">
+    <article class="blog-section" id="overview">
       <p class="section-label">// 01 — overview</p>
       <h2>What is this project?</h2>
       <p>
@@ -567,7 +590,7 @@
     <!-- ╔══════════════════════════════════╗ -->
     <!-- ║  SECTION 2 — BEYOND THE SURFACE  ║ -->
     <!-- ╚══════════════════════════════════╝ -->
-    <article class="blog-section">
+    <article class="blog-section" id="system">
       <p class="section-label">// 02 — Beyond the Surface</p>
       <h2>System Design</h2>
       <p>
@@ -1359,7 +1382,7 @@ void CommitTile(size_t cell, HTML& html) {
     <!-- ╔══════════════════════════════════╗ -->
     <!-- ║  SECTION 3 — CHALLENGES         ║ -->
     <!-- ╚══════════════════════════════════╝ -->
-    <article class="blog-section">
+    <article class="blog-section" id="challenges">
       <p class="section-label">// 03 — challenges &amp; solutions</p>
       <h2>Problems I Solved</h2>
       <!-- <p>[Brief intro — this section is the heart of the blog. Show how you think.]</p> -->
@@ -1435,7 +1458,7 @@ void CommitTile(size_t cell, HTML& html) {
     <!-- ╔══════════════════════════════════╗ -->
     <!-- ║  SECTION 4 — METRICS / RESULTS  ║ -->
     <!-- ╚══════════════════════════════════╝ -->
-    <article class="blog-section">
+    <article class="blog-section" id="results">
       <p class="section-label">// 04 — results</p>
       <h2>By The Numbers</h2>
 
@@ -1533,7 +1556,7 @@ void CommitTile(size_t cell, HTML& html) {
     <!-- ╔══════════════════════════════════╗ -->
     <!-- ║  SECTION 5 — LESSONS LEARNED    ║ -->
     <!-- ╚══════════════════════════════════╝ -->
-    <article class="blog-section">
+    <article class="blog-section" id="retrospective">
       <p class="section-label">// 05 — retrospective</p>
       <h2>What I Learned</h2>
       <!-- <p>[A closing reflection — technical takeaways, team dynamics, what you'd do differently.]</p> -->
