@@ -469,6 +469,36 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* ── COLLAPSIBLE CODE BLOCKS ──────────────────────── */
+    .code-block.collapsible .code-header {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .code-block.collapsible .code-header:hover {
+      background: rgba(0, 242, 255, 0.14);
+    }
+
+    .code-toggle {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--accent);
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .code-block.collapsible .code-header:hover .code-toggle {
+      opacity: 1;
+    }
+
+    .code-block.collapsible pre {
+      display: none;
+    }
+
+    .code-block.collapsible.open pre {
+      display: block;
+    }
   </style>
   <link rel="icon" href="./images/HTML/icon.png">
 </head>
@@ -1555,6 +1585,22 @@ void CommitTile(size_t cell, HTML& html) {
       portfolio</a>
   </footer>
 
+  <script>
+    document.querySelectorAll('.code-block').forEach(block => {
+      block.classList.add('collapsible');
+
+      const header = block.querySelector('.code-header');
+      const toggle = document.createElement('span');
+      toggle.className = 'code-toggle';
+      toggle.textContent = '[ show ]';
+      header.appendChild(toggle);
+
+      header.addEventListener('click', () => {
+        const isOpen = block.classList.toggle('open');
+        toggle.textContent = isOpen ? '[ hide ]' : '[ show ]';
+      });
+    });
+  </script>
 </body>
 
 </html>
