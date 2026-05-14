@@ -483,8 +483,14 @@
   <!-- ── HERO ────────────────────────────────────────── -->
   <section class="hero">
     <p class="hero-eyebrow">// tech breakdown</p>
-    <h1>Hyper Technical Magic Leprechaun (HTML)</h1>
-    <h1>Vulkan-OpenGL Graphics Engine</h1>
+    <div style="display:flex; align-items:center; gap:24px; margin-bottom:20px;">
+      <img src="./images/HTML/icon.png" alt="Engine cover"
+        style="width:240px; height:240px; object-fit:cover; border-radius:8px; border:1px solid var(--border); box-shadow:0 0 20px rgba(0,242,255,0.1); flex-shrink:0;">
+      <div>
+        <h1 style="margin-bottom:8px;">Hyper Technical Magic Leprechaun (HTML)</h1>
+        <h1>Vulkan-OpenGL Graphics Engine</h1>
+      </div>
+    </div>
 
     <div class="hero-meta">
       <span><span class="dot"></span>2025 - 2026</span>
@@ -521,9 +527,8 @@
         powered by ImGui. Academic project for ESAT.
       </p>
       <p>
-        El proyecto se dividió entre Vulkan y OpenGL, yo fui responsable de la parte de Vulkan (con base en el tutorial
-        de Brendan Galea) y de la creación del ECS
-        en el que se basa el motor, la integración con PhysX y con ImGui y el port a Android.
+        The project was split between Vulkan and OpenGL. I was responsible for the Vulkan side (based on Brendan Galea's
+        tutorial), the ECS the engine is built on, PhysX and ImGui integration, and the Android port.
       </p>
     </article>
 
@@ -535,12 +540,12 @@
       <p class="section-label">// 02 — Beyond the Surface</p>
       <h2>System Design</h2>
       <p>
-        El motor se basa en un sistema de Entity Component System, se apoya en un Job System para la carga de modelos y
-        algunas texturas.
+        The engine is built around an Entity Component System, supported by a Job System for asynchronous model and
+        texture loading.
       </p>
 
       <p>
-        Se ha dividido en clases comunes y específicas para Vulkan y OpenGL.
+        It is structured into shared classes and API-specific ones for Vulkan and OpenGL.
       </p>
 
       <!-- CODE SNIPPET EXAMPLE -->
@@ -557,10 +562,9 @@ std::vector&ltstd::pair&ltsize_t, T&gt&gt entityList_;  /// Entity - component r
         </pre>
       </div>
 
-      <p>Sin el mapa, encontrar el componente de una entidad concreta requeriría recorrer el vector entero: O(n). Con
-        él, la búsqueda por ID es O(1), pero el vector sigue siendo contiguo para la iteración masiva de sistemas. Es el
-        mejor de los dos mundos: velocidad de lookup para accesos individuales, y localidad de caché para los bucles de
-        sistemas.
+      <p>Without the map, finding a specific entity's component would require scanning the entire vector: O(n). With it,
+        lookup by ID is O(1), while the vector stays contiguous for bulk system iteration. Best of both worlds: fast
+        individual access and cache-friendly loops.
       </p>
 
       <div class="code-block">
@@ -582,11 +586,10 @@ T* comp = &entityList_[index].second; // acceso directo</code>
         </pre>
       </div>
 
-      <p>Los componentes se guardan en un vector, que en memoria es un bloque contiguo. Cuando un sistema itera sobre
-        todos los componentes de un tipo (por ejemplo, todos los TransformComponent), la CPU puede cargar varios en la
-        misma línea de caché de una sola vez. Si en cambio cada componente fuera un puntero a un objeto creado con new,
-        cada acceso implicaría un salto a una dirección arbitraria de memoria, invalidando la caché constantemente. Esto
-        es uno de los principales motivos por los que ECS supera al diseño orientado a objetos clásico en rendimiento.
+      <p>Components are stored in a contiguous vector. When a system iterates over all components of one type, the CPU
+        can load several in the same cache line at once. With pointer-based OOP, each access jumps to an arbitrary
+        memory address, constantly invalidating the cache. This is one of the main reasons ECS outperforms classic
+        object-oriented design in performance.
       </p>
 
       <div class="code-block">
@@ -636,8 +639,8 @@ private:
         </pre>
       </div>
 
-      <p>Separación de responsabilidades mediante sistemas. CameraSystem, ScriptSystem, RenderManager,
-        PlantGeneratorSystem... cada subsistema tiene su clase propia, y HTML los orquesta sin implementarlos.
+      <p>Separation of concerns through systems. CameraSystem, ScriptSystem, RenderManager, PlantGeneratorSystem — each
+        subsystem has its own class, and HTML orchestrates them without implementing them.
       </p>
 
       <div class="code-block">
@@ -697,7 +700,7 @@ html.Finish();
         </pre>
       </div>
 
-      <p>Loop típico de juego para facilitar el uso del main al usuario, el cual solo interactúa con la clase HTML.
+      <p>Typical game loop to simplify the user's main entry point. The user only interacts with the HTML class.
       </p>
 
       <h2>Render</h2>
@@ -774,9 +777,8 @@ void RenderManager::InitRenderProcess(FrameInfo& frameInfo, int stepLight, glm::
         </pre>
       </div>
 
-      <p>Se prepara en la parte inicial del renderizado el shadow map para las sombras y el GBuffer, para de esta
-        forma tenerlo todo separado en pequeños pasos fáciles de debugear. El parámetro stepLight sirve para distribuir
-        las sombras en distintos atlas.
+      <p>At the start of the render process, the shadow map and G-Buffer are prepared, keeping everything separated into
+        small, debuggable steps. The stepLight parameter distributes shadows across different atlas slots.
       </p>
 
       <div class="code-block">
@@ -815,9 +817,11 @@ void RenderManager::RenderObjects(FrameInfo& frameInfo, int stepLight, glm::vec3
         </pre>
       </div>
 
-      <p>Se ejecuta el lighting pass en los sistemas de renderizado que así lo requieran después de haber generado el
-        mapa de sombras y el buffer de geometría y por último se renderizan todos los objetos.
+      <p>The lighting pass is executed in the systems that require it, after the shadow map and geometry buffer have
+        been generated. Finally, all objects are rendered.
       </p>
+      <img src="./images/HTML/triangleRender.png" alt="TriangleRender"
+        style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
 
       <div class="code-block">
         <div class="code-header">
@@ -925,10 +929,13 @@ void RenderManager::RenderObjects(FrameInfo& frameInfo, int stepLight, glm::vec3
         </pre>
       </div>
 
-      <p>El pipeline de post-proceso en cadena es la parte más sofisticada. Cada efecto consume la salida del anterior
-        mediante BlitTexture y redirige viewbase/sampler, formando una cadena MotionBlur → DoF → Bloom sobre el mismo
+      <p>The chained post-process pipeline is the most sophisticated part. Each effect consumes the previous one's
+        output via BlitTexture and redirects viewbase/sampler, forming a MotionBlur → DoF → Bloom chain over the same
         sceneTarget_.
       </p>
+
+      <img src="./images/HTML/allPostPo.png" alt="AllPostPo"
+        style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
 
       <h2>Simple Plant Generator</h2>
 
@@ -1101,9 +1108,11 @@ std::vector&ltchar> PlantGeneratorSystem::GetPlant(kType type, size_t iterations
         </pre>
       </div>
 
-      <p>Alfabeto de símbolos (F, X, +, -, [, ], &, ^, \) que se expande iterativamente aplicando reglas de reescritura.
-        Cinco tipos de plantas distintas con patrones de generación diferentes.
+      <p>A symbol alphabet (F, X, +, -, [, ], &, ^, \) that expands iteratively by applying rewriting rules. Five
+        distinct plant types with different generation patterns.
       </p>
+      <img src="./images/HTML/plantgeneration.png" alt="plantGenerationImg"
+        style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
     </article>
 
 
@@ -1119,33 +1128,25 @@ std::vector&ltchar> PlantGeneratorSystem::GetPlant(kType type, size_t iterations
       <div class="ps-grid">
         <div class="ps-card problem">
           <p class="ps-label">⚠ Problem</p>
-          <p>Renderizado con sombras</p>
+          <p>Shadow rendering</p>
         </div>
         <div class="ps-card solution">
           <p class="ps-label">✓ Solution</p>
-          <!-- <p>[How you solved it. Be specific — numbers, technique names, API calls.]</p> -->
+          <p>Created a Shadow Atlas class to render shadows into a separate texture for later use. Forward Rendering+
+            and Deferred Rendering were both implemented.</p>
         </div>
       </div>
 
       <div class="ps-grid">
         <div class="ps-card problem">
           <p class="ps-label">⚠ Problem</p>
-          <p>Integración de ImGui</p>
+          <p>PhysX integration</p>
         </div>
         <div class="ps-card solution">
           <p class="ps-label">✓ Solution</p>
-          <!-- <p>[How you solved it. Be specific — numbers, technique names, API calls.]</p> -->
-        </div>
-      </div>
-
-      <div class="ps-grid">
-        <div class="ps-card problem">
-          <p class="ps-label">⚠ Problem</p>
-          <p>Integración de PhysX</p>
-        </div>
-        <div class="ps-card solution">
-          <p class="ps-label">✓ Solution</p>
-          <!-- <p>[How you solved it. Be specific — numbers, technique names, API calls.]</p> -->
+          <p>Compiled the official PhysX library, added it to the project, and built a wrapper that creates and
+            initializes the scene and handles physics steps. A base Pawn Controller was also created to support custom
+            pawns for different use cases, handling collisions accordingly.</p>
         </div>
       </div>
 
@@ -1156,18 +1157,21 @@ std::vector&ltchar> PlantGeneratorSystem::GetPlant(kType type, size_t iterations
         </div>
         <div class="ps-card solution">
           <p class="ps-label">✓ Solution</p>
-          <!-- <p>[How you solved it. Be specific — numbers, technique names, API calls.]</p> -->
+          <p>When a model is created, a bounding sphere is automatically generated. It is later used to check whether
+            the object falls within the frustum, defined by its enclosing planes and following the camera. Anything
+            outside is not rendered, improving performance.</p>
         </div>
       </div>
 
       <div class="ps-grid">
         <div class="ps-card problem">
           <p class="ps-label">⚠ Problem</p>
-          <p>Añadido de Postprocesos</p>
+          <p>Post-process pipeline</p>
         </div>
         <div class="ps-card solution">
           <p class="ps-label">✓ Solution</p>
-          <!-- <p>[How you solved it. Be specific — numbers, technique names, API calls.]</p> -->
+          <p>A base render pass is performed and its result is passed as a texture to the selected post-process effect.
+            Motion blur uses a dedicated velocity pass that encodes per-pixel screen-space velocity.</p>
         </div>
       </div>
 
@@ -1201,30 +1205,49 @@ std::vector&ltchar> PlantGeneratorSystem::GetPlant(kType type, size_t iterations
           <span class="stat-label">Development Time</span>
         </div>
       </div>
+      <img src="./images/HTML/metrics.png" alt="Metrics"
+        style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+      <h2>Render Systems</h2>
       <div class="stat-row">
         <div class="stat">
-          <span class="stat-value">Forward</span>
-          <span class="stat-label">Render System</span>
+          <span class="stat-value">Forward+</span>
+          <img src="./images/HTML/forward.png" alt="Forward+"
+            style="width:100%; border-radius:6px; border:1px solid var(--border);">
         </div>
         <div class="stat">
           <span class="stat-value">Deferred</span>
-          <span class="stat-label">Render System</span>
+          <img src="./images/HTML/deferred.png" alt="Deferred"
+            style="width:100%; border-radius:6px; border:1px solid var(--border);">
         </div>
       </div>
+      <h2>Extra</h2>
+      <div class="stat-row">
+        <div class="stat">
+          <span class="stat-value">PBR</span>
+          <img src="./images/HTML/pbr.png" alt="PBR"
+            style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+        </div>
+      </div>
+
+      <h2>Post Process</h2>
       <div class="stat-row">
         <div class="stat">
           <span class="stat-value">Bloom</span>
-          <span class="stat-label">Post Process</span>
+          <img src="./images/HTML/bloom.png" alt="Bloom"
+            style="width:100%; border-radius:6px; border:1px solid var(--border);">
         </div>
         <div class="stat">
           <span class="stat-value">Motion Blur</span>
-          <span class="stat-label">Post Process</span>
+          <img src="./images/HTML/motionBlur.png" alt="Motion Blur"
+            style="width:100%; border-radius:6px; border:1px solid var(--border);">
         </div>
         <div class="stat">
-          <span class="stat-value">Depth Of Field</span>
-          <span class="stat-label">Post Process</span>
+          <span class="stat-value">DoF</span>
+          <img src="./images/HTML/dof.png" alt="Depth Of Field"
+            style="width:100%; border-radius:6px; border:1px solid var(--border);">
         </div>
       </div>
+
     </article>
 
 
@@ -1239,15 +1262,29 @@ std::vector&ltchar> PlantGeneratorSystem::GetPlant(kType type, size_t iterations
       <ul class="lessons-list">
         <li>
           <span class="lesson-num">01</span>
-          <!-- <span>[First key takeaway — be specific and honest.]</span> -->
+          <span>Vulkan forces you to truly understand the GPU. There is no magic: you manage every memory barrier, every
+            image layout transition, every synchronization point. It is overwhelming at first, but when something breaks
+            you know exactly why.</span>
         </li>
         <li>
           <span class="lesson-num">02</span>
-          <!-- <span>[Second takeaway.]</span> -->
+          <span>The ECS with contiguous vector + unordered_map was the most impactful architectural decision of the
+            project. I started with classic OOP design and the performance jump after migrating was immediate and
+            measurable.</span>
         </li>
         <li>
           <span class="lesson-num">03</span>
-          <!-- <span>[What you'd do differently next time.]</span> -->
+          <span>Implementing Forward+, Deferred, and PBR from scratch gave me a real understanding of modern rendering:
+            how a G-Buffer is built, why separating the geometry and lighting passes matters, and when each technique
+            makes sense. Shadows with a Shadow Atlas taught me that a basic shadow map is not enough — distributing
+            multiple lights across an atlas, managing slots, and correctly synchronizing passes is where the real
+            difficulty lies.</span>
+        </li>
+        <li>
+          <span class="lesson-num">04</span>
+          <span>Splitting the work across two APIs (Vulkan/OpenGL) within the same engine was a constant abstraction
+            challenge with my teammate. I learned to design API-agnostic interfaces before implementing, not
+            after.</span>
         </li>
       </ul>
     </article>
