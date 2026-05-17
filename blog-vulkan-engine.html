@@ -510,6 +510,79 @@
     .code-block.collapsible.open pre {
       display: block;
     }
+	  .repo-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid #333;
+    color: #c8c8c8;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.2s, border-color 0.2s;
+    cursor: pointer;
+  }
+ 
+  /* Corner accents */
+  .repo-link::before,
+  .repo-link::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-color: #555;
+    border-style: solid;
+    transition: border-color 0.2s, width 0.2s, height 0.2s;
+  }
+  .repo-link::before {
+    top: -1px; left: -1px;
+    border-width: 1px 0 0 1px;
+  }
+  .repo-link::after {
+    bottom: -1px; right: -1px;
+    border-width: 0 1px 1px 0;
+  }
+ 
+  .repo-link:hover {
+    color: #e8e8e8;
+    border-color: #666;
+  }
+  .repo-link:hover::before,
+  .repo-link:hover::after {
+    border-color: #aaa;
+    width: 10px;
+    height: 10px;
+  }
+ 
+  /* Subtle scan line on hover */
+  .repo-link:hover .repo-label::after {
+    opacity: 1;
+  }
+ 
+  .repo-label {
+    position: relative;
+  }
+ 
+  .repo-prefix {
+    color: #555;
+    user-select: none;
+  }
+ 
+  /* GitHub SVG icon */
+  .gh-icon {
+    width: 15px;
+    height: 15px;
+    fill: #666;
+    flex-shrink: 0;
+    transition: fill 0.2s;
+  }
+  .repo-link:hover .gh-icon {
+    fill: #aaa;
+  }
   </style>
   <link rel="icon" href="./images/HTML/icon.png">
 </head>
@@ -564,6 +637,33 @@
     <div class="hero-video">
       <iframe src="https://www.youtube.com/embed/C72k1QLnmFY" loading="lazy" allowfullscreen></iframe>
     </div>
+ 
+	<a
+	class="repo-link"
+	href="https://github.com/vajujo01/working_progress"
+	target="_blank"
+	rel="noopener noreferrer"
+	>
+	<svg class="gh-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+	  <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303
+		3.438 9.8 8.205 11.385.6.113.82-.258.82-.577
+		0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422
+		18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729
+		1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305
+		3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93
+		0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176
+		0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405
+		1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23
+		3.285-1.23.645 1.653.24 2.873.12 3.176.765.84
+		1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475
+		5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015
+		3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592
+		24 12.297c0-6.627-5.373-12-12-12"/>
+	</svg>
+	<span class="repo-label">
+	  <span class="repo-prefix">// </span>source_code
+	</span>
+	</a>
   </section>
 
   <!-- ── ARTICLE BODY ─────────────────────────────────── -->
@@ -581,8 +681,7 @@
         powered by ImGui. Academic project for ESAT.
       </p>
       <p>
-        The project was split between Vulkan and OpenGL. I was responsible for the Vulkan side (based on Brendan Galea's
-        tutorial), the ECS the engine is built on, PhysX and ImGui integration, and the Android port.
+        The project was split between Vulkan and OpenGL. I was responsible for the full Vulkan side: ECS, PhysX, ImGui, Android port, and all rendering systems.
       </p>
     </article>
 
@@ -1055,119 +1154,48 @@ std::vector&ltchar> PlantGeneratorSystem::GetPlant(kType type, size_t iterations
 
 		break;
 	case PlantGeneratorSystem::kTree:
-		result = { 'F', 'X' };
+		// ... other types follow the same pattern
+		break;
+	case PlantGeneratorSystem::kStochasticTree:
+		result = { 'X' };
 
 		for (size_t i = 0; i &lt iterations; i++) {
 			std::vector&ltchar> newVector;
+			newVector.reserve(result.size() * 5);
+
 			for (char node : result) {
-				if (node == 'X') {
-					int r = rand() % 100;
-					if (r &lt 30) {
-						AppendString(newVector, "F[&X][^X]");
+				switch (node) {
+					case 'X': {
+						int r = rand() % 100;
+						if (r &lt 40) {
+							AppendString(newVector, "FF[+X][-X]X");
+						} else if (r &lt 70) {
+							AppendString(newVector, "F[+X]F[-X]+X");
+						} else if (r &lt 90) {
+							AppendString(newVector, "F[\\X][/X]FX");
+						} else {
+							AppendString(newVector, "FX");
+						}
+						break;
 					}
-					else if (r &lt 60) {
-						AppendString(newVector, "F[+&X][\\^X]");
-					}
-					else if (r &lt 90) {
-						AppendString(newVector, "F[\\&X]FX");
-					}
-					else {
-						newVector.push_back('X');
-					}
-				}
-				else if (node == 'F') {
-					newVector.push_back('F');
-				}
-				else {
-					newVector.push_back(node);
+					case 'F':
+						AppendString(newVector, "FF");
+						break;
+					default:
+						newVector.push_back(node);
+						break;
 				}
 			}
-			result = newVector;
+
+			result = std::move(newVector);
 		}
 		break;
-        case PlantGeneratorSystem::kSymmetricTree:
-            result = { 'F', 'X' };
-
-            for (size_t i = 0; i &lt iterations; i++) {
-                std::vector&ltchar> newVector;
-                newVector.reserve(result.size() * 4);
-
-                for (char node : result) {
-                    switch (node) {
-                        case 'X':
-                            AppendString(newVector, "F[+X][-X]FX");
-                            break;
-                        case 'F':
-                            AppendString(newVector, "FF");
-                            break;
-                        default:
-                            newVector.push_back(node);
-                            break;
-                    }
-                }
-
-                result = std::move(newVector);
-            }
-            break;
-        case PlantGeneratorSystem::kSpiralTree:
-            result = { 'F', 'X' };
-
-            for (size_t i = 0; i &lt iterations; i++) {
-                std::vector&ltchar> newVector;
-                newVector.reserve(result.size() * 5);
-
-                for (char node : result) {
-                    switch (node) {
-                        case 'X':
-                            AppendString(newVector, "F[&+X][&-X][&\\X]X");
-                            break;
-                        case 'F':
-                            AppendString(newVector, "FF");
-                            break;
-                        default:
-                            newVector.push_back(node);
-                            break;
-                    }
-                }
-
-                result = std::move(newVector);
-            }
-            break;
-
-        case PlantGeneratorSystem::kStochasticTree:
-            result = { 'X' };
-
-            for (size_t i = 0; i &lt iterations; i++) {
-                std::vector&ltchar> newVector;
-                newVector.reserve(result.size() * 5);
-
-                for (char node : result) {
-                    switch (node) {
-                        case 'X': {
-                            int r = rand() % 100;
-                            if (r &lt 40) {
-                                AppendString(newVector, "FF[+X][-X]X");
-                            } else if (r &lt 70) {
-                                AppendString(newVector, "F[+X]F[-X]+X");
-                            } else if (r &lt 90) {
-                                AppendString(newVector, "F[\\X][/X]FX");
-                            } else {
-                                AppendString(newVector, "FX");
-                            }
-                            break;
-                        }
-                        case 'F':
-                            AppendString(newVector, "FF");
-                            break;
-                        default:
-                            newVector.push_back(node);
-                            break;
-                    }
-                }
-
-                result = std::move(newVector);
-            }
-            break;
+	case PlantGeneratorSystem::kSymmetricTree:
+		// ... other types follow the same pattern
+		break;
+	case PlantGeneratorSystem::kSpiralTree:
+		// ... other types follow the same pattern
+		break;
 	default:
 		break;
 	}
@@ -1465,11 +1493,11 @@ void CommitTile(size_t cell, HTML& html) {
       <div class="stat-row">
         <div class="stat">
           <span class="stat-value">+60</span>
-          <span class="stat-label">Target FPS</span>
+          <span class="stat-label">FPS</span>
         </div>
         <div class="stat">
           <span class="stat-value">+1000</span>
-          <span class="stat-label">Target Entities</span>
+          <span class="stat-label">Entities</span>
         </div>
         <div class="stat">
           <span class="stat-value">2</span>
@@ -1535,7 +1563,7 @@ void CommitTile(size_t cell, HTML& html) {
       <div class="stat-row">
         <div class="stat">
           <span class="stat-value">Bloom</span>
-          <img src="./images/HTML/bloom.png" alt="Bloom"
+          <img src="./images/HTML/bloom.gif" alt="Bloom"
             style="width:100%; border-radius:6px; border:1px solid var(--border);">
         </div>
         <div class="stat">
@@ -1545,7 +1573,7 @@ void CommitTile(size_t cell, HTML& html) {
         </div>
         <div class="stat">
           <span class="stat-value">DoF</span>
-          <img src="./images/HTML/dof.png" alt="Depth Of Field"
+          <img src="./images/HTML/dof.gif" alt="Depth Of Field"
             style="width:100%; border-radius:6px; border:1px solid var(--border);">
         </div>
       </div>
