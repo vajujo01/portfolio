@@ -4,196 +4,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio - Juanjo Valenzuela</title>
+  <title>Juanjo Valenzuela — Technical Artist</title>
   <style>
-    /* Definición de Variables */
     :root {
-      --bg-color: #121212;
-      --grid-color: rgba(0, 255, 255, 0.05);
-      --text-color: #eee;
+      --bg-color: #0a0a0f;
+      --grid-color: rgba(0, 242, 255, 0.04);
+      --text-color: #dde6ee;
+      --text-dim: rgba(221, 230, 238, 0.55);
       --section-bg: rgba(255, 255, 255, 0.03);
-      --item-bg: rgba(40, 40, 40, 0.6);
-      --header-bg: rgba(20, 20, 20, 0.95);
-      --accent-color: #00f2ff;
-      --border-color: rgba(0, 255, 255, 0.1);
-      --shadow: rgba(0, 0, 0, 0.5);
+      --item-bg: rgba(20, 20, 30, 0.7);
+      --header-bg: rgba(10, 10, 15, 0.95);
+      --accent: #00f2ff;
+      --accent-dim: rgba(0, 242, 255, 0.35);
+      --accent-2: #ff2d78;
+      --border: rgba(0, 242, 255, 0.12);
+      --shadow: rgba(0, 0, 0, 0.6);
+      --mono: 'Share Tech Mono', monospace;
+      --body: 'Rajdhani', sans-serif;
     }
 
-    [data-theme="light"] {
-      --bg-color: #f0f4f8;
-      --grid-color: rgba(0, 123, 255, 0.1);
-      --text-color: #222;
-      --section-bg: rgba(255, 255, 255, 0.8);
-      --item-bg: rgba(255, 255, 255, 1);
-      --header-bg: rgba(255, 255, 255, 0.95);
-      --accent-color: #007bff;
-      --border-color: rgba(0, 0, 0, 0.1);
-      --shadow: rgba(0, 0, 0, 0.1);
+    @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap');
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
-      line-height: 1.6;
-      margin: 0;
-      padding: 0;
-      padding-top: 100px;
+      font-family: var(--body);
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--text-color);
       background-color: var(--bg-color);
       background-image:
         linear-gradient(var(--grid-color) 1px, transparent 1px),
         linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
       background-size: 30px 30px;
-      color: var(--text-color);
-      transition: background-color 0.3s, color 0.3s;
+      padding-top: 90px;
     }
 
+    /* scanline */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.07) 2px, rgba(0, 0, 0, 0.07) 4px);
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ── HEADER ── */
     header {
       position: fixed;
       top: 0;
       width: 100%;
       z-index: 1000;
       background: var(--header-bg);
-      backdrop-filter: blur(15px);
-      border-bottom: 2px solid var(--accent-color);
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--accent);
     }
 
     .header-content {
-      max-width: 1600px;
+      max-width: 1400px;
       margin: 0 auto;
-      padding: 10px 40px;
+      padding: 12px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-sizing: border-box;
     }
 
     .header-branding {
       display: flex;
       align-items: center;
-      gap: 20px;
+      gap: 16px;
     }
 
-    .header-main img {
-      width: 60px;
-      height: 60px;
+    .header-avatar {
+      width: 52px;
+      height: 52px;
       border-radius: 50%;
-      border: 2px solid var(--accent-color);
-      animation: img-glitch 4s infinite;
+      border: 2px solid var(--accent);
       object-fit: cover;
-    }
-
-    .header-text-group {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .header-main h1 {
-      margin: 0;
-      font-size: 1.5rem;
-      position: relative;
-      display: inline-block;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .subtitle {
-      margin: 0;
-      font-size: 0.8rem;
-      font-weight: bold;
-      opacity: 0.8;
-      color: var(--accent-color);
-    }
-
-    .header-right {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-    }
-
-    .header-nav {
-      display: flex;
-      gap: 25px;
-    }
-
-    .header-nav a {
-      color: var(--text-color);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-      transition: color 0.3s;
-    }
-
-    .header-nav a:hover {
-      color: var(--accent-color);
-    }
-
-    .skills-badges {
-      display: flex;
-      gap: 6px;
-    }
-
-    .skills-badges span {
-      background: rgba(0, 242, 255, 0.1);
-      border: 1px solid var(--accent-color);
-      padding: 1px 8px;
-      border-radius: 3px;
-      font-size: 0.65rem;
-      color: var(--accent-color);
-      font-weight: bold;
-    }
-
-    .header-main h1::before,
-    .header-main h1::after {
-      content: "Juanjo Valenzuela";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--header-bg);
-    }
-
-    .header-main h1::before {
-      left: 2px;
-      text-shadow: -1px 0 #ff00c1;
-      clip: rect(10px, 450px, 20px, 0);
-      animation: glitch-anim 3s infinite linear alternate-reverse;
-    }
-
-    .header-main h1::after {
-      left: -2px;
-      text-shadow: 1px 0 #00fff9;
-      clip: rect(20px, 450px, 30px, 0);
-      animation: glitch-anim2 2s infinite linear alternate-reverse;
-    }
-
-    @keyframes glitch-anim {
-      0% {
-        clip: rect(10px, 9999px, 20px, 0);
-      }
-
-      50% {
-        clip: rect(2px, 9999px, 30px, 0);
-      }
-
-      100% {
-        clip: rect(15px, 9999px, 12px, 0);
-      }
-    }
-
-    @keyframes glitch-anim2 {
-      0% {
-        clip: rect(5px, 9999px, 15px, 0);
-      }
-
-      50% {
-        clip: rect(25px, 9999px, 5px, 0);
-      }
-
-      100% {
-        clip: rect(10px, 9999px, 25px, 0);
-      }
+      animation: img-glitch 5s infinite;
     }
 
     @keyframes img-glitch {
@@ -219,6 +118,128 @@
       }
     }
 
+    .header-name {
+      font-family: var(--body);
+      font-size: 1.3rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      display: inline-block;
+    }
+
+    .header-name::before,
+    .header-name::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--header-bg);
+    }
+
+    .header-name::before {
+      left: 2px;
+      text-shadow: -1px 0 #ff00c1;
+      clip: rect(10px, 450px, 20px, 0);
+      animation: glitch-a 3s infinite linear alternate-reverse;
+    }
+
+    .header-name::after {
+      left: -2px;
+      text-shadow: 1px 0 #00fff9;
+      clip: rect(20px, 450px, 30px, 0);
+      animation: glitch-b 2s infinite linear alternate-reverse;
+    }
+
+    @keyframes glitch-a {
+      0% {
+        clip: rect(10px, 9999px, 20px, 0);
+      }
+
+      50% {
+        clip: rect(2px, 9999px, 30px, 0);
+      }
+
+      100% {
+        clip: rect(15px, 9999px, 12px, 0);
+      }
+    }
+
+    @keyframes glitch-b {
+      0% {
+        clip: rect(5px, 9999px, 15px, 0);
+      }
+
+      50% {
+        clip: rect(25px, 9999px, 5px, 0);
+      }
+
+      100% {
+        clip: rect(10px, 9999px, 25px, 0);
+      }
+    }
+
+    .header-subtitle {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 24px;
+    }
+
+    .header-nav a {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+
+    .header-nav a:hover {
+      color: var(--accent);
+    }
+
+    .skills-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .skills-badges span {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      padding: 2px 8px;
+      border-radius: 2px;
+      border: 1px solid var(--accent-dim);
+      background: rgba(0, 242, 255, 0.06);
+      color: var(--accent);
+      letter-spacing: 0.5px;
+    }
+
+    .skills-badges span.ta {
+      border-color: rgba(45, 255, 76, 0.25);
+      background: rgba(45, 255, 111, 0.07);
+      color: #6eff90;
+    }
+
+    /* ── LAYOUT ── */
     .container {
       width: 90%;
       max-width: 1400px;
@@ -227,160 +248,22 @@
     }
 
     section {
-      background: rgba(0, 0, 0, 0.4) !important;
+      background: rgba(0, 0, 0, 0.45);
       backdrop-filter: blur(8px);
-      padding: 40px;
       margin-bottom: 40px;
-      border-radius: 12px;
-      border: 1px solid var(--border-color);
-      scroll-margin-top: 120px;
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-      gap: 30px;
-      margin-top: 25px;
-      margin: 25px;
-    }
-
-    .project-item {
-      background: var(--item-bg);
-      padding: 20px;
       border-radius: 10px;
-      border: 1px solid var(--border-color);
-      transition: 0.3s;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .project-item:hover {
-      transform: translateY(-5px);
-      border-color: var(--accent-color);
-      box-shadow: 0 10px 30px var(--shadow);
-    }
-
-    /* ── Tech Blog Button ──────────────────────────────── */
-    .project-footer {
-      margin-top: auto;
-      padding-top: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .project-footer small {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .btn-blog {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      padding: 7px 16px;
-      font-family: monospace;
-      font-size: 0.72rem;
-      font-weight: bold;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: var(--accent-color);
-      background: rgba(0, 242, 255, 0.06);
-      border: 1px solid var(--accent-color);
-      border-radius: 4px;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
-    }
-
-    .btn-blog::before {
-      content: '>';
-      opacity: 0.6;
-    }
-
-    .btn-blog:hover {
-      background: rgba(0, 242, 255, 0.15);
-      box-shadow: 0 0 14px rgba(0, 242, 255, 0.25);
-      transform: translateX(3px);
-    }
-
-    /* ─────────────────────────────────────────────────── */
-
-    .video-container {
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      background: #000;
-      border-radius: 6px;
+      border: 1px solid var(--border);
       overflow: hidden;
-      margin-bottom: 15px;
-    }
-
-    .video-container iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    #theme-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 12px 20px;
-      cursor: pointer;
-      background: var(--accent-color);
-      color: #000;
-      border: none;
-      border-radius: 50px;
-      font-weight: bold;
-      z-index: 1000;
-      box-shadow: 0 4px 15px var(--shadow);
-    }
-
-    footer {
-      text-align: center;
-      padding: 40px;
-      color: #777;
-      border-top: 1px solid var(--border-color);
-    }
-
-    @media (max-width: 850px) {
-      .header-content {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-      }
-
-      .header-right {
-        align-items: center;
-      }
-
-      body {
-        padding-top: 220px;
-      }
-
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .contact-section,
-    .experience-section,
-    .projects-section,
-    .profile-section {
-      position: relative;
-      padding: 0 !important;
-      overflow: hidden;
+      scroll-margin-top: 110px;
     }
 
     .terminal-header {
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.06);
       padding: 10px 20px;
       display: flex;
       align-items: center;
       gap: 8px;
-      border-bottom: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border);
     }
 
     .terminal-dot {
@@ -400,11 +283,273 @@
 
     .terminal-title {
       margin-left: 10px;
-      font-family: monospace;
-      font-size: 0.8rem;
+      font-family: var(--mono);
+      font-size: 0.75rem;
       opacity: 0.5;
     }
 
+    /* ── ABOUT ── */
+    #profile-now {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 60px 40px;
+    }
+
+    #profile-now h2 {
+      font-size: clamp(1.8rem, 3vw, 2.4rem);
+      font-weight: 700;
+      margin-bottom: 20px;
+      text-shadow: 2px 0 0 rgba(255, 45, 120, 0.3), -2px 0 0 rgba(0, 242, 255, 0.3);
+    }
+
+    #profile-now p {
+      max-width: 720px;
+      color: var(--text-dim);
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+    }
+
+    .ta-highlight {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 8px;
+      padding: 10px 20px;
+      background: rgba(45, 255, 111, 0.07);
+      border: 1px solid rgba(45, 255, 76, 0.25);
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: #6eff90;
+      letter-spacing: 1px;
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 24px;
+      padding: 28px;
+    }
+
+    .project-item {
+      background: var(--item-bg);
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .project-item:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+      box-shadow: 0 8px 32px rgba(0, 242, 255, 0.08);
+    }
+
+    .project-item.featured {
+      border-color: rgba(45, 255, 76, 0.253);
+      grid-column: span 2;
+    }
+
+    .project-item.featured:hover {
+      border-color: #6eff90;
+      box-shadow: 0 8px 32px rgba(45, 255, 111, 0.07);
+    }
+
+    .project-badge {
+      display: inline-block;
+      margin-bottom: 10px;
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      padding: 2px 10px;
+      border-radius: 2px;
+      background: rgba(45, 255, 111, 0.07);
+      border: 1px solid rgba(45, 255, 76, 0.25);
+      color: #6eff90;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .project-item h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      color: var(--text-color);
+    }
+
+    .video-container {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-bottom: 14px;
+    }
+
+    .video-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .project-item p {
+      color: var(--text-dim);
+      font-size: 0.92rem;
+      flex: 1;
+    }
+
+    .project-footer {
+      margin-top: auto;
+      padding-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .project-footer small {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--text-dim);
+      flex: 1;
+    }
+
+    .project-footer small strong {
+      color: var(--accent);
+    }
+
+    .btn-blog {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: bold;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(0, 242, 255, 0.06);
+      border: 1px solid var(--accent-dim);
+      border-radius: 3px;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+
+    .btn-blog::before {
+      content: '>';
+      opacity: 0.6;
+    }
+
+    .btn-blog:hover {
+      background: rgba(0, 242, 255, 0.14);
+      box-shadow: 0 0 12px rgba(0, 242, 255, 0.2);
+      transform: translateX(3px);
+    }
+
+    /* ── RESUME ── */
+    .resume-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      padding: 40px;
+    }
+
+    .column-title {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 10px;
+      margin-bottom: 28px;
+    }
+
+    .resume-item {
+      position: relative;
+      padding-left: 22px;
+      border-left: 2px solid var(--border);
+      margin-bottom: 28px;
+      transition: border-color 0.2s;
+    }
+
+    .resume-item:hover {
+      border-left-color: var(--accent);
+    }
+
+    .resume-date {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .resume-content h4 {
+      font-size: 1.05rem;
+      color: var(--text-color);
+      margin: 0 0 4px;
+    }
+
+    .institution {
+      font-size: 0.88rem;
+      color: var(--accent);
+      opacity: 0.8;
+      margin-bottom: 4px;
+    }
+
+    .description {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+    }
+
+    .open-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      margin-bottom: 24px;
+      background: rgba(45, 255, 111, 0.07);
+      border: 1px solid rgba(45, 255, 76, 0.25);
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: #6eff90;
+      letter-spacing: 1px;
+    }
+
+    .open-badge::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #6eff90;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.4;
+        transform: scale(0.8);
+      }
+    }
+
+    /* ── CONTACT ── */
     .contact-grid {
       padding: 40px;
       display: grid;
@@ -412,44 +557,50 @@
       gap: 40px;
     }
 
+    .contact-info h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .contact-info p {
+      color: var(--text-dim);
+      font-size: 0.95rem;
+    }
+
     .contact-card {
       display: block;
-      position: relative;
-      padding: 20px;
-      margin-bottom: 15px;
-      background: rgba(0, 242, 255, 0.05);
-      border-left: 4px solid var(--accent-color);
+      padding: 18px;
+      margin-bottom: 12px;
+      background: rgba(0, 242, 255, 0.04);
+      border-left: 3px solid var(--accent);
       text-decoration: none;
-      transition: all 0.3s ease;
+      transition: all 0.25s;
     }
 
     .contact-card:hover {
-      background: rgba(0, 242, 255, 0.15);
-      transform: translateX(10px);
-      box-shadow: -10px 0 20px rgba(0, 242, 255, 0.2);
-    }
-
-    .card-content {
-      display: flex;
-      flex-direction: column;
+      background: rgba(0, 242, 255, 0.1);
+      transform: translateX(8px);
+      box-shadow: -8px 0 20px rgba(0, 242, 255, 0.15);
     }
 
     .label {
-      font-size: 0.7rem;
-      color: var(--accent-color);
-      font-weight: bold;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
       letter-spacing: 2px;
     }
 
     .value {
-      font-size: 1.1rem;
+      font-size: 1rem;
       color: var(--text-color);
-      margin-top: 5px;
+      margin-top: 4px;
     }
 
     .typing-effect {
-      font-family: monospace;
-      border-right: 2px solid var(--accent-color);
+      font-family: var(--mono);
+      font-size: 0.85rem;
+      border-right: 2px solid var(--accent);
       width: fit-content;
       white-space: nowrap;
       overflow: hidden;
@@ -474,117 +625,59 @@
       }
 
       50% {
-        border-color: var(--accent-color);
+        border-color: var(--accent);
       }
     }
 
-    @media (max-width: 768px) {
-      .contact-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    #profile-now {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    footer {
       text-align: center;
-      justify-content: center;
-      padding: 60px 20px;
-    }
-
-    #profile p {
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .resume-container {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px;
       padding: 40px;
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      border-top: 1px solid var(--border);
     }
 
-    .column-title {
-      color: var(--accent-color);
-      font-family: monospace;
-      text-transform: uppercase;
-      border-bottom: 1px solid var(--border-color);
-      padding-bottom: 10px;
-      margin-bottom: 30px;
-    }
-
-    .resume-item {
-      position: relative;
-      padding-left: 25px;
-      border-left: 2px solid var(--border-color);
-      margin-bottom: 30px;
-      transition: 0.3s;
-    }
-
-    .resume-item:hover {
-      border-left-color: var(--accent-color);
-    }
-
-    .resume-date {
-      font-family: monospace;
-      font-size: 0.85rem;
-      color: var(--accent-color);
-      margin-bottom: 5px;
-    }
-
-    .resume-content h4 {
-      margin: 0;
-      font-size: 1.1rem;
-      color: var(--text-color);
-    }
-
-    .institution {
-      font-weight: bold;
-      font-size: 0.9rem;
-      opacity: 0.9;
-      margin: 5px 0;
-    }
-
-    .description {
-      font-size: 0.9rem;
-      opacity: 0.7;
-    }
-
-    .accent-text {
-      animation: blink 1s infinite;
-    }
-
+    /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
-      .resume-container {
-        grid-template-columns: 1fr;
+      .header-content {
+        flex-direction: column;
+        gap: 14px;
+        text-align: center;
+        padding: 14px 20px;
       }
-    }
 
-    @media (max-width: 768px) {
+      .header-right {
+        align-items: center;
+      }
+
+      .skills-badges {
+        justify-content: center;
+      }
+
+      body {
+        padding-top: 200px;
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+        padding: 16px;
+      }
+
+      .project-item.featured {
+        grid-column: span 1;
+      }
+
+      .resume-container,
       .contact-grid {
-        padding: 20px;
+        grid-template-columns: 1fr;
+        padding: 24px;
       }
 
       .typing-effect {
-        font-size: 0.85rem;
         white-space: normal;
-        word-break: break-word;
-        width: 100%;
-        animation: fade-in 1s ease-in forwards;
-      }
-    }
-
-    @keyframes fade-in {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
+        border-right: none;
+        animation: none;
       }
     }
   </style>
@@ -593,26 +686,30 @@
 </head>
 
 <body>
-  <header id="main-header">
+
+  <!-- ── HEADER ── -->
+  <header>
     <div class="header-content">
       <div class="header-branding">
-        <div class="header-main">
-          <img src="./images/profile.jpeg" alt="Juanjo Valenzuela">
-        </div>
-        <div class="header-text-group">
-          <h1>Juanjo Valenzuela</h1>
-          <p class="subtitle">Crafting the logic behind the fun</p>
+        <img src="./images/profile.jpeg" alt="Juanjo Valenzuela" class="header-avatar">
+        <div>
+          <div class="header-name" data-text="Juanjo Valenzuela">Juanjo Valenzuela</div>
+          <p class="header-subtitle">// TECHNICAL ARTIST</p>
         </div>
       </div>
 
       <div class="header-right">
         <nav class="header-nav">
-          <a href="#profile">About Me</a>
+          <a href="#profile">About</a>
           <a href="#projects">Projects</a>
           <a href="#experience">Experience</a>
           <a href="#contact">Contact</a>
         </nav>
         <div class="skills-badges">
+          <span class="ta">PBR</span>
+          <span class="ta">Shaders / GLSL</span>
+          <span class="ta">Post-Process</span>
+          <span class="ta">Procedural Gen</span>
           <span>C / C++ / C#</span>
           <span>Vulkan / OpenGL</span>
           <span>UE5 / Unity</span>
@@ -622,63 +719,61 @@
   </header>
 
   <div class="container">
-    <section id="profile" class="profile-section">
+
+    <!-- ── ABOUT ── -->
+    <section id="profile">
       <div class="terminal-header">
-        <span class="terminal-dot"></span>
-        <span class="terminal-dot"></span>
-        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span>
         <span class="terminal-title">ABOUT_ME.EXE</span>
       </div>
       <div id="profile-now">
         <h2>Hi, I'm Juanjo Valenzuela</h2>
-        <p>Programming video games is my passion. I love diving into game logic and building the complex
-          systems that make everything work as it should.
-          To me, there's nothing better than seeing an idea turn into something you can actually play and enjoy. My goal
-          is simple: to keep learning and help build games that people find fun and engaging.</p>
-
-        <p style="margin-top: 20px; color: var(--accent-color); font-size: 1.2rem;">
-          <strong>Let's build something cool!</strong>
-        </p>
-
-        <p style="opacity: 0.6; font-size: 0.9rem;">Based in Spain, building the next generation of interactive
-          entertainment.</p>
+        <p>I'm a Game Programmer with a passion for the technical side of visual art. My focus is the intersection
+          between code and visuals — building rendering systems, shaders, and procedural tools that make games look and
+          feel great.</p>
+        <p>I've implemented PBR, Forward+, Deferred rendering, post-process pipelines and procedural generation systems
+          in Vulkan. I understand what happens at the GPU level, which means I can debug, optimize, and
+          build on top of engines like UE5 and Unity with real depth.</p>
+        <p>Based in Valencia, Spain — open to remote and on-site opportunities.</p>
+        <div class="ta-highlight">⬡ &nbsp; Bridging art and code — from shader to screen</div>
       </div>
     </section>
 
-    <section id="projects" class="projects-section">
+    <!-- ── PROJECTS ── -->
+    <section id="projects">
       <div class="terminal-header">
-        <span class="terminal-dot"></span>
-        <span class="terminal-dot"></span>
-        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span>
         <span class="terminal-title">FEATURED_PROJECTS.EXE</span>
       </div>
       <div class="projects-grid">
+
+        <!-- FEATURED: Vulkan Engine — first and wide -->
+        <div class="project-item featured">
+          <span class="project-badge">⬡ Rendering & Technical Art</span>
+          <h3>Vulkan Graphics Engine — HTML</h3>
+          <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/C72k1QLnmFY" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <p>Custom rendering engine built from scratch in Vulkan and C++. Implements Forward+, Deferred and Deferred
+            PBR pipelines with a Shadow Atlas for multi-light support. Full post-process stack — Bloom, Depth of Field
+            and Motion Blur — all chained. Procedural generation systems: L-System tree/plant generator
+            with 5 species, Simplex-noise forest placement, and Wave Function Collapse tilemap generator. ECS
+            architecture with a Job System for async loading.</p>
+          <div class="project-footer">
+            <small><strong>Tech:</strong> C++, Vulkan, OpenGL, GLSL, PhysX 5, Lua, Android</small>
+            <a href="./blog-vulkan-engine.html" class="btn-blog">Tech Blog</a>
+          </div>
+        </div>
 
         <div class="project-item">
           <h3>Beerseker: The Stolen Brew</h3>
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/GtQ6LtdkQII" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>Top-Down Arcade action-comedy game with viking setting powered by Unreal Engine 5. Academic project
-            for ESAT.</p>
+          <p>Top-down arcade action-comedy in UE5. Team project — responsible for gameplay systems, character mechanics
+            and C++ architecture.</p>
           <div class="project-footer">
-            <small><strong>Tech:</strong> C++, Unreal Engine 5, Gameplay, Design, Team Work</small>
-            <!-- <a href="./blog-beerseker.html" class="btn-blog">Tech Blog</a> -->
-          </div>
-        </div>
-
-        <div class="project-item">
-          <h3>Vulkan Graphics Engine</h3>
-          <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/C72k1QLnmFY" loading="lazy" allowfullscreen></iframe>
-          </div>
-          <p>Graphics engine built with Vulkan (and OpenGL support), featuring PhysX 5 integration, a custom rendering
-            system, Lua scripting, and an ECS architecture, limited version on Android Studio. Includes a custom editor
-            powered by ImGui. Academic project
-            for ESAT.</p>
-          <div class="project-footer">
-            <small><strong>Tech:</strong> C++, Vulkan, OpenGL, PhysX 5, Lua</small>
-            <a href="./blog-vulkan-engine.html" class="btn-blog">Tech Blog</a>
+            <small><strong>Tech:</strong> C++, Unreal Engine 5</small>
           </div>
         </div>
 
@@ -687,13 +782,9 @@
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/rM8X3t2emTo" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>A Unity-based game where you play as a bartender in different night clubs. The core gameplay involves
-            crafting drinks while listening to the unique stories of your customers (Currently in Development). Personal
-            project. All visual assets in this project were generated using AI tools. This is a non-commercial personal
-            project.</p>
+          <p>Unity bartender game — craft drinks and listen to customer stories. In development. Personal project.</p>
           <div class="project-footer">
             <small><strong>Tech:</strong> C#, Unity</small>
-            <!-- <a href="./blog-night-club.html" class="btn-blog">Tech Blog</a> -->
           </div>
         </div>
 
@@ -702,14 +793,10 @@
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/0QrlKNaWMx0" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>Academic VR project developed in Unity with a partner. An infinite runner set in a mine where you shoot
-            enemies and score points.
-            Models &amp; assets: Mixamo, Kenney, Unity Asset Store. Audio: YouTube Studio and other fonts.
-            Non-commercial
-            academic project.</p>
+          <p>Academic VR infinite runner in Unity. Focused on comfortable VR locomotion and interaction on Meta Quest
+            2/3.</p>
           <div class="project-footer">
-            <small><strong>Tech:</strong> C#, VR, Meta Quest 2/3, Unity</small>
-            <!-- <a href="./blog-vr-mine-runner.html" class="btn-blog">Tech Blog</a> -->
+            <small><strong>Tech:</strong> C#, Unity, Meta Quest 2/3</small>
           </div>
         </div>
 
@@ -718,13 +805,9 @@
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/buPgK3GWHpM" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>Academic project built in Unreal Engine 5. Features AI agents competing against each other using behavior
-            trees.
-            The demo includes: a patrolling agent, two agents fighting 1v1, and two teams in combat.
-            Models and animations from Mixamo.</p>
+          <p>AI demo in UE5 using Behavior Trees. Patrolling agents, 1v1 combat, and team-based combat scenarios.</p>
           <div class="project-footer">
-            <small><strong>Tech:</strong> C++, Blueprints, Unreal Engine 5, AI</small>
-            <!-- <a href="./blog-unreal-ai.html" class="btn-blog">Tech Blog</a> -->
+            <small><strong>Tech:</strong> C++, Blueprints, Unreal Engine 5</small>
           </div>
         </div>
 
@@ -733,14 +816,10 @@
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/w_bd8GWwu0o" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>An academic video game developed in Unreal Engine 5 with a partner, in which the player takes on the role
-            of an astronaut
-            adrift in space. Using mechanics based on gravitational manipulation and perspective shifting,
-            the player must solve a series of spatial puzzles to locate the missing components of their spacecraft and
-            safely return home.</p>
+          <p>UE5 puzzle game exploring gravitational manipulation and perspective shifting. Player must recover
+            spaceship components to return home.</p>
           <div class="project-footer">
             <small><strong>Tech:</strong> C++, Unreal Engine 5</small>
-            <!-- <a href="./blog-fezio-galaxy.html" class="btn-blog">Tech Blog</a> -->
           </div>
         </div>
 
@@ -749,24 +828,10 @@
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/cE8brbtDXaM" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>My Computer Engineering final thesis project. A VR Ping Pong experience developed in Unreal Engine 4,
-            specifically optimized for Oculus Quest 2. Focused on realistic physics and tactile feedback.</p>
+          <p>Computer Engineering thesis — VR Ping Pong on Oculus Quest 2. Focused on realistic physics simulation and
+            haptic feedback.</p>
           <div class="project-footer">
-            <small><strong>Tech:</strong> C++, VR, Meta Quest 2, Blueprints, Unreal Engine 4</small>
-            <!-- <a href="./blog-ping-pong-vr.html" class="btn-blog">Tech Blog</a> -->
-          </div>
-        </div>
-
-        <div class="project-item">
-          <h3>Funny Infinite Runner</h3>
-          <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/AYgiarc-pQ4" loading="lazy" allowfullscreen></iframe>
-          </div>
-          <p>Academic project developed in Unity with a partner. A funny infinite runner using Kenney assets and YouTube
-            Studio audio tracks. Non-commercial academic project.</p>
-          <div class="project-footer">
-            <small><strong>Tech:</strong> C#, Unity</small>
-            <!-- <a href="./blog-funny-runner.html" class="btn-blog">Tech Blog</a> -->
+            <small><strong>Tech:</strong> C++, Blueprints, Unreal Engine 4, Meta Quest 2</small>
           </div>
         </div>
 
@@ -775,70 +840,76 @@
           <div class="video-container">
             <iframe src="https://www.youtube.com/embed/LiQB0rK2Et0" loading="lazy" allowfullscreen></iframe>
           </div>
-          <p>An Unreal Engine prototype dedicated to exploring interaction mechanics, atmospheric storytelling, and
-            tension-building in the horror genre.</p>
+          <p>UE4 prototype exploring interaction mechanics, atmospheric storytelling and tension-building for the horror
+            genre.</p>
           <div class="project-footer">
             <small><strong>Tech:</strong> C++, Blueprints, Unreal Engine 4</small>
-            <!-- <a href="./blog-horror-mechanics.html" class="btn-blog">Tech Blog</a> -->
+          </div>
+        </div>
+
+        <div class="project-item">
+          <h3>Funny Infinite Runner</h3>
+          <div class="video-container">
+            <iframe src="https://www.youtube.com/embed/AYgiarc-pQ4" loading="lazy" allowfullscreen></iframe>
+          </div>
+          <p>Academic Unity runner built with a partner. First full game loop shipped — procedural obstacle generation
+            and score system.</p>
+          <div class="project-footer">
+            <small><strong>Tech:</strong> C#, Unity</small>
           </div>
         </div>
 
       </div>
     </section>
 
-    <section id="experience" class="experience-section">
+    <!-- ── EXPERIENCE ── -->
+    <section id="experience">
       <div class="terminal-header">
-        <span class="terminal-dot"></span>
-        <span class="terminal-dot"></span>
-        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span>
         <span class="terminal-title">RESUME.EXE</span>
       </div>
       <div class="resume-container">
         <div class="resume-column">
-          <h3 class="column-title"><span class="accent-text">></span> Academic Path</h3>
+          <h3 class="column-title">> Academic Path</h3>
 
           <div class="resume-item">
-            <div class="resume-date">2023 - Present</div>
+            <div class="resume-date">2023 – Present</div>
             <div class="resume-content">
               <h4>HND in Game Programming</h4>
-              <p class="institution">ESAT (Escuela Superior de Arte y Tecnología)</p>
-              <p class="description">Specializing in C++, gameplay, low-level programming, team work, game
-                development, and building an engine.</p>
+              <p class="institution">ESAT — Escuela Superior de Arte y Tecnología</p>
+              <p class="description">Advanced rendering, C++, engine architecture, team game development. Built a full
+                Vulkan engine from scratch.</p>
             </div>
           </div>
 
           <div class="resume-item">
-            <div class="resume-date">2017 - 2021</div>
+            <div class="resume-date">2017 – 2021</div>
             <div class="resume-content">
               <h4>Computer Engineering</h4>
               <p class="institution">Universitat de València (UV)</p>
-              <p class="description">Focused on software engineering, C++, Java, Maths, Physics.</p>
+              <p class="description">Software engineering, C++, linear algebra, physics simulation. Strong mathematical
+                foundation for graphics and rendering.</p>
             </div>
           </div>
         </div>
 
         <div class="resume-column">
-          <h3 class="column-title"><span class="accent-text">></span> Experience</h3>
+          <h3 class="column-title">> Experience</h3>
 
-          <div class="resume-item empty">
-            <div class="resume-content">
-              <h4>Open for new opportunities</h4>
-              <p>Looking to join a game studio as a Gameplay or Engine Programmer.</p>
-            </div>
-          </div>
+          <div class="open-badge">Open to opportunities — Technical Artist</div>
 
           <div class="resume-item">
-            <div class="resume-date">sept. 2023 - dec. 2024</div>
+            <div class="resume-date">sept. 2023 – dec. 2024</div>
             <div class="resume-content">
               <h4>Simulation Researcher</h4>
-              <p class="institution">LSyM - IRTIC</p>
-              <p class="description">Simulators development for learning and training, bugs solving, software solutions,
-                virtual reality.</p>
+              <p class="institution">LSyM – IRTIC</p>
+              <p class="description">Simulator development for training and learning, VR integration, bug fixing and
+                software solutions.</p>
             </div>
           </div>
 
           <div class="resume-item">
-            <div class="resume-date">apr. 2023 - jun. 2023</div>
+            <div class="resume-date">apr. 2023 – jun. 2023</div>
             <div class="resume-content">
               <h4>Videogame Developer</h4>
               <p class="institution">Quasar Dynamics</p>
@@ -847,40 +918,40 @@
           </div>
 
           <div class="resume-item">
-            <div class="resume-date">oct. 2021 - apr. 2023</div>
+            <div class="resume-date">oct. 2021 – apr. 2023</div>
             <div class="resume-content">
               <h4>Software Developer</h4>
               <p class="institution">SagitaZ</p>
-              <p class="description">Team management, projects responsibility, customer solutions, Zoho integration,
-                chatbots.</p>
+              <p class="description">Team lead, client solutions, Zoho integration, chatbot development.</p>
             </div>
           </div>
 
           <div class="resume-item">
-            <div class="resume-date">nov. 2020 - jul. 2021</div>
+            <div class="resume-date">nov. 2020 – jul. 2021</div>
             <div class="resume-content">
-              <h4>Software Developer</h4>
+              <h4>Software Developer (Intern)</h4>
               <p class="institution">IRTIC</p>
-              <p class="description">Intership, Unity and HTML solutions.</p>
+              <p class="description">Unity and web solutions during Computer Engineering internship.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="contact" class="contact-section">
+    <!-- ── CONTACT ── -->
+    <section id="contact">
       <div class="terminal-header">
-        <span class="terminal-dot"></span>
-        <span class="terminal-dot"></span>
-        <span class="terminal-dot"></span>
+        <span class="terminal-dot"></span><span class="terminal-dot"></span><span class="terminal-dot"></span>
         <span class="terminal-title">CONTACT.EXE</span>
       </div>
       <div class="contact-grid">
         <div class="contact-info">
-          <h2 class="glitch-text">Establishing Connection...</h2>
-          <p class="typing-effect">Ready to collaborate on videogame, graphics and high-performance solutions.</p>
+          <h2>Establishing Connection...</h2>
+          <p class="typing-effect">Open to TA roles — remote or on-site.</p>
+          <p style="margin-top:16px; color: var(--text-dim); font-size:0.92rem;">Comfortable working across the art-code
+            boundary: shaders, render pipelines, procedural tools, pipeline scripting. Let's build something worth
+            looking at.</p>
         </div>
-
         <div class="contact-links">
           <a href="mailto:juanjo.valenzuela.go@gmail.com" class="contact-card">
             <div class="card-content">
@@ -888,14 +959,12 @@
               <span class="value">juanjo.valenzuela.go@gmail.com</span>
             </div>
           </a>
-
           <a href="https://www.linkedin.com/in/juanjovalenzuela" target="_blank" class="contact-card">
             <div class="card-content">
               <span class="label">LINKEDIN</span>
               <span class="value">in/juanjovalenzuela</span>
             </div>
           </a>
-
           <a href="https://github.com/vajujo01" target="_blank" class="contact-card">
             <div class="card-content">
               <span class="label">GITHUB</span>
@@ -905,11 +974,13 @@
         </div>
       </div>
     </section>
+
   </div>
 
   <footer>
-    <p>&copy; 2026 Juanjo Valenzuela. Built for Performance.</p>
+    <p>&copy; 2026 Juanjo Valenzuela — Technical Artist</p>
   </footer>
+
 </body>
 
 </html>
