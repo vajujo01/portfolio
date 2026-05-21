@@ -4,11 +4,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- 
-    ================================================================
-    TECH BLOG TEMPLATE — Juanjo Valenzuela
-    ================================================================
-  -->
   <title>Vulkan-OpenGL Graphics Engine — Tech Blog | Juanjo Valenzuela</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&display=swap');
@@ -53,21 +48,16 @@
       padding-top: 80px;
     }
 
-    /* ── SCANLINE OVERLAY ─────────────────────────────── */
     body::before {
       content: '';
       position: fixed;
       inset: 0;
-      background: repeating-linear-gradient(0deg,
-          transparent,
-          transparent 2px,
-          rgba(0, 0, 0, 0.08) 2px,
-          rgba(0, 0, 0, 0.08) 4px);
+      background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.08) 2px, rgba(0, 0, 0, 0.08) 4px);
       pointer-events: none;
       z-index: 9999;
     }
 
-    /* ── HEADER ───────────────────────────────────────── */
+    /* ── HEADER ── */
     header {
       position: fixed;
       top: 0;
@@ -112,7 +102,25 @@
       background: var(--surface-2);
     }
 
-    /* ── HERO ─────────────────────────────────────────── */
+    .header-nav-blog {
+      display: flex;
+      gap: 20px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+    }
+
+    .header-nav-blog a {
+      color: var(--accent);
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .header-nav-blog a:hover {
+      opacity: 1;
+    }
+
+    /* ── HERO ── */
     .hero {
       max-width: 960px;
       margin: 0 auto;
@@ -136,10 +144,7 @@
       line-height: 1.1;
       letter-spacing: 1px;
       margin-bottom: 20px;
-      /* Glitch color split */
-      text-shadow:
-        2px 0 0 rgba(255, 45, 120, 0.4),
-        -2px 0 0 rgba(0, 242, 255, 0.4);
+      text-shadow: 2px 0 0 rgba(255, 45, 120, 0.4), -2px 0 0 rgba(0, 242, 255, 0.4);
     }
 
     .hero-meta {
@@ -182,7 +187,6 @@
       border: none;
     }
 
-    /* ── TAGS ─────────────────────────────────────────── */
     .tag-list {
       display: flex;
       flex-wrap: wrap;
@@ -201,14 +205,49 @@
       letter-spacing: 1px;
     }
 
-    /* ── MAIN LAYOUT ──────────────────────────────────── */
+    .tag.ta-tag {
+      border-color: rgba(45, 255, 97, 0.4);
+      background: rgba(45, 255, 73, 0.06);
+      color: #6eff89;
+    }
+
+    /* ── TA ROLE BADGE ── */
+    .ta-role-banner {
+      margin-top: 28px;
+      padding: 14px 20px;
+      background: rgba(45, 255, 73, 0.06);
+      border: 1px solid rgba(45, 255, 97, 0.4);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .ta-role-banner .ta-icon {
+      font-family: var(--mono);
+      font-size: 1.4rem;
+      color: #6eff89;
+      flex-shrink: 0;
+    }
+
+    .ta-role-banner p {
+      font-size: 0.92rem;
+      color: var(--text-dim);
+      margin: 0;
+    }
+
+    .ta-role-banner strong {
+      color: var(--text);
+    }
+
+    /* ── MAIN LAYOUT ── */
     .page-body {
       max-width: 960px;
       margin: 0 auto;
       padding: 0 40px 100px;
     }
 
-    /* ── SECTION ──────────────────────────────────────── */
+    /* ── SECTION ── */
     .blog-section {
       margin-top: 60px;
       padding: 36px 40px;
@@ -219,7 +258,6 @@
       overflow: hidden;
     }
 
-    /* Accent left bar */
     .blog-section::before {
       content: '';
       position: absolute;
@@ -230,6 +268,10 @@
       background: linear-gradient(to bottom, var(--accent), transparent);
     }
 
+    .blog-section.ta-section::before {
+      background: linear-gradient(to bottom, #6eff89, transparent);
+    }
+
     .section-label {
       font-family: var(--mono);
       font-size: 0.68rem;
@@ -238,6 +280,10 @@
       text-transform: uppercase;
       margin-bottom: 12px;
       opacity: 0.7;
+    }
+
+    .ta-section .section-label {
+      color: #6eff89;
     }
 
     .blog-section h2 {
@@ -258,7 +304,170 @@
       margin-bottom: 0;
     }
 
-    /* ── CODE BLOCK ───────────────────────────────────── */
+    /* ── RENDERING SHOWCASE GRID ── */
+    .showcase-intro {
+      font-size: 1rem;
+      color: var(--text-dim);
+      margin-bottom: 28px;
+      line-height: 1.7;
+    }
+
+    .render-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .render-card {
+      position: relative;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .render-card img {
+      width: 100%;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .render-card:hover img {
+      transform: scale(1.02);
+    }
+
+    .render-card .render-label {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 8px 14px;
+      background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .render-card.wide {
+      grid-column: span 2;
+    }
+
+    /* ── POST PROCESS STRIP ── */
+    .pp-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .pp-card {
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .pp-card img {
+      width: 100%;
+      display: block;
+    }
+
+    .pp-card .pp-label {
+      text-align: center;
+      padding: 8px;
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      background: rgba(0, 0, 0, 0.6);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    /* ── PROCEDURAL SECTION ── */
+    .proc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 20px;
+    }
+
+    .proc-item {}
+
+    .proc-item h3 {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .proc-item p {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      margin-bottom: 12px;
+    }
+
+    .proc-item img {
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── PIPELINE DIAGRAM ── */
+    .pipeline-flow {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 20px 0;
+    }
+
+    .pipeline-step {
+      padding: 8px 16px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--text-dim);
+      background: var(--surface);
+    }
+
+    .pipeline-step.active {
+      border-color: var(--accent-dim);
+      color: var(--accent);
+      background: var(--surface-2);
+    }
+
+    .pipeline-arrow {
+      font-family: var(--mono);
+      color: var(--accent-dim);
+      font-size: 0.8rem;
+    }
+
+    /* ── HIGHLIGHT BOX ── */
+    .highlight-box {
+      margin: 24px 0;
+      padding: 20px 24px;
+      background: rgba(0, 242, 255, 0.06);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 6px 6px 0;
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      color: var(--accent);
+      line-height: 1.7;
+    }
+
+    .highlight-box.pink {
+      background: rgba(45, 255, 97, 0.036);
+      border-color: #6eff89;
+      color: #6eff89;
+    }
+
+    /* ── CODE BLOCK ── */
     .code-block {
       margin: 24px 0;
       border-radius: 6px;
@@ -315,20 +524,7 @@
       color: #a8e6cf;
     }
 
-    /* ── HIGHLIGHT BOX ────────────────────────────────── */
-    .highlight-box {
-      margin: 24px 0;
-      padding: 20px 24px;
-      background: rgba(0, 242, 255, 0.06);
-      border-left: 3px solid var(--accent);
-      border-radius: 0 6px 6px 0;
-      font-family: var(--mono);
-      font-size: 0.88rem;
-      color: var(--accent);
-      line-height: 1.7;
-    }
-
-    /* ── PROBLEM/SOLUTION CARDS ───────────────────────── */
+    /* ── PROBLEM/SOLUTION CARDS ── */
     .ps-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -374,7 +570,7 @@
       margin: 0 !important;
     }
 
-    /* ── STAT ROW ─────────────────────────────────────── */
+    /* ── STAT ROW ── */
     .stat-row {
       display: flex;
       flex-wrap: wrap;
@@ -408,7 +604,7 @@
       letter-spacing: 1px;
     }
 
-    /* ── LESSONS LEARNED LIST ─────────────────────────── */
+    /* ── LESSONS LIST ── */
     .lessons-list {
       list-style: none;
       margin-top: 20px;
@@ -435,53 +631,7 @@
       padding-top: 3px;
     }
 
-    /* ── FOOTER ───────────────────────────────────────── */
-    footer {
-      text-align: center;
-      padding: 40px;
-      color: var(--text-dim);
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .header-nav-blog {
-      display: flex;
-      gap: 20px;
-      font-family: var(--mono);
-      font-size: 0.72rem;
-    }
-
-    /* ── RESPONSIVE ───────────────────────────────────── */
-    @media (max-width: 720px) {
-      header {
-        padding: 12px 20px;
-      }
-
-      .hero,
-      .page-body {
-        padding-left: 20px;
-        padding-right: 20px;
-      }
-
-      .hero {
-        padding-top: 60px;
-      }
-
-      .blog-section {
-        padding: 24px 20px;
-      }
-
-      .ps-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .header-nav-blog {
-        display: none;
-      }
-    }
-
-    /* ── COLLAPSIBLE CODE BLOCKS ──────────────────────── */
+    /* ── COLLAPSIBLE CODE ── */
     .code-block.collapsible .code-header {
       cursor: pointer;
       user-select: none;
@@ -510,109 +660,80 @@
     .code-block.collapsible.open pre {
       display: block;
     }
-	  .repo-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 20px;
-    background: transparent;
-    border: 1px solid #333;
-    color: #c8c8c8;
-    font-family: 'Courier New', Courier, monospace;
-    font-size: 13px;
-    letter-spacing: 0.05em;
-    text-decoration: none;
-    position: relative;
-    transition: color 0.2s, border-color 0.2s;
-    cursor: pointer;
-  }
- 
-  /* Corner accents */
-  .repo-link::before,
-  .repo-link::after {
-    content: '';
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    border-color: #555;
-    border-style: solid;
-    transition: border-color 0.2s, width 0.2s, height 0.2s;
-  }
-  .repo-link::before {
-    top: -1px; left: -1px;
-    border-width: 1px 0 0 1px;
-  }
-  .repo-link::after {
-    bottom: -1px; right: -1px;
-    border-width: 0 1px 1px 0;
-  }
- 
-  .repo-link:hover {
-    color: #e8e8e8;
-    border-color: #666;
-  }
-  .repo-link:hover::before,
-  .repo-link:hover::after {
-    border-color: #aaa;
-    width: 10px;
-    height: 10px;
-  }
- 
-  /* Subtle scan line on hover */
-  .repo-link:hover .repo-label::after {
-    opacity: 1;
-  }
- 
-  .repo-label {
-    position: relative;
-  }
- 
-  .repo-prefix {
-    color: #555;
-    user-select: none;
-  }
- 
-  /* GitHub SVG icon */
-  .gh-icon {
-    width: 15px;
-    height: 15px;
-    fill: #666;
-    flex-shrink: 0;
-    transition: fill 0.2s;
-  }
-  .repo-link:hover .gh-icon {
-    fill: #aaa;
-  }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 40px;
+      color: var(--text-dim);
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      header {
+        padding: 12px 20px;
+      }
+
+      .hero,
+      .page-body {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .hero {
+        padding-top: 60px;
+      }
+
+      .blog-section {
+        padding: 24px 20px;
+      }
+
+      .ps-grid,
+      .render-grid,
+      .proc-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .render-card.wide {
+        grid-column: span 1;
+      }
+
+      .pp-strip {
+        grid-template-columns: 1fr;
+      }
+
+      .header-nav-blog {
+        display: none;
+      }
+    }
   </style>
   <link rel="icon" href="./images/HTML/icon.png">
 </head>
 
 <body>
 
-  <!-- ── HEADER ──────────────────────────────────────── -->
+  <!-- ── HEADER ── -->
   <header>
     <a href="./index.html" class="back-link">Back to Portfolio</a>
     <nav class="header-nav-blog">
-      <a href="#overview" style="color:var(--accent); text-decoration:none; opacity:0.7; transition:opacity 0.2s;"
-        onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">// overview</a>
-      <a href="#system" style="color:var(--accent); text-decoration:none; opacity:0.7; transition:opacity 0.2s;"
-        onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">// beyond the surface</a>
-      <a href="#challenges" style="color:var(--accent); text-decoration:none; opacity:0.7; transition:opacity 0.2s;"
-        onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">// challenges</a>
-      <a href="#results" style="color:var(--accent); text-decoration:none; opacity:0.7; transition:opacity 0.2s;"
-        onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">// results</a>
-      <a href="#retrospective" style="color:var(--accent); text-decoration:none; opacity:0.7; transition:opacity 0.2s;"
-        onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.7">// retrospective</a>
+      <a href="#showcase">// render showcase</a>
+      <a href="#procedural">// procedural</a>
+      <a href="#pipeline">// pipeline</a>
+      <a href="#challenges">// challenges</a>
+      <a href="#retrospective">// retrospective</a>
     </nav>
     <span class="header-badge">TECH_BLOG.EXE</span>
   </header>
 
-  <!-- ── HERO ────────────────────────────────────────── -->
+  <!-- ── HERO ── -->
   <section class="hero">
-    <p class="hero-eyebrow">// tech breakdown</p>
+    <p class="hero-eyebrow">// technical art breakdown</p>
     <div style="display:flex; align-items:center; gap:24px; margin-bottom:20px;">
       <img src="./images/HTML/icon.png" alt="Engine cover"
-        style="width:240px; height:240px; object-fit:cover; border-radius:8px; border:1px solid var(--border); box-shadow:0 0 20px rgba(0,242,255,0.1); flex-shrink:0;">
+        style="width:200px; height:200px; object-fit:cover; border-radius:8px; border:1px solid var(--border); box-shadow:0 0 20px rgba(0,242,255,0.1); flex-shrink:0;">
       <div>
         <h1 style="margin-bottom:8px;">Hyper Technical Magic Leprechaun (HTML)</h1>
         <h1>Vulkan-OpenGL Graphics Engine</h1>
@@ -621,828 +742,339 @@
 
     <div class="hero-meta">
       <span><span class="dot"></span>2025 - 2026</span>
-      <span><span class="dot"></span>Vulkan - C++</span>
+      <span><span class="dot"></span>Vulkan · C++</span>
       <span><span class="dot"></span>Team of 2</span>
-      <span><span class="dot"></span>Academic</span>
+      <span><span class="dot"></span>8 months</span>
     </div>
 
+    <div class="tag-list">
+      <span class="tag ta-tag">PBR</span>
+      <span class="tag ta-tag">Deferred Rendering</span>
+      <span class="tag ta-tag">Forward+</span>
+      <span class="tag ta-tag">Post-Process Pipeline</span>
+      <span class="tag ta-tag">Procedural Generation</span>
+    </div>
     <div class="tag-list">
       <span class="tag">C++</span>
       <span class="tag">Vulkan</span>
       <span class="tag">OpenGL</span>
       <span class="tag">PhysX 5</span>
-      <span class="tag">Lua</span>
+      <span class="tag">GLSL</span>
+    </div>
+
+    <div class="ta-role-banner">
+      <span class="ta-icon">⬡</span>
+      <p>This project was built for academic purposes to understand rendering at the GPU level — not to use an engine,
+        but to <strong>build
+          one from scratch</strong>. The goal was to know exactly what happens below the surface of tools like UE5 or
+        Unity.<br><br>The project was split between Vulkan and OpenGL. I was responsible for the full Vulkan side: ECS,
+        PhysX, ImGui, Android port, and all rendering systems.</p>
     </div>
 
     <div class="hero-video">
       <iframe src="https://www.youtube.com/embed/C72k1QLnmFY" loading="lazy" allowfullscreen></iframe>
     </div>
- 
-	<div style="text-align: center; margin-top: 16px;">
-	  <a
-	    class="repo-link"
-	    href="https://github.com/vajujo01/HTML_VulkanOpenGL_Engine"
-	    target="_blank"
-	    rel="noopener noreferrer"
-	  >
-	    <svg class="gh-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-	      <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303
-	        3.438 9.8 8.205 11.385.6.113.82-.258.82-.577
-	        0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422
-	        18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729
-	        1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305
-	        3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93
-	        0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176
-	        0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405
-	        1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23
-	        3.285-1.23.645 1.653.24 2.873.12 3.176.765.84
-	        1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475
-	        5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015
-	        3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592
-	        24 12.297c0-6.627-5.373-12-12-12"/>
-	    </svg>
-	    <span class="repo-label">
-	      <span class="repo-prefix">// </span>source_code // ask for it
-	    </span>
-	  </a>
-</div>
   </section>
 
-  <!-- ── ARTICLE BODY ─────────────────────────────────── -->
+  <!-- ── ARTICLE BODY ── -->
   <main class="page-body">
 
-    <!-- ╔══════════════════════════════════╗ -->
-    <!-- ║  SECTION 1 — OVERVIEW / PITCH   ║ -->
-    <!-- ╚══════════════════════════════════╝ -->
-    <article class="blog-section" id="overview">
-      <p class="section-label">// 01 — overview</p>
-      <h2>What is this project?</h2>
-      <p>
-        Graphics engine built with Vulkan (and OpenGL), featuring PhysX 5 integration, a custom rendering
-        system, Lua scripting, and an ECS architecture, limited version on Android Studio. Includes a custom editor
-        powered by ImGui. Academic project for ESAT.
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║  RENDER SHOWCASE         ║ -->
+    <!-- ╚══════════════════════════╝ -->
+    <article class="blog-section ta-section" id="showcase">
+      <p class="section-label">// 01 — render showcase</p>
+      <h2>Rendering Systems</h2>
+
+      <p class="showcase-intro">
+        Three rendering pipelines implemented: <strong>Forward+</strong> for dynamic multi-light scenes,
+        <strong>Deferred</strong> for decoupling geometry from lighting, and <strong>Deferred PBR</strong> for
+        physically-based materials. All share the same Shadow Atlas system for multi-light shadow rendering and G-Buffer
+        for deferred ones and velocity pass (for motion blur post process).
       </p>
+
+      <div class="render-grid">
+        <div class="render-card">
+          <img src="./images/HTML/forward.png" alt="Forward+ Rendering">
+          <div class="render-label">Forward+</div>
+        </div>
+        <div class="render-card">
+          <img src="./images/HTML/deferred.png" alt="Deferred Rendering">
+          <div class="render-label">Deferred</div>
+        </div>
+        <div class="render-card wide">
+          <img src="./images/HTML/pbr.png" alt="PBR">
+          <div class="render-label">Deferred PBR — metallic / roughness / ao</div>
+        </div>
+      </div>
+
+      <div class="highlight-box pink">
+        PBR implemented: G-Buffer stores albedo, normal, metallic, roughness and AO. The lighting pass
+        reconstructs world position from depth and evaluates the Cook-Torrance BRDF per light.
+      </div>
+
+      <h2 style="margin-top:40px;">G-Buffer Passes</h2>
+      <p>The deferred pipeline separates geometry from lighting into discrete, inspectable passes. Visualized with
+        RenderDoc.</p>
+
+      <div class="render-grid">
+        <div class="render-card">
+          <img src="./images/HTML/depthPass.png" alt="Depth Pass">
+          <div class="render-label">Depth Pass</div>
+        </div>
+        <div class="render-card">
+          <img src="./images/HTML/colorPass.png" alt="Color Pass">
+          <div class="render-label">Color Pass</div>
+        </div>
+        <div class="render-card">
+          <img src="./images/HTML/shadowPass.png" alt="Shadow Pass">
+          <div class="render-label">Shadow Atlas</div>
+        </div>
+        <div class="render-card">
+          <img src="./images/HTML/lightingPass.png" alt="Lighting Pass">
+          <div class="render-label">Lighting Pass</div>
+        </div>
+      </div>
+
+      <h2 style="margin-top:40px;">Post-Process Pipeline</h2>
       <p>
-        The project was split between Vulkan and OpenGL. I was responsible for the full Vulkan side: ECS, PhysX, ImGui, Android port, and all rendering systems.
+        Three post-process effects chained together over a single scene target. Each effect consumes the previous one's
+        output texture, forming a <strong>MotionBlur → DoF → Bloom</strong> stack. Motion blur uses a dedicated velocity
+        pass that encodes per-pixel screen-space velocity from current and previous view-projection matrices.
       </p>
+
+      <div class="pipeline-flow">
+        <div class="pipeline-step">Scene Target</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step active">Velocity Pass</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step active">Motion Blur</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step active">Depth of Field</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step active">Bloom</div>
+        <div class="pipeline-arrow">→</div>
+        <div class="pipeline-step">Blit to Swapchain</div>
+      </div>
+
+      <div class="pp-strip">
+        <div class="pp-card">
+          <img src="./images/HTML/motion_blur.gif" alt="Motion Blur">
+          <div class="pp-label">Motion Blur</div>
+        </div>
+        <div class="pp-card">
+          <img src="./images/HTML/dof.gif" alt="Depth of Field">
+          <div class="pp-label">Depth of Field</div>
+        </div>
+        <div class="pp-card">
+          <img src="./images/HTML/bloom.gif" alt="Bloom">
+          <div class="pp-label">Bloom</div>
+        </div>
+      </div>
+
+      <img src="./images/HTML/rts3effects.gif" alt="All post-process effects combined"
+        style="width:100%; border-radius:6px; border:1px solid var(--border); margin-top:16px;">
+      <p style="margin-top:10px; font-size:0.85rem; opacity:0.6; text-align:center; font-family:var(--mono);">All three
+        effects combined</p>
     </article>
 
 
-    <!-- ╔══════════════════════════════════╗ -->
-    <!-- ║  SECTION 2 — BEYOND THE SURFACE  ║ -->
-    <!-- ╚══════════════════════════════════╝ -->
-    <article class="blog-section" id="system">
-      <p class="section-label">// 02 — Beyond the Surface</p>
-      <h2>System Design</h2>
-      <p>
-        The engine is built around an Entity Component System, supported by a Job System for asynchronous model and
-        texture loading.
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║  PROCEDURAL GENERATION   ║ -->
+    <!-- ╚══════════════════════════╝ -->
+    <article class="blog-section ta-section" id="procedural">
+      <p class="section-label">// 02 — procedural content</p>
+      <h2>Procedural Generation Systems</h2>
+
+      <p class="showcase-intro">
+        Two procedural systems built as production-style tools: an L-System based plant and tree generator with five
+        species, and a Wave Function Collapse tilemap generator. Both are integrated directly into the engine as
+        standalone demos.
       </p>
 
-      <p>
-        It is structured into shared classes and API-specific ones for Vulkan and OpenGL.
-      </p>
-
-      <!-- CODE SNIPPET EXAMPLE -->
-      <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots">
-            <span></span><span></span><span></span>
-          </div>
-          <span class="code-lang">C++ — ECS.hpp</span>
+      <div class="proc-grid">
+        <div class="proc-item">
+          <h3>L-System Plant Generator</h3>
+          <p>Symbol alphabet (F, X, +, −, [, ], &amp;, ^, \) that expands iteratively via rewriting rules. Five distinct
+            plant types — stochastic, spiral, symmetric, and standard variants. Randomness is injected at the
+            rule-expansion stage, producing different geometry on every run.</p>
+          <img src="./images/HTML/plantgeneration.png" alt="L-System plants">
         </div>
-        <pre>
-          <code>
-std::vector&ltstd::pair&ltsize_t, T&gt&gt entityList_;  /// Entity - component realtion list</code>
-        </pre>
+        <div class="proc-item">
+          <h3>Foliage / Forest Generator</h3>
+          <p>Combines the L-System generator with Simplex Noise for biome-aware placement. A threshold parameter
+            controls forest density. Each tree receives a random rotation and iteration count, giving organic variation
+            across the landscape.</p>
+          <img src="./images/HTML/foliage.png" alt="Procedural forest">
+        </div>
       </div>
 
-      <p>Without the map, finding a specific entity's component would require scanning the entire vector: O(n). With it,
-        lookup by ID is O(1), while the vector stays contiguous for bulk system iteration. Best of both worlds: fast
-        individual access and cache-friendly loops.
-      </p>
+      <div class="proc-grid" style="margin-top:28px;">
+        <div class="proc-item">
+          <h3>Wave Function Collapse</h3>
+          <p>Constraint-based tilemap generator. Each tile type defines which neighbors are valid, and the algorithm
+            resolves the grid by collapsing cells with lowest entropy first. The result is always coherent — no
+            water-next-to-dirt without sand in between.</p>
+          <img src="./images/HTML/wave1.png" alt="WFC step 1">
+        </div>
+        <div class="proc-item">
+          <h3 style="visibility:hidden;">—</h3>
+          <p style="visibility:hidden;">—</p>
+          <img src="./images/HTML/wave2.png" alt="WFC step 2">
+        </div>
+      </div>
+
+      <div class="highlight-box" style="margin-top:28px;">
+        L-Systems are the foundation of most procedural vegetation tools
+        (SpeedTree, Houdini's branch solvers). WFC is the algorithm behind many modern level-generation pipelines.
+      </div>
+    </article>
+
+
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║  PIPELINE / TECH DEEP   ║ -->
+    <!-- ╚══════════════════════════╝ -->
+    <article class="blog-section" id="pipeline">
+      <p class="section-label">// 03 — pipeline deep dive</p>
+      <h2>Engine Architecture</h2>
+
+      <p>The engine is built around an ECS with a contiguous component storage + O(1) lookup map. A Job System handles
+        async model and texture loading. The render layer is fully abstracted behind API-specific backends (Vulkan /
+        Android /
+        OpenGL / Web).</p>
+
+      <div class="highlight-box">
+        ECS design: contiguous <code>vector&lt;pair&lt;size_t,T&gt;&gt;</code> for cache-friendly bulk iteration +
+        <code>unordered_map</code> for O(1) per-entity lookup. Migrating from classic OOP gave an immediate, measurable
+        performance jump.
+      </div>
+
+      <h2 style="margin-top:36px;">Render Manager</h2>
+      <p>The render manager switches between Forward+, Deferred, and Deferred PBR at runtime. Shadow map and G-Buffer
+        prep are separated into discrete steps and distributed across a Shadow Atlas for multi-light support.</p>
 
       <div class="code-block">
         <div class="code-header">
-          <div class="code-dots">
-            <span></span><span></span><span></span>
-          </div>
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">C++ — renderManager.cpp · InitRenderProcess</span>
+        </div>
+        <pre><code>void RenderManager::InitRenderProcess(FrameInfo&amp; frameInfo, int stepLight, glm::vec3 dirPosReference)
+{
+  switch (renderMode_)
+  {
+  case ImGuiWrapper::kForward:
+    forwardSystem_->RenderShadowMap(ecsManager_, frameInfo, dirPosReference, stepLight);
+    break;
+  case ImGuiWrapper::kDeferred:
+    deferredSystem_->RenderShadowMap(...);
+    deferredSystem_->RenderToGBuffer(...);
+    deferredSystem_->BlitDepthToMain(...);
+    break;
+  case ImGuiWrapper::kDeferredPBR:
+    deferredSystemPBR_->RenderShadowMap(...);
+    deferredSystemPBR_->RenderToGBuffer(...);
+    deferredSystemPBR_->BlitDepthToMain(...);
+    break;
+  }
+}</code></pre>
+      </div>
+
+      <h2 style="margin-top:36px;">Post-Process Chain</h2>
+      <p>Each effect writes to its own output texture. <code>viewbase</code> and <code>sampler</code> are redirected
+        after each effect, so the chain requires no intermediate copies — the output of one pass is the input of the
+        next.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">C++ — renderManager.cpp · Post-Process Chain</span>
+        </div>
+        <pre><code>// MotionBlur reads velocity pass output
+motionBlurSystem_->Apply(frameInfo.commandBuffer, viewbase, sampler,
+  velTex->getImageView(), velTex->getSampler(), ...);
+viewbase = mbOutput->getImageView();  // redirect for next pass
+
+// DoF reads MB output + depth buffer
+dofSystem_->Apply(frameInfo.commandBuffer, viewbase, sampler,
+  vkWrapper_.GetOffScreenDepthView(), ...);
+viewbase = dofOut->getImageView();
+
+// Bloom reads DoF output
+bloomSystem_->Apply(frameInfo.commandBuffer, viewbase, sampler, ...);</code></pre>
+      </div>
+
+      <h2 style="margin-top:36px;">ECS Architecture</h2>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
           <span class="code-lang">C++ — ECS.hpp</span>
         </div>
-        <pre>
-          <code>
-std::vector&ltstd::pair&ltsize_t, T&gt&gt entityList_ ; /// Entity - component realtion list
+        <pre><code>// Contiguous storage for cache-friendly iteration
+std::vector&lt;std::pair&lt;size_t, T&gt;&gt; entityList_;
 
-std::unordered_map&ltsize_t, size_t&gt entityIdToIndexMap_; /// For optimization
+// O(1) lookup by entity ID
+std::unordered_map&lt;size_t, size_t&gt; entityIdToIndexMap_;
 
-// Use
+// Usage: direct access without full scan
 size_t index = entityIdToIndexMap_[entityID];
-T* comp = &entityList_[index].second; // acceso directo</code>
-        </pre>
+T* comp = &amp;entityList_[index].second;</code></pre>
       </div>
 
-      <p>Components are stored in a contiguous vector. When a system iterates over all components of one type, the CPU
-        can load several in the same cache line at once. With pointer-based OOP, each access jumps to an arbitrary
-        memory address, constantly invalidating the cache. This is one of the main reasons ECS outperforms classic
-        object-oriented design in performance.
-      </p>
+      <h2 style="margin-top:36px;">Plant Generator</h2>
 
       <div class="code-block">
         <div class="code-header">
-          <div class="code-dots">
-            <span></span><span></span><span></span>
-          </div>
-          <span class="code-lang">C++ — vkHTML.hpp</span>
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">C++ — PlantGeneratorSystem.cpp · Stochastic Tree</span>
         </div>
-        <pre>
-          <code>
-class HTML {
-public:
-  HTML();
-  HTML(int width, int height, std::string windowName, std::string facesCubeMap[6] = {});
-  
-  .
-  .
-  .
-
-private:
-  private:
-  std::unique_ptr&ltECSManager&gt ecsManager_;                           /// The manager of the entities
-  std::unique_ptr&ltJobsystem&gt jobSystem_;                             /// System for threading
-  // EXECUTION
-  std::unique_ptr&ltScriptSystem&gt scriptSystem_;                       /// System for scripting
-  std::unique_ptr&ltCameraSystem&gt cameraSystem_;                       /// System for camera
-  std::shared_ptr&ltInput&gt inputController_;                           /// Controller for input
-
-  std::unique_ptr&ltPlantGeneratorSystem&gt plantGeneratorSystem_;       /// System for generating plants
-
-  .
-  .
-  .
-
-  // PAWNS
-  std::shared_ptr&ltPhysXPawnController&gt pawnController_;
-
-  // WRAPPERS
-  std::unique_ptr&ltImGuiWrapper&gt imguiWrapper_;
-  PhysX physXWrapper_;                                               /// Wrapper for all PhysX elements
-  std::unique_ptr&ltVulkanWrapper&gt vkWrapper_;
-  std::unique_ptr&ltActorManager&gt actorManager_;
-  std::unique_ptr&ltRenderManager&gt renderManager_;
-}
-          </code>
-        </pre>
-      </div>
-
-      <p>Separation of concerns through systems. CameraSystem, ScriptSystem, RenderManager, PlantGeneratorSystem — each
-        subsystem has its own class, and HTML orchestrates them without implementing them.
-      </p>
-
-      <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots">
-            <span></span><span></span><span></span>
-          </div>
-          <span class="code-lang">C++ — anyMain.cpp</span>
-        </div>
-        <pre>
-          <code>
-html.InitializeSystems(HTML::kPawnType::kCustom);
-
-auto startTime = std::chrono::high_resolution_clock::now();
-auto currentTime = std::chrono::high_resolution_clock::now();
-auto lastTimeDuration = 
-  std::chrono::duration&ltfloat, std::chrono::seconds::period&gt(startTime - currentTime).count();
-
-while (!html.ShouldClose()) {
-  html.PollEvents();
-  
-  auto newTime = std::chrono::high_resolution_clock::now();
-  float frameTime = 
-    std::chrono::duration&ltfloat, std::chrono::seconds::period&gt(newTime - currentTime).count();
-  lastTimeDuration += frameTime;
-
-  currentTime = newTime;
-
-  frameTime = glm::min(frameTime, 60.0f);
-
-  html.PreUpdateApp(frameTime);
-
-  // update
-  html.UpdateInput();
-  html.ResetInput();
-  html.UpdatePawn(frameTime);
-
-  // User update things
-
-  // render functions
-  html.Render();
-
-  html.BaseImGui();
-
-  // User ImGui
-
-  html.EndImGui();
-
-  html.EndRender();
-
-  // PHYSX
-  html.StepPhysics(frameTime);
-}
-
-html.Finish();
-          </code>
-        </pre>
-      </div>
-
-      <p>Typical game loop to simplify the user's main entry point. The user only interacts with the HTML class.
-      </p>
-
-      <h2>Render</h2>
-
-      <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots">
-            <span></span><span></span><span></span>
-          </div>
-          <span class="code-lang">C++ — renderManager.cpp</span>
-        </div>
-        <pre>
-          <code>
-void RenderManager::InitRenderProcess(FrameInfo& frameInfo, int stepLight, glm::vec3 dirPosReference)
-{
-  switch (renderMode_)
-  {
-  case ImGuiWrapper::kForward:
-    forwardSystem_->RenderShadowMap(ecsManager_,
-      frameInfo,
-      dirPosReference, stepLight);
-    break;
-  case ImGuiWrapper::kDeferred:
-    if (scenesExtent_[0].x > 0.0f && scenesExtent_[0].y > 0.0f) {
-      deferredSystem_->RenderShadowMap(ecsManager_,
-        frameInfo,
-        dirPosReference, stepLight);
-
-      if (stepLight == 0) {
-        deferredSystem_->RenderToGBuffer(ecsManager_,
-          frameInfo,
-          { (uint32_t)scenesExtent_[0].x, (uint32_t)scenesExtent_[0].y });
-
-        deferredSystem_->BlitDepthToMain(
-          frameInfo.commandBuffer,
-          vkWrapper_.GetOffScreenDepthImage(),
-          { (uint32_t)scenesExtent_[0].x, (uint32_t)scenesExtent_[0].y });
+        <pre><code>case PlantGeneratorSystem::kStochasticTree:
+  result = { 'X' };
+  for (size_t i = 0; i &lt; iterations; i++) {
+    for (char node : result) {
+      if (node == 'X') {
+        int r = rand() % 100;
+        if      (r &lt; 40) AppendString(newVector, "FF[+X][-X]X");
+        else if (r &lt; 70) AppendString(newVector, "F[+X]F[-X]+X");
+        else if (r &lt; 90) AppendString(newVector, "F[\\X][/X]FX");
+        else              AppendString(newVector, "FX");
       }
     }
-    break;
-  case ImGuiWrapper::kDeferredPBR:
-    if (scenesExtent_[0].x > 0.0f && scenesExtent_[0].y > 0.0f) {
-      deferredSystemPBR_->RenderShadowMap(ecsManager_,
-        frameInfo, dirPosReference, stepLight);
-
-      if (stepLight == 0) {
-        deferredSystemPBR_->RenderToGBuffer(ecsManager_,
-          frameInfo,
-          { (uint32_t)scenesExtent_[0].x, (uint32_t)scenesExtent_[0].y });
-
-        deferredSystemPBR_->BlitDepthToMain(
-          frameInfo.commandBuffer,
-          vkWrapper_.GetOffScreenDepthImage(),
-          { (uint32_t)scenesExtent_[0].x, (uint32_t)scenesExtent_[0].y });
-      }
-    }
-    break;
-  default:
-    break;
   }
-
-  // Start to record draws
-  if (scenesExtent_[0].x > 0.0f) {
-    if ((renderMode_ == ImGuiWrapper::kDeferred ||
-     renderMode_ == ImGuiWrapper::kDeferredPBR) && stepLight == 0)
-      vkWrapper_.BeginOffScreenRenderPassDeferred(frameInfo, (float)scenesExtent_[0].x,
-       (uint32_t)scenesExtent_[0].y);
-    else
-      vkWrapper_.BeginOffScreenRenderPass(frameInfo, (float)scenesExtent_[0].x,
-       (uint32_t)scenesExtent_[0].y,
-        ((stepLight != 0 && renderMode_ != ImGuiWrapper::kSimpleRender) ? false : true));
-  }
-}</code>
-        </pre>
-      </div>
-
-      <p>At the start of the render process, the shadow map and G-Buffer are prepared, keeping everything separated into
-        small, debuggable steps. The stepLight parameter distributes shadows across different atlas slots.
-      </p>
-
-      <img src="./images/HTML/depthPass.png" alt="Depth Pass"
-        style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
-
-      <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots">
-            <span></span><span></span><span></span>
-          </div>
-          <span class="code-lang">C++ — renderManager.cpp</span>
-        </div>
-        <pre>
-          <code>
-void RenderManager::RenderObjects(FrameInfo& frameInfo, int stepLight, glm::vec3 dirPosReference) {
-  if (scenesExtent_[0].x &lt= 0.0f || scenesExtent_[0].y &lt= 0.0f) {
-    return;
-  }
-
-  vkWrapper_.SetViewport(frameInfo, scenesExtent_[0].x, scenesExtent_[0].y);
-
-  switch (renderMode_)
-  {
-  case ImGuiWrapper::kForward:
-    forwardSystem_->RenderGameObjects(ecsManager_, frameInfo, dirPosReference, stepLight);
-    break;
-  case ImGuiWrapper::kDeferred:
-    deferredSystem_->RenderLightingPass(frameInfo, ecsManager_, dirPosReference, stepLight);
-    break;
-  case ImGuiWrapper::kDeferredPBR:
-    deferredSystemPBR_->RenderLightingPass(frameInfo, ecsManager_, dirPosReference, stepLight);
-    break;
-  case ImGuiWrapper::kSimpleRender:
-  default:
-    simpleRenderSystem_->RenderGameObjects(ecsManager_, frameInfo);
-    break;
-  }
-}</code>
-        </pre>
-      </div>
-
-      <p>The lighting pass is executed in the systems that require it, after the shadow map and geometry buffer have
-        been generated. Finally, all objects are rendered.
-      </p>
-
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0;">
-        <img src="./images/HTML/colorPass.png" alt="Color Pass"
-          style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
-        <img src="./images/HTML/shadowPass.png" alt="Shadow Pass"
-          style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
-      </div>
-
-      <img src="./images/HTML/lightingPass.png" alt="Lighting Pass"
-        style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
-
-      <p>All these images are being visualized via RenderDoc, a program that I started learning while developping this
-        project.
-      </p>
-
-      <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots">
-            <span></span><span></span><span></span>
-          </div>
-          <span class="code-lang">C++ — renderManager.cpp</span>
-        </div>
-        <pre>
-          <code>
-      .
-      .
-      .
-      
-    Texture* outputTexture = nullptr;
-    VkImageView viewbase = vkWrapper_.sceneTarget_.view;
-    VkSampler sampler = vkWrapper_.sceneTarget_.sampler;
-
-    if (postProcess_["MotionBlur"]->enabled) {
-      velocityPassSystem_->Render(
-        ecsManager_, frameInfo,
-        currentViewProj_, prevViewProj_,
-        prevWorldTransforms_);
-
-      Texture* velTex = velocityPassSystem_->GetOutput();
-
-      if (velTex) {
-        motionBlurSystem_->Apply(
-          frameInfo.commandBuffer,
-          viewbase,
-          sampler,
-          velTex->getImageView(),
-          velTex->getSampler(),
-          *frameInfo.frameDescriptorPool,
-          *(std::static_pointer_cast&ltMotionBlurSettings>(postProcess_["MotionBlur"])));
-
-        Texture* mbOutput = motionBlurSystem_->GetOutput();
-        
-        if (mbOutput) {
-          BlitTexture(mbOutput, frameInfo);
-
-          .
-          .
-          .          
-
-          viewbase = mbOutput->getImageView();
-          sampler = mbOutput->getSampler();
-        }
-      }
-    }
-
-    if (postProcess_["DoF"]->enabled && dofSystem_)
-    {
-      auto& dofSettings = *(std::static_pointer_cast&ltDoFSettings>(postProcess_["DoF"]));
-
-      dofSystem_->SetCameraPlanes(camNear, camFar);
-
-      dofSystem_->Apply(
-        frameInfo.commandBuffer,
-        viewbase, sampler,
-        vkWrapper_.GetOffScreenDepthView(),
-        vkWrapper_.GetOffScreenDepthSampler(),
-        *frameInfo.frameDescriptorPool,
-        dofSettings);
-
-      Texture* dofOut = dofSystem_->GetOutput();
-      if (dofOut) {
-        BlitTexture(dofOut, frameInfo);
-
-          .
-          .
-          .
-
-        viewbase = vkWrapper_.sceneTarget_.view;
-        sampler = vkWrapper_.sceneTarget_.sampler;
-      }
-    }
-
-    if (postProcess_["Bloom"]->enabled) {
-      bloomSystem_->Apply(
-        frameInfo.commandBuffer,
-        viewbase,
-        sampler,
-        *frameInfo.frameDescriptorPool,
-        *(std::static_pointer_cast&ltBloomSettings>(postProcess_["Bloom"]))
-      );
-
-      outputTexture = bloomSystem_->GetOutput();
-      if (outputTexture) BlitTexture(outputTexture, frameInfo);
-    }
-
-    .
-    .
-    .
-
-    vkCmdPipelineBarrier(
-      frameInfo.commandBuffer,
-      VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-      VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT,
-      0, 0, nullptr, 0, nullptr, 1, &depthRestoreBarrier);
-      
-      .
-      .
-      .</code>
-        </pre>
-      </div>
-
-      <p>The chained post-process pipeline is the most sophisticated part. Each effect consumes the previous one's
-        output via BlitTexture and redirects viewbase/sampler, forming a MotionBlur → DoF → Bloom chain over the same
-        sceneTarget_.
-      </p>
-
-      <img src="./images/HTML/allPostPo.png" alt="AllPostPo"
-        style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
-
-      <h2>Simple Plant Generator</h2>
-
-      <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots">
-            <span></span><span></span><span></span>
-          </div>
-          <span class="code-lang">C++ — PlantGeneratorSystem.cpp</span>
-        </div>
-        <pre>
-          <code>
-std::vector&ltchar> PlantGeneratorSystem::GetPlant(kType type, size_t iterations)
-{
-  std::vector&ltchar> result;
-
-	switch (type)
-	{
-	case PlantGeneratorSystem::kPlant:
-		result = { '-', 'X' };
-
-		for (size_t i = 0; i &lt iterations; i++) {
-			std::vector&ltchar> newVector;
-
-			for (char node : result) {
-				switch (node)
-				{
-				case 'X':
-					if (rand() % 2) {
-						AppendString(newVector, "F+[[X]-X]-F[-FX]+X");
-					}
-					else {
-						AppendString(newVector, "F-[[X]+X]+F[+FX]-X");
-					}
-					break;
-				case 'F':
-					AppendString(newVector, "FF");
-					break;
-				default:
-					newVector.push_back(node);
-					break;
-				}
-			}
-
-			result.clear();
-			result = newVector;
-		}
-
-		break;
-	case PlantGeneratorSystem::kTree:
-		// ... other types follow the same pattern
-		break;
-	case PlantGeneratorSystem::kStochasticTree:
-		result = { 'X' };
-
-		for (size_t i = 0; i &lt iterations; i++) {
-			std::vector&ltchar> newVector;
-			newVector.reserve(result.size() * 5);
-
-			for (char node : result) {
-				switch (node) {
-					case 'X': {
-						int r = rand() % 100;
-						if (r &lt 40) {
-							AppendString(newVector, "FF[+X][-X]X");
-						} else if (r &lt 70) {
-							AppendString(newVector, "F[+X]F[-X]+X");
-						} else if (r &lt 90) {
-							AppendString(newVector, "F[\\X][/X]FX");
-						} else {
-							AppendString(newVector, "FX");
-						}
-						break;
-					}
-					case 'F':
-						AppendString(newVector, "FF");
-						break;
-					default:
-						newVector.push_back(node);
-						break;
-				}
-			}
-
-			result = std::move(newVector);
-		}
-		break;
-	case PlantGeneratorSystem::kSymmetricTree:
-		// ... other types follow the same pattern
-		break;
-	case PlantGeneratorSystem::kSpiralTree:
-		// ... other types follow the same pattern
-		break;
-	default:
-		break;
-	}
-
-  return result;
-}</code>
-        </pre>
-      </div>
-
-      <p>A symbol alphabet (F, X, +, -, [, ], &, ^, \) that expands iteratively by applying rewriting rules. Five
-        distinct plant types with different generation patterns.
-      </p>
-      <img src="./images/HTML/plantgeneration.png" alt="plantGenerationImg"
-        style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
-
-      <h2>Foliage Generator</h2>
-
-      <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots">
-            <span></span><span></span><span></span>
-          </div>
-          <span class="code-lang">C++ — VulkanPlantGeneratorDemoV2.cpp</span>
-        </div>
-        <pre>
-          <code>
-void PopulateForest(HTML* html, float threshold, PlantGeneratorSystem::kType type, int iterations)
-{
-  size_t Foliage = html->AddActor("Foliage", "", 0, glm::vec3(), glm::vec3(), glm::vec3(1.0f));
-
-  std::vector&ltchar> plant;
-
-  glm::vec3 currentPos(0.0f, 0.0f, 0.0f);
-  glm::vec3 currentRot(0.0f, 0.0f, 0.0f);
-
-  float stepLength = 1.0f;
-  float angleStep = glm::radians&ltfloat>(25.0f);
-  int cubeCount = 0;
-  std::string parentPlant = "Plant";
-  int plantsCreated = 0;
-  size_t step = 0;
-  float timeStep = 0.1f;
-
-  std::stack&ltPlantGeneratorSystem::TransformState> stateStackPlant;
-  std::stack&ltPlantGeneratorSystem::TransformStateTree> stateStackTree;
-
-  bool startedTree = false;
-
-  float noiseScale = 0.25f;
-  float seed = static_cast&ltfloat>(rand() % 1000);
-
-  switch (type)
-  {
-  
-  .
-  .
-  .
-
-  case PlantGeneratorSystem::kTree:
-    for (int x = 0; x &lt 80; x++) {
-      for (int y = 0; y &lt 80; y++) {
-
-        float noiseValue = SimplexNoise::noise(x * noiseScale, y * noiseScale, seed);
-        float normalizedNoise = (noiseValue + 1.0f) * 0.5f;
-
-        if (normalizedNoise > threshold) {
-
-          float offsetX = ((rand() % 100) / 100.0f) - 0.5f;
-          float offsetY = ((rand() % 100) / 100.0f) - 0.5f;
-
-          currentPos = { (x - 40.0f) + offsetX, 0.0f, (y - 40.0f) + offsetY };
-
-          if ((rand() % 100) > 30) {
-            parentPlant = "Tree_" + std::to_string(plantsCreated++);
-            size_t parentPlantId = html->AddActor(parentPlant, "", Foliage,
-              glm::vec3(), glm::vec3(), glm::vec3(1.0f));
-
-            plant = html->GetPlantGeneratorSystem()
-              .GetPlant(PlantGeneratorSystem::kType::kTree, iterations);
-
-            currentRot.y = static_cast&ltfloat>(rand() % 360) * (3.14159f / 180.0f);
-
-            int newIteration = (rand() + 2) % iterations;
-
-            LoadTreeFull(html, plant, currentPos, currentRot, stepLength,
-              angleStep, cubeCount, stateStackTree, parentPlantId, newIteration);
-          }
-        }
-      }
-    }
-    break;
-  
-  .
-  .
-  .
-
-  }
-}
-          </code>
-        </pre>
-      </div>
-
-      <p>A forest generation using Perlin and the previous PlantGeneratorSystem.
-      </p>
-      <img src="./images/HTML/foliage.png" alt="Foliage"
-        style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
-
-      <h2>Wave Function Collapse</h2>
-
-      <div class="code-block">
-        <div class="code-header">
-          <div class="code-dots">
-            <span></span><span></span><span></span>
-          </div>
-          <span class="code-lang">C++ — VulkanWaveFunctionCollapseDemoV1.cpp</span>
-        </div>
-        <pre>
-          <code>
-void GenerateRules() {
-  rules[kTiles::kEmpty] = { kTiles::kWater };
-  rules[kTiles::kWater] = { kTiles::kWater, kTiles::kSand };
-  rules[kTiles::kSand] = { kTiles::kWater, kTiles::kSand, kTiles::kDirt };
-  rules[kTiles::kDirt] = { kTiles::kSand, kTiles::kDirt };
-}
-
-void GeneratePossibilities() {
-  for (size_t i = 0; i &lt sizeGrid * sizeGrid; i++) {
-    gridPossibilities[i] = { kTiles::kEmpty, kTiles::kWater, kTiles::kSand, kTiles::kDirt };
-  }
-}
-
-std::vector&ltkTiles> GetAvailableTiles(size_t cell, size_t checkingCell) {
-  std::vector&ltkTiles> availableTiles;
-
-  for (kTiles tile : gridPossibilities[checkingCell]) {
-    if (std::find(rules[grid[cell]].begin(), rules[grid[cell]].end(), tile) !=
-      rules[grid[cell]].end()) {
-      availableTiles.push_back(tile);
-    }
-  }
-
-  return availableTiles;
-}
-
-void CommitTile(size_t cell, HTML& html) {
-  std::string tileName = "Tile_" + std::to_string(cell);
-
-  size_t cellRow = cell / sizeGrid;
-  size_t cellCol = cell % sizeGrid;
-  glm::vec3 tilePosition = {cellCol, 0.0f, cellRow};
-
-  std::string texturePath = "";
-
-  switch (grid[cell])
-  {
-  case kTiles::kEmpty:
-  case kTiles::kNoData:
-    texturePath = "../examples/data/Textures/NoTexture.png";
-    break;
-  case kTiles::kWater:
-    texturePath = "../examples/data/Textures/WaterTexture.png";
-    break;
-  case kTiles::kSand:
-    texturePath = "../examples/data/Textures/sandTexture.png";
-    break;
-  case kTiles::kDirt:
-    texturePath = "../examples/data/Textures/dirtTexture.png";
-    break;
-  default:
-    break;
-  }
-
-  gridPossibilities[cell] = { grid[cell] };
-
-  // Top
-  if (cellRow > 0) {
-    size_t topCell = (cellRow - 1) * sizeGrid + cellCol;
-    gridPossibilities[topCell] = GetAvailableTiles(cell, topCell);
-  }
-  // Bottom
-  if (cellRow + 1 &lt sizeGrid) {
-    size_t bottomCell = (cellRow + 1) * sizeGrid + cellCol;
-    gridPossibilities[bottomCell] = GetAvailableTiles(cell, bottomCell);
-  }
-  // Left
-  if (cellCol > 0) {
-    size_t leftCell = cellRow * sizeGrid + cellCol - 1;
-    gridPossibilities[leftCell] = GetAvailableTiles(cell, leftCell);
-  }
-  // Right
-  if (cellCol + 1 &lt sizeGrid) {
-    size_t rightCell = cellRow * sizeGrid + cellCol + 1;
-    gridPossibilities[rightCell] = GetAvailableTiles(cell, rightCell);
-  }
-}
-          </code>
-        </pre>
-      </div>
-
-      <p>Some functions that generate rules and collapse tiles inside a grid and change the nearest cells. Simple
-        implemetation of the wave function collapse technique. In the example the grid is filled ring by ring.
-      </p>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0;">
-        <img src="./images/HTML/wave1.png" alt="Wave Function Collapse 1"
-          style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
-        <img src="./images/HTML/wave2.png" alt="Wave Function Collapse 2"
-          style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
+  break;</code></pre>
       </div>
     </article>
 
 
-    <!-- ╔══════════════════════════════════╗ -->
-    <!-- ║  SECTION 3 — CHALLENGES         ║ -->
-    <!-- ╚══════════════════════════════════╝ -->
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║  CHALLENGES              ║ -->
+    <!-- ╚══════════════════════════╝ -->
     <article class="blog-section" id="challenges">
-      <p class="section-label">// 03 — challenges &amp; solutions</p>
+      <p class="section-label">// 04 — challenges &amp; solutions</p>
       <h2>Problems I Solved</h2>
-      <!-- <p>[Brief intro — this section is the heart of the blog. Show how you think.]</p> -->
-
-      <!-- PROBLEM / SOLUTION CARDS — repeat as needed -->
-      <div class="ps-grid">
-        <div class="ps-card problem">
-          <p class="ps-label">⚠ Problem</p>
-          <p>Shadow rendering</p>
-        </div>
-        <div class="ps-card solution">
-          <p class="ps-label">✓ Solution</p>
-          <p>Created a Shadow Atlas class to render shadows into a separate texture for later use. Forward Rendering+
-            and Deferred Rendering were both implemented.</p>
-        </div>
-      </div>
 
       <div class="ps-grid">
         <div class="ps-card problem">
           <p class="ps-label">⚠ Problem</p>
-          <p>PhysX integration</p>
+          <p>Multi-light shadow rendering</p>
         </div>
         <div class="ps-card solution">
           <p class="ps-label">✓ Solution</p>
-          <p>Compiled the official PhysX library, added it to the project, and built a wrapper that creates and
-            initializes the scene and handles physics steps. A base Pawn Controller was also created to support custom
-            pawns for different use cases, handling collisions accordingly.</p>
+          <p>Shadow Atlas class packs multiple shadow maps into a single texture. The <code>stepLight</code> parameter
+            routes each light to its atlas slot, with correct synchronization between passes.</p>
         </div>
       </div>
-
+      <div class="ps-grid">
+        <div class="ps-card problem">
+          <p class="ps-label">⚠ Problem</p>
+          <p>Motion blur required per-pixel velocity</p>
+        </div>
+        <div class="ps-card solution">
+          <p class="ps-label">✓ Solution</p>
+          <p>Dedicated velocity pass encodes screen-space velocity from current and previous view-projection matrices.
+            Result is passed as a separate texture into the blur shader.</p>
+        </div>
+      </div>
       <div class="ps-grid">
         <div class="ps-card problem">
           <p class="ps-label">⚠ Problem</p>
@@ -1450,183 +1082,122 @@ void CommitTile(size_t cell, HTML& html) {
         </div>
         <div class="ps-card solution">
           <p class="ps-label">✓ Solution</p>
-          <p>When a model is created, a bounding sphere is automatically generated. It is later used to check whether
-            the object falls within the frustum, defined by its enclosing planes and following the camera. Anything
-            outside is not rendered, improving performance.</p>
+          <p>Bounding sphere generated at model load time, tested against the frustum planes each frame. Objects outside
+            the frustum are skipped entirely before draw calls.</p>
         </div>
       </div>
-
       <div class="ps-grid">
         <div class="ps-card problem">
           <p class="ps-label">⚠ Problem</p>
-          <p>Post-process pipeline</p>
+          <p>PhysX integration</p>
         </div>
         <div class="ps-card solution">
           <p class="ps-label">✓ Solution</p>
-          <p>A base render pass is performed and its result is passed as a texture to the selected post-process effect.
-            Motion blur uses a dedicated velocity pass that encodes per-pixel screen-space velocity.</p>
+          <p>Compiled PhysX from source and built a wrapper around the scene, actors, and step functions. A base Pawn
+            Controller abstracts different movement types (character, vehicle, custom).</p>
         </div>
       </div>
-
       <div class="ps-grid">
         <div class="ps-card problem">
           <p class="ps-label">⚠ Problem</p>
-          <p>Android Implementation</p>
+          <p>Android port</p>
         </div>
         <div class="ps-card solution">
           <p class="ps-label">✓ Solution</p>
-          <p>Using Android Studio and CMake it wasn't hard to port the engine, Vulkan is friendly on Android so I just
-            needed to adjust some guards and change how the app is created due to the C++ support.</p>
+          <p>Vulkan's portability made the Android Studio + CMake port manageable. Required adjusting surface creation
+            guards and adapting the app lifecycle for Android's C++ support.</p>
         </div>
       </div>
-
-      <!-- Add more ps-grid blocks as needed -->
-
     </article>
 
 
-    <!-- ╔══════════════════════════════════╗ -->
-    <!-- ║  SECTION 4 — METRICS / RESULTS  ║ -->
-    <!-- ╚══════════════════════════════════╝ -->
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║  RESULTS                 ║ -->
+    <!-- ╚══════════════════════════╝ -->
     <article class="blog-section" id="results">
-      <p class="section-label">// 04 — results</p>
+      <p class="section-label">// 05 — results</p>
       <h2>By The Numbers</h2>
 
       <div class="stat-row">
         <div class="stat">
           <span class="stat-value">+60</span>
-          <span class="stat-label">FPS</span>
+          <span class="stat-label">Target FPS</span>
         </div>
         <div class="stat">
           <span class="stat-value">+1000</span>
           <span class="stat-label">Entities</span>
         </div>
         <div class="stat">
-          <span class="stat-value">2</span>
-          <span class="stat-label">Team Members</span>
+          <span class="stat-value">3</span>
+          <span class="stat-label">Render Pipelines</span>
         </div>
         <div class="stat">
-          <span class="stat-value">8 Months</span>
-          <span class="stat-label">Development Time</span>
+          <span class="stat-value">3</span>
+          <span class="stat-label">Post FX</span>
         </div>
-        <img src="./images/HTML/metrics.png" alt="Metrics"
-          style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
-      </div>
-
-      <h2>Platforms</h2>
-      <div class="stat-row">
         <div class="stat">
-          <span class="stat-value">Vulkan</span>
-          <img src="./images/HTML/plantgeneration.png" alt="Vulkan"
-            style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
-        </div>
-      </div>
-      <div class="stat-row">
-        <div class="stat">
-          <span class="stat-value">Android</span>
-          <img src="./images/HTML/mobile.jpeg" alt="Mobile"
-            style="width:25%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
-        </div>
-      </div>
-      <div class="stat-row">
-        <div class="stat">
-          <span class="stat-value">OpenGL</span>
-        </div>
-      </div>
-      <div class="stat-row">
-        <div class="stat">
-          <span class="stat-value">Web</span>
+          <span class="stat-value">8mo</span>
+          <span class="stat-label">Development</span>
         </div>
       </div>
 
-      <h2>Render Systems</h2>
-      <div class="stat-row">
-        <div class="stat">
-          <span class="stat-value">Forward+</span>
-          <img src="./images/HTML/forward.png" alt="Forward+"
-            style="width:100%; border-radius:6px; border:1px solid var(--border);">
-        </div>
-        <div class="stat">
-          <span class="stat-value">Deferred</span>
-          <img src="./images/HTML/deferred.png" alt="Deferred"
-            style="width:100%; border-radius:6px; border:1px solid var(--border);">
-        </div>
-      </div>
-      <h2>Extra</h2>
-      <div class="stat-row">
-        <div class="stat">
-          <span class="stat-value">PBR</span>
-          <img src="./images/HTML/pbr.png" alt="PBR"
-            style="width:100%; border-radius:6px; border:1px solid var(--border); margin:20px 0;">
-        </div>
-      </div>
+      <img src="./images/HTML/metrics.png" alt="Performance metrics"
+        style="width:100%; border-radius:6px; border:1px solid var(--border); margin-top:8px;">
 
-      <h2>Post Process</h2>
-      <div class="stat-row">
-        <div class="stat">
-          <span class="stat-value">Bloom</span>
-          <img src="./images/HTML/bloom.gif" alt="Bloom"
-            style="width:100%; border-radius:6px; border:1px solid var(--border);">
+      <h2 style="margin-top:36px;">Platforms</h2>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:16px;">
+        <div class="render-card">
+          <img src="./images/HTML/foliage.png" alt="Vulkan desktop">
+          <div class="render-label">Vulkan · Desktop</div>
         </div>
-        <div class="stat">
-          <span class="stat-value">Motion Blur</span>
-          <img src="./images/HTML/motionBlur.png" alt="Motion Blur"
-            style="width:100%; border-radius:6px; border:1px solid var(--border);">
-        </div>
-        <div class="stat">
-          <span class="stat-value">DoF</span>
-          <img src="./images/HTML/dof.gif" alt="Depth Of Field"
-            style="width:100%; border-radius:6px; border:1px solid var(--border);">
+        <div class="render-card" style="display:flex; align-items:center; justify-content:center; padding:20px;">
+          <img src="./images/HTML/mobile.jpeg" alt="Android" style="width:60%; border-radius:4px;">
+          <div class="render-label">Android · Mobile</div>
         </div>
       </div>
-
     </article>
 
 
-    <!-- ╔══════════════════════════════════╗ -->
-    <!-- ║  SECTION 5 — LESSONS LEARNED    ║ -->
-    <!-- ╚══════════════════════════════════╝ -->
+    <!-- ╔══════════════════════════╗ -->
+    <!-- ║  RETROSPECTIVE           ║ -->
+    <!-- ╚══════════════════════════╝ -->
     <article class="blog-section" id="retrospective">
-      <p class="section-label">// 05 — retrospective</p>
+      <p class="section-label">// 06 — retrospective</p>
       <h2>What I Learned</h2>
-      <!-- <p>[A closing reflection — technical takeaways, team dynamics, what you'd do differently.]</p> -->
 
       <ul class="lessons-list">
         <li>
           <span class="lesson-num">01</span>
-          <span>Vulkan forces you to truly understand the GPU. There is no magic: you manage every memory barrier, every
-            image layout transition, every synchronization point. It is overwhelming at first, but when something breaks
-            you know exactly why.</span>
+          <span>Vulkan forces you to truly understand the GPU pipeline. No abstraction layer, no magic — every memory
+            barrier, image layout transition and synchronization point is explicit. When something breaks, you know
+            exactly why and where.</span>
         </li>
         <li>
           <span class="lesson-num">02</span>
-          <span>The ECS with contiguous vector + unordered_map was the most impactful architectural decision of the
-            project. I started with classic OOP design and the performance jump after migrating was immediate and
-            measurable.</span>
+          <span>Implementing Forward+, Deferred and PBR gave me a real understanding of modern rendering:
+            how a G-Buffer is built, why decoupling geometry from lighting matters, and when each technique makes sense
+            for a given scene. This is knowledge that's hard to get from using an engine that hides it.</span>
         </li>
         <li>
           <span class="lesson-num">03</span>
-          <span>Implementing Forward+, Deferred, and PBR from scratch gave me a real understanding of modern rendering:
-            how a G-Buffer is built, why separating the geometry and lighting passes matters, and when each technique
-            makes sense. Shadows with a Shadow Atlas taught me that a basic shadow map is not enough — distributing
-            multiple lights across an atlas, managing slots, and correctly synchronizing passes is where the real
-            difficulty lies.</span>
+          <span>The chained post-process pipeline taught me how render passes, image barriers and texture ownership work
+            at the API level — directly applicable to writing custom post-process passes in UE5 or Unity.</span>
         </li>
         <li>
           <span class="lesson-num">04</span>
-          <span>Splitting the work across two APIs (Vulkan/OpenGL) within the same engine was a constant abstraction
-            challenge with my teammate. I learned to design API-agnostic interfaces before implementing, not
-            after.</span>
+          <span>L-Systems and WFC are real tools used in production PCG pipelines. Building them from scratch made their
+            strengths and limitations concrete — when to use each, what parameters control the output, and how to expose
+            them as artist-friendly controls.</span>
         </li>
         <li>
           <span class="lesson-num">05</span>
-          <span>Android Studio and Render Doc basic usage. First time using these two tools, one for the mobile port and
-            the other for debugging.</span>
+          <span>Designing API-agnostic interfaces before implementing (Vulkan vs OpenGL in the same engine) is the same
+            discipline as writing TA tools that work across different DCCs — abstract first, implement second.</span>
         </li>
         <li>
           <span class="lesson-num">06</span>
-          <span>Some interesting AI techniques such as Lindenmayer Systems, forest generation with Perlin Noise and Wave
-            Function Collapse.</span>
+          <span>RenderDoc as a debugging and inspection tool. Visualizing the G-Buffer passes in isolation was
+            invaluable for diagnosing rendering issues.</span>
         </li>
       </ul>
     </article>
@@ -1634,26 +1205,25 @@ void CommitTile(size_t cell, HTML& html) {
   </main>
 
   <footer>
-    &copy; 2026 Juanjo Valenzuela — <a href="./index.html" style="color: var(--accent); text-decoration:none;">← back to
+    &copy; 2026 Juanjo Valenzuela — <a href="./index.html" style="color:var(--accent); text-decoration:none;">← back to
       portfolio</a>
   </footer>
 
   <script>
     document.querySelectorAll('.code-block').forEach(block => {
       block.classList.add('collapsible');
-
       const header = block.querySelector('.code-header');
       const toggle = document.createElement('span');
       toggle.className = 'code-toggle';
       toggle.textContent = '[ show ]';
       header.appendChild(toggle);
-
       header.addEventListener('click', () => {
         const isOpen = block.classList.toggle('open');
         toggle.textContent = isOpen ? '[ hide ]' : '[ show ]';
       });
     });
   </script>
+
 </body>
 
 </html>
