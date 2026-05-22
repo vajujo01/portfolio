@@ -789,6 +789,25 @@
     .repo-link:hover .gh-icon {
       fill: #aaa;
     }
+
+    .diagram-container {
+      margin: 24px 0;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .diagram-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(0, 242, 255, 0.05);
+    }
   </style>
   <link rel="icon" href="./images/HTML/icon.png">
 </head>
@@ -984,6 +1003,59 @@
     </article>
 
 
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <!--               ADDITIONAL SYSTEMS                            -->
+    <!-- ═══════════════════════════════════════════════════════════ -->
+    <article class="blog-section ta-section" id="systems">
+      <p class="section-label">// 02 — additional visual systems</p>
+      <h2>SkyBox</h2>
+      <p>A cubemap-based skybox rendered as the last pass in the frame, after all geometry and lights, to avoid
+        overdraw. The six faces are loaded at engine startup and bound as a cube sampler in the descriptor set. In the
+        PBR pipeline, the cubemap is also sampled for <strong>image-based lighting (IBL)</strong> — visible in the
+        specular reflections on the metal spheres below.</p>
+      <div class="render-card wide" style="margin-bottom:20px;">
+        <img src="./images/HTML/skybox.png" alt="SkyBox with PBR reflections" style="width:100%;display:block;">
+        <div class="render-label" style="color:var(--green);">SkyBox + PBR cubemap reflections</div>
+      </div>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">C++ — main setup</span>
+        </div>
+        <pre><code>std::string facesCubeMap[6] = {
+  "../data/Skybox/right.jpg",  "../data/Skybox/left.jpg",
+  "../data/Skybox/top.jpg",    "../data/Skybox/bottom.jpg",
+  "../data/Skybox/front.jpg",  "../data/Skybox/back.jpg"
+};
+HTML html{ 1200, 1000, "Demo", facesCubeMap };
+// SkyBox is initialized inside VulkanWrapper and bound globally
+// PBR system reads the cubemap sampler for IBL specular contribution</code></pre>
+      </div>
+
+      <h2 style="margin-top:40px;">Terrain</h2>
+      <p>A simplex noise and heightmap-based terrain rendered with texture. The system generates mesh geometry at load
+        time and submits it through the standard render path, benefiting from the same PBR materials and
+        shadow atlas as any other mesh in the scene.</p>
+      <div class="render-card wide" style="margin-bottom:20px;">
+        <img src="./images/HTML/terrain.png" alt="Terrain" style="width:100%;display:block;">
+        <div class="render-label" style="color:var(--green);">Terrain</div>
+      </div>
+
+      <h2 style="margin-top:40px;">Particle System</h2>
+      <p>CPU-side particle simulation (position, velocity, lifetime, color) with a dedicated
+        <code>ParticleRenderSystem</code> that submits billboarded quads to the GPU each frame. The simulation logic was
+        written by my teammate; my contribution was the <strong>Vulkan rendering side</strong> — descriptor sets, vertex
+        buffers, the render pass integration and synchronization with the main frame.
+      </p>
+      <div class="render-card wide" style="margin-bottom:16px;">
+        <img src="./images/HTML/particles.png" alt="Particles" style="width:100%;display:block;">
+        <div class="render-label" style="color:var(--green);">Particle System — Vulkan port</div>
+      </div>
+      <div class="note-box"><strong>Note —</strong> Particle simulation logic authored by teammate. Vulkan integration
+        (ParticleRenderSystem, descriptor layout, frame sync) by me.</div>
+    </article>
+
     <!-- ╔══════════════════════════╗ -->
     <!-- ║  PROCEDURAL GENERATION   ║ -->
     <!-- ╚══════════════════════════╝ -->
@@ -1014,6 +1086,11 @@
         </div>
       </div>
 
+      <div class="highlight-box" style="margin-top:28px;">
+        L-Systems are the foundation of most procedural vegetation tools
+        (SpeedTree, Houdini's branch solvers).
+      </div>
+
       <div class="proc-grid" style="margin-top:28px;">
         <div class="proc-item">
           <h3>Wave Function Collapse</h3>
@@ -1029,10 +1106,10 @@
         </div>
       </div>
 
-      <div class="highlight-box" style="margin-top:28px;">
-        L-Systems are the foundation of most procedural vegetation tools
-        (SpeedTree, Houdini's branch solvers). WFC is the algorithm behind many modern level-generation pipelines.
+      <div class="highlight-box" style="margin-top:28px;"> WFC is the algorithm behind many modern level-generation
+        pipelines.
       </div>
+
     </article>
 
 
@@ -1043,46 +1120,131 @@
       <p class="section-label">// 03 — pipeline deep dive</p>
       <h2>Engine Architecture</h2>
 
-      <p>The engine is built around an ECS with a contiguous component storage + O(1) lookup map. A Job System handles
-        async model and texture loading. The render layer is fully abstracted behind API-specific backends (Vulkan /
-        Android /
-        OpenGL / Web).</p>
-
-      <div class="highlight-box">
-        ECS design: contiguous <code>vector&lt;pair&lt;size_t,T&gt;&gt;</code> for cache-friendly bulk iteration +
-        <code>unordered_map</code> for O(1) per-entity lookup. Migrating from classic OOP gave an immediate, measurable
-        performance jump.
+      <p>The HTML class is the single public interface the user sees. Internally it owns and orchestrates all subsystems
+        through unique_ptr. No subsystem knows about the others — HTML coordinates them.</p>
+      <div class="diagram-container">
+        <div class="diagram-label">// engine Architecture</div>
+        <div class="proc-item">
+          <img src="./images/HTML/engineArchitecture.png" alt="Engine Architecture">
+        </div>
       </div>
 
-      <h2 style="margin-top:36px;">Render Manager</h2>
-      <p>The render manager switches between Forward+, Deferred, and Deferred PBR at runtime. Shadow map and G-Buffer
-        prep are separated into discrete steps and distributed across a Shadow Atlas for multi-light support.</p>
+      <h2>Frame Time Line</h2>
+
+      <p>Every frame follows a fixed sequence. Input and logic run first, then rendering, then ImGui overlay, then
+        physics step. The separation is explicit — no rendering during physics, no physics during rendering.</p>
+
+      <div class="diagram-container">
+        <div class="diagram-label">// frame execution order</div>
+        <div class="proc-item">
+          <img src="./images/HTML/frameTimeLine.png" alt="Frame Timeline">
+        </div>
+      </div>
+
+      <h2>Shadow Atlas</h2>
+
+      <p>Instead of one shadow map per light (which requires N render passes and N textures), all shadow maps are packed
+        into a single atlas texture. The <code>stepLight</code> loop distributes slots: directional light gets 1 slot,
+        each point
+        light needs 6 faces (cubemap), each spot light needs 1.</p>
+
+      <div class="diagram-container">
+        <div class="diagram-label">// shadow atlas - slot distribution</div>
+        <div class="proc-item">
+          <img src="./images/HTML/shadowAtlaspass.png" alt="Shadow Atlas Pass">
+        </div>
+      </div>
 
       <div class="code-block">
         <div class="code-header">
           <div class="code-dots"><span></span><span></span><span></span></div>
-          <span class="code-lang">C++ — renderManager.cpp · InitRenderProcess</span>
+          <span class="code-lang">C++ — renderManager.cpp · light loop</span>
         </div>
-        <pre><code>void RenderManager::InitRenderProcess(FrameInfo&amp; frameInfo, int stepLight, glm::vec3 dirPosReference)
-{
-  switch (renderMode_)
-  {
-  case ImGuiWrapper::kForward:
-    forwardSystem_->RenderShadowMap(ecsManager_, frameInfo, dirPosReference, stepLight);
-    break;
-  case ImGuiWrapper::kDeferred:
-    deferredSystem_->RenderShadowMap(...);
-    deferredSystem_->RenderToGBuffer(...);
-    deferredSystem_->BlitDepthToMain(...);
-    break;
-  case ImGuiWrapper::kDeferredPBR:
-    deferredSystemPBR_->RenderShadowMap(...);
-    deferredSystemPBR_->RenderToGBuffer(...);
-    deferredSystemPBR_->BlitDepthToMain(...);
-    break;
-  }
+        <pre><code>int numberOfLights = 1;                                       // Directional
+numberOfLights += (int)pointLights.size() * 6;                // 6 faces per point light
+numberOfLights += (int)spotLights.size();                     // 1 per spot light
+
+int maxPerBatch = GetMaxNumberLightsShadowAtlas();
+
+for (int i = 0; i &lt numberOfLights; i += maxPerBatch) {
+  InitRenderProcess(frameInfo, i, dirPosReference);           // -> ShadowMap + GBuffer for this batch
+  RenderObjects(frameInfo, i, dirPosReference);               // -> Lighting pass
+  if (i + maxPerBatch &lt numberOfLights)
+    vkWrapper_.EndOffScreenRenderPass(frameInfo);             // Close pass, start next batch
 }</code></pre>
       </div>
+
+      <h2>G-Buffer Layout</h2>
+
+      <p>The Deferred pipeline writes geometry data to a set of render targets in a first pass, then the lighting pass
+        reads from them. Separating geometry from lighting allows N lights at roughly the cost of 1 forward pass.</p>
+
+      <div class="diagram-container">
+        <div class="diagram-label">// G-Buffer Attachments - Deferred PBR</div>
+        <div class="proc-item">
+          <img src="./images/HTML/gbufferattachments.png" alt="G-Buffer Attachments - Deferred PBR">
+        </div>
+      </div>
+
+      <h2>Culling System</h2>
+      <p>Before any draw call, objects outside the camera frustum are skipped entirely. A bounding sphere is generated
+        at model load time. Each frame, the sphere is tested against the 6 frustum planes. On Android, distance-based
+        culling is used instead — simpler and cheaper on mobile GPUs.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">pseudocode - frustum sphere test</span>
+        </div>
+        <pre><code>// For each entity with a MeshComponent:
+BoundingSphere sphere = mesh.boundingSphere;         // center + radius, generated at load
+
+for (Plane plane : frustum.planes) {                 // 6 planes: near, far, left, right, top, bottom
+  float dist = dot(plane.normal, sphere.center) + plane.d;
+  if (dist &lt -sphere.radius) -> CULL (behind this plane)
+}
+-> VISIBLE: submit to draw call list
+
+// Android fallback:
+if (distance(camera.pos, sphere.center) > maxDistance) -> CULL</code></pre>
+      </div>
+
+      <div class="highlight-box pink">
+        Frustum culling is the single most impactful CPU-side optimization. With 1000+ entities, skipping invisible
+        objects before they reach the GPU eliminates a significant fraction of draw calls at zero GPU cost.
+      </div>
+
+      <h2>Image Barriers & Synchronization</h2>
+      <p>Vulkan has no implicit synchronization — every image layout transition and pipeline stage dependency must be
+        declared explicitly. The post-process chain requires a sequence of barriers to correctly hand off ownership
+        between passes.</p>
+
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">C++ — renderManager.cpp · scene target barrier</span>
+        </div>
+        <pre><code>// After geometry pass: transition scene target to be readable by post-process shader
+VkImageMemoryBarrier barrier{};
+barrier.oldLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+barrier.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+barrier.srcAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;   // waited until color writes finish
+barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;              // safe to read in fragment shader
+vkCmdPipelineBarrier(cmd,
+  VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,                // source stage
+  VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,                        // destination stage
+  ...);
+
+// BlitTexture: transition post-process output -> scene target
+// src: SHADER_READ_ONLY -> TRANSFER_SRC
+// dst: SHADER_READ_ONLY -> TRANSFER_DST
+// -> vkCmdBlitImage
+// -> final barrier: TRANSFER_DST -> SHADER_READ_ONLY</code></pre>
+      </div>
+
+      <h2>Shaders</h2>
+      <p>All shaders are written in GLSL and compiled to SPIR-V at build time. The engine has separate shader programs
+        for each pipeline path. Work in progress — shader breakdown coming soon.</p>
 
       <h2 style="margin-top:36px;">Post-Process Chain</h2>
       <p>Each effect writes to its own output texture. <code>viewbase</code> and <code>sampler</code> are redirected
@@ -1110,6 +1272,11 @@ bloomSystem_->Apply(frameInfo.commandBuffer, viewbase, sampler, ...);</code></pr
 
       <h2 style="margin-top:36px;">ECS Architecture</h2>
 
+      <p>The engine is built around an ECS with a contiguous component storage + O(1) lookup map. A Job System handles
+        async model and texture loading. The render layer is fully abstracted behind API-specific backends (Vulkan /
+        Android /
+        OpenGL / Web).</p>
+
       <div class="code-block">
         <div class="code-header">
           <div class="code-dots"><span></span><span></span><span></span></div>
@@ -1124,6 +1291,12 @@ std::unordered_map&lt;size_t, size_t&gt; entityIdToIndexMap_;
 // Usage: direct access without full scan
 size_t index = entityIdToIndexMap_[entityID];
 T* comp = &amp;entityList_[index].second;</code></pre>
+      </div>
+
+      <div class="highlight-box">
+        ECS design: contiguous <code>vector&lt;pair&lt;size_t,T&gt;&gt;</code> for cache-friendly bulk iteration +
+        <code>unordered_map</code> for O(1) per-entity lookup. Migrating from classic OOP gave an immediate, measurable
+        performance jump.
       </div>
 
       <h2 style="margin-top:36px;">Plant Generator</h2>
@@ -1273,9 +1446,9 @@ T* comp = &amp;entityList_[index].second;</code></pre>
       <ul class="lessons-list">
         <li>
           <span class="lesson-num">01</span>
-          <span>Vulkan forces you to truly understand the GPU pipeline. No abstraction layer, no magic — every memory
-            barrier, image layout transition and synchronization point is explicit. When something breaks, you know
-            exactly why and where.</span>
+          <span>Vulkan forces you to understand the GPU pipeline completely. Every memory barrier, image layout
+            transition and synchronization point is explicit. When something breaks, you know exactly why — and
+            RenderDoc makes the invisible visible.</span>
         </li>
         <li>
           <span class="lesson-num">02</span>
@@ -1301,6 +1474,12 @@ T* comp = &amp;entityList_[index].second;</code></pre>
         </li>
         <li>
           <span class="lesson-num">06</span>
+          <span>Shadow Atlas distribution, frustum culling and ECS data layout are the three optimizations with the
+            highest practical impact. All three are about memory access patterns — either on the GPU (atlas) or the CPU
+            (cache locality).</span>
+        </li>
+        <li>
+          <span class="lesson-num">07</span>
           <span>RenderDoc as a debugging and inspection tool. Visualizing the G-Buffer passes in isolation was
             invaluable for diagnosing rendering issues.</span>
         </li>
