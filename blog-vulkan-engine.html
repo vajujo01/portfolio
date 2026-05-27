@@ -1242,10 +1242,6 @@ vkCmdPipelineBarrier(cmd,
 // -> final barrier: TRANSFER_DST -> SHADER_READ_ONLY</code></pre>
       </div>
 
-      <h2>Shaders</h2>
-      <p>All shaders are written in GLSL and compiled to SPIR-V at build time. The engine has separate shader programs
-        for each pipeline path. Work in progress — shader breakdown coming soon.</p>
-
       <h2 style="margin-top:36px;">Post-Process Chain</h2>
       <p>Each effect writes to its own output texture. <code>viewbase</code> and <code>sampler</code> are redirected
         after each effect, so the chain requires no intermediate copies — the output of one pass is the input of the
