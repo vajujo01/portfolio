@@ -938,7 +938,7 @@
       <h2 style="margin-top:40px;">Levels of Destruction</h2>
       <p>Then we need to fracture the geometry collection as we want in order to get the desired effect.</p>
       <div class="render-card wide" style="margin-bottom:20px;">
-        <img src="./images/Beerserker/Fracture.png" alt="Fracture" style="width:100%;display:block;">
+        <img src="./images/Beerserker/Fracture.gif" alt="Fracture" style="width:100%;display:block;">
         <div class="render-label" style="color:var(--green);">Fracture</div>
       </div>
 
@@ -970,8 +970,8 @@
         </div>
         <div class="proc-item">
           <h3>Beerserker shockwave</h3>
-          <p>When the player activates the beerserker mode.</p>
-          <img src="./images/Beerserker/shockwave.gif" alt="Beerserker Shockwave">
+          <p>When the player activates the beerserker mode the shockwave push all enemies and break objects.</p>
+          <img src="./images/Beerserker/Shockwave.gif" alt="Beerserker Shockwave">
         </div>
       </div>
     </article>
@@ -983,61 +983,62 @@
       <p class="section-label">// 04 — challenges &amp; solutions</p>
       <h2>Problems I Solved</h2>
 
-      <!-- <div class="ps-grid">
-        <div class="ps-card problem">
-          <p class="ps-label">⚠ Problem</p>
-          <p>Multi-light shadow rendering</p>
-        </div>
-        <div class="ps-card solution">
-          <p class="ps-label">✓ Solution</p>
-          <p>Shadow Atlas class packs multiple shadow maps into a single texture. The <code>stepLight</code> parameter
-            routes each light to its atlas slot, with correct synchronization between passes.</p>
-        </div>
-      </div>
       <div class="ps-grid">
         <div class="ps-card problem">
           <p class="ps-label">⚠ Problem</p>
-          <p>Motion blur required per-pixel velocity</p>
+          <p>Creating a dash that could pass through enemies and gaps in the floor, and go up and down ramps.</p>
         </div>
         <div class="ps-card solution">
           <p class="ps-label">✓ Solution</p>
-          <p>Dedicated velocity pass encodes screen-space velocity from current and previous view-projection matrices.
-            Result is passed as a separate texture into the blur shader.</p>
+          <p>With a team mate we decide to fire a capsule trace to check if the character can move to the next position,
+            verifying there's ground
+            beneath and no collisions ahead. If valid, move the character and fire another trace, repeating until the
+            dash's maximum distance is reached. If no ground is found, keep tracing until a valid position appears or
+            the distance runs out.</p>
         </div>
       </div>
+
       <div class="ps-grid">
         <div class="ps-card problem">
           <p class="ps-label">⚠ Problem</p>
-          <p>Frustum Culling</p>
+          <p>Creating objects that could be destroyed by the player.</p>
         </div>
         <div class="ps-card solution">
           <p class="ps-label">✓ Solution</p>
-          <p>Bounding sphere generated at model load time, tested against the frustum planes each frame. Objects outside
-            the frustum are skipped entirely before draw calls.</p>
+          <p>Used Unreal Engine 5's Chaos system, creating a Geometry Collection with the desired fracture pattern and a
+            destructible class to handle destruction events, applying <code>external strain</code> and
+            <code>radial impulse</code>. Managed the levels of fracture to prevent the player from colliding with
+            already-destroyed pieces.
+          </p>
         </div>
       </div>
+
       <div class="ps-grid">
         <div class="ps-card problem">
           <p class="ps-label">⚠ Problem</p>
-          <p>PhysX integration</p>
+          <p>Particle system optimization.</p>
         </div>
         <div class="ps-card solution">
           <p class="ps-label">✓ Solution</p>
-          <p>Compiled PhysX from source and built a wrapper around the scene, actors, and step functions. A base Pawn
-            Controller abstracts different movement types (character, vehicle, custom).</p>
+          <p>Many particles used <code>Transparent</code> blending, which is fairly costly. Switching to
+            <code>Masked</code> significantly improved performance, while <code>Transparent</code> was kept for
+            particles that appear rarely and don't add a meaningful load.
+          </p>
         </div>
       </div>
+
       <div class="ps-grid">
         <div class="ps-card problem">
           <p class="ps-label">⚠ Problem</p>
-          <p>Android port</p>
+          <p>A Hades-style death screen.</p>
         </div>
         <div class="ps-card solution">
           <p class="ps-label">✓ Solution</p>
-          <p>Vulkan's portability made the Android Studio + CMake port manageable. Required adjusting surface creation
-            guards and adapting the app lifecycle for Android's C++ support.</p>
+          <p>Built two post-process effects: one rendering the player's silhouette in blue and another rendering
+            enemies' silhouettes in red, with everything else in black. Both activate on death, accompanied by a short
+            death scene.</p>
         </div>
-      </div> -->
+      </div>
     </article>
 
     <!-- ╔══════════════════════════╗ -->
@@ -1047,47 +1048,52 @@
       <p class="section-label">// 06 — retrospective</p>
       <h2>What I Learned</h2>
 
-      <!-- <ul class="lessons-list">
+      <ul class="lessons-list">
         <li>
           <span class="lesson-num">01</span>
-          <span>Vulkan forces you to understand the GPU pipeline completely. Every memory barrier, image layout
-            transition and synchronization point is explicit. When something breaks, you know exactly why — and
-            RenderDoc makes the invisible visible.</span>
+          <span>Working alongside a dedicated art and design team completely changed how I write code. Systems had to be
+            exposed through clean, artist-friendly parameters — a destructible object or a particle effect is only as
+            useful as the controls you give the person who isn't a programmer.</span>
         </li>
         <li>
           <span class="lesson-num">02</span>
-          <span>Implementing Forward+, Deferred and PBR gave me a real understanding of modern rendering:
-            how a G-Buffer is built, why decoupling geometry from lighting matters, and when each technique makes sense
-            for a given scene. This is knowledge that's hard to get from using an engine that hides it.</span>
+          <span>Learning Chaos from scratch — Geometry Collections, fracture levels, external strain, radial impulse —
+            showed me how much of "destruction" is actually about controlling chaos rather than creating it: deciding
+            what
+            the player is allowed to break and when.</span>
         </li>
         <li>
           <span class="lesson-num">03</span>
-          <span>The chained post-process pipeline taught me how render passes, image barriers and texture ownership work
-            at the API level — directly applicable to writing custom post-process passes in UE5 or Unity.</span>
+          <span>Integrating animations taught me that gameplay code and animation work constantly pull against each
+            other.
+            Root motion, blend spaces and state machines only feel right when programmer and animator iterate together,
+            not in isolation.</span>
         </li>
         <li>
           <span class="lesson-num">04</span>
-          <span>L-Systems and WFC are real tools used in production PCG pipelines. Building them from scratch made their
-            strengths and limitations concrete — when to use each, what parameters control the output, and how to expose
-            them as artist-friendly controls.</span>
+          <span>Touching materials — masked vs. transparent, instance parameters, dynamic material
+            instances — made clear how much performance and visual polish depend on decisions that live outside pure
+            gameplay code.</span>
         </li>
         <li>
           <span class="lesson-num">05</span>
-          <span>Designing API-agnostic interfaces before implementing (Vulkan vs OpenGL in the same engine) is the same
-            discipline as writing TA tools that work across different DCCs — abstract first, implement second.</span>
+          <span>On a bigger team, communication becomes a technical skill in itself. Naming conventions, clear commit
+            messages and documenting systems mattered as much as the systems themselves once other people depended on
+            them.</span>
         </li>
         <li>
           <span class="lesson-num">06</span>
-          <span>Shadow Atlas distribution, frustum culling and ECS data layout are the three optimizations with the
-            highest practical impact. All three are about memory access patterns — either on the GPU (atlas) or the CPU
-            (cache locality).</span>
+          <span>Building a full game end to end — not a tech demo — showed me the real cost of features: a dash or a
+            destructible prop is easy in isolation, but every system has to survive contact with every other
+            system.</span>
         </li>
         <li>
           <span class="lesson-num">07</span>
-          <span>RenderDoc as a debugging and inspection tool. Visualizing the G-Buffer passes in isolation was
-            invaluable for diagnosing rendering issues.</span>
+          <span>Working at a professional scale, with real production constraints and deadlines, taught me to prioritize
+            ruthlessly — polishing what the player actually notices instead of what's technically interesting to
+            build.</span>
         </li>
-      </ul> -->
+      </ul>
     </article>
 
   </main>
