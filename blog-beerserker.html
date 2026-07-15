@@ -944,10 +944,14 @@
       <h2>Player Systems</h2>
 
       <p class="showcase-intro">
-        Four gameplay habilities implemented: <strong>Melee Attack</strong> for close combat situations,
-        <strong>Range Attack</strong> for further enemies, stun, and mortar weaks, <strong>Dash</strong> for arcade
-        movement, avoid enemies and fast hits, and <strong>Beerserker Mode</strong> as ultimate for push enemies and
-        buff the player.
+        Four core gameplay abilities have been implemented to shape the combat loop:
+        <strong>Melee Attack:</strong> Designed for tight, close-quarter combat situations. <strong>Ranged
+          Attack:</strong> Used to target distant enemies, apply stuns, and exploit mortar enemy
+        weaknesses. <strong>Dash:</strong> Provides arcade-style mobility, allowing the player to dodge incoming
+        attacks,
+        reposition, and land quick strikes. <strong>Beerserker Mode:</strong> The ultimate ability, used to knock back
+        surrounding enemies and
+        significantly buff the player's stats.
       </p>
 
       <div class="render-grid">
@@ -990,26 +994,29 @@
     <article class="blog-section ta-section" id="chaos">
       <p class="section-label">// 02 — Chaos Destruction</p>
 
-      <p>Class that have damageable interface implemented and when health goes to zero it breaks using chaos destruction
-        system.</p>
+      <p>We developed a base class that implements a custom damage interface. When its health reaches zero, the object
+        shatters dynamically using Unreal Engine's <strong>Chaos Destruction</strong> system.</p>
 
       <h2>Geometry Collection</h2>
-      <p>First we need to create a Geometry Collection from the mesh we want to break.</p>
+      <p>The process begins by converting our static meshes into <strong>Geometry Collections</strong>, preparing them
+        for real-time fracturing.</p>
       <div class="render-card wide" style="margin-bottom:20px;">
         <img src="./images/Beerserker/GC.png" alt="Geometry Collection" style="width:100%;display:block;">
         <div class="render-label" style="color:var(--green);">Geometry Collection</div>
       </div>
 
       <h2 style="margin-top:40px;">Levels of Destruction</h2>
-      <p>Then we need to fracture the geometry collection as we want in order to get the desired effect.</p>
+      <p>Next, we fractured the geometry collection into multiple levels of detail to achieve the desired debris size
+        and realistic shattering behavior.</p>
       <div class="render-card wide" style="margin-bottom:20px;">
         <img src="./images/Beerserker/Fracture.gif" alt="Fracture" style="width:100%;display:block;">
         <div class="render-label" style="color:var(--green);">Fracture</div>
       </div>
 
       <h2 style="margin-top:40px;">Break</h2>
-      <p>In our case we set the collision preset and if the player hit these destructibles then will apply an external
-        strain and a radial impulse to simulate with chaos the destruction.</p>
+      <p>To trigger the destruction, we configured custom collision presets. When the player strikes a destructible
+        object, the system applies an <strong>external strain</strong> and a <strong>radial impulse</strong>, causing
+        the physics asset to explode outward realistically.</p>
       <div class="render-card wide" style="margin-bottom:20px;">
         <img src="./images/Beerserker/Destruction.gif" alt="Destruction" style="width:100%;display:block;">
         <div class="render-label" style="color:var(--green);">Destruction</div>
@@ -1024,18 +1031,22 @@
       <h2>Niagara Systems</h2>
 
       <p class="showcase-intro">
-        I have created two niagara systems: The Beerserker aura and the beerserker shockwave.
+        I designed and implemented two custom Niagara particle systems to support the ultimate ability: the Beerserker
+        Aura and the Beerserker Shockwave.
       </p>
 
       <div class="proc-grid">
         <div class="proc-item">
           <h3>Beerserker Aura</h3>
-          <p>Aura that activates when the player can go full beerserker and when is on this mode (red and blue).</p>
+          <p>Provides clear visual feedback, activating as an agressive red when the ultimate is fully charged, and
+            shifting
+            to a blue glow while the Beerserker mode is active.</p>
           <img src="./images/Beerserker/Aura.gif" alt="Beerserker Aura">
         </div>
         <div class="proc-item">
           <h3>Beerserker shockwave</h3>
-          <p>When the player activates the beerserker mode the shockwave push all enemies and break objects.</p>
+          <p>An instantaneous burst effect triggered upon activation, visually representing the radial force that pushes
+            back nearby enemies and shatters destructible objects.</p>
           <img src="./images/Beerserker/Shockwave.gif" alt="Beerserker Shockwave">
         </div>
       </div>
